@@ -25,7 +25,7 @@ bool Map::Awake(pugi::xml_node& config)
     LOG("Loading Map Parser");
     bool ret = true;
 
-    mapFileName = config.child("mapfile").attribute("path").as_string();
+    mapFadileName = config.child("mapfile").attribute("path").as_string();
     mapFolder = config.child("mapfolder").attribute("path").as_string();
 
     return ret;

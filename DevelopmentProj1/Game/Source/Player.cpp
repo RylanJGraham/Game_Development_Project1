@@ -53,6 +53,8 @@ bool Player::Update()
 	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 		position.x += 1;
 
+	
+
 	app->render->DrawTexture(texture, position.x, position.y);
 
 	return true;
