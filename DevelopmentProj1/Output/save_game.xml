@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<save_state>
+	<input />
+	<window />
+	<textures />
+	<audio />
+	<scene />
+	<entitymanager />
+	<renderer>
+		<camera x="195" y="36" />
+	</renderer>
+</save_state>
