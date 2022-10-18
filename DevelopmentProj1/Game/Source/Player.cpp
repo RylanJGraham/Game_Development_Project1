@@ -24,8 +24,8 @@ bool Player::Awake() {
 	//texturePath = "Assets/Textures/player/idle1.png";
 
 	//L02: DONE 5: Get Player parameters from XML
-	pos.x = parameters.attribute("x").as_int();
-	pos.y = parameters.attribute("y").as_int();
+	position.x = parameters.attribute("x").as_int();
+	position.y = parameters.attribute("y").as_int();
 	texturePath = parameters.attribute("texturepath").as_string();
 
 	return true;

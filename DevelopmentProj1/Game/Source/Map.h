@@ -18,10 +18,11 @@ struct TileSet
 	int	tileWidth;
 	int	tileHeight;
 	int columns;
+	int tilecount;
 
 	SDL_Texture* texture;
 
-	// L05: TODO 7: Create a method that receives a tile id and returns it's Rectfind the Rect associated with a specific tile id
+	// L05: DONE 7: Create a method that receives a tile id and returns it's Rectfind the Rect associated with a specific tile id
 	SDL_Rect GetTileRect(int gid) const;
 };
 
@@ -35,11 +36,38 @@ enum MapTypes
 	MAPTYPE_STAGGERED
 };
 
-// L05: TODO 1: Create a struct for the map layer
-struct MapLayer
+// L06: TODO 5: Create a generic structure to hold properties
+struct Properties
 {
 
-	// L05: TODO 6: Short function to get the gid value of x,y
+	// L06: TODO 7: Method to ask for the value of a custom property
+
+};
+
+// L05: DONE 1: Create a struct for the map layer
+struct MapLayer
+{
+	SString	name;
+	int id; 
+	int width;
+	int height;
+	uint* data;
+
+	// L06: TODO7: Store custom properties
+
+	MapLayer() : data(NULL)
+	{}
+
+	~MapLayer()
+	{
+		RELEASE(data);
+	}
+
+	// L05: DONE 6: Short function to get the gid value of x,y
+	inline uint Get(int x, int y) const
+	{
+		return data[(y * width) + x];
+	}
 };
 
 // L04: DONE 1: Create a struct needed to hold the information to Map node
@@ -52,7 +80,8 @@ struct MapData
 	List<TileSet*> tilesets;
 	MapTypes type;
 
-	// L05: TODO 2: Add a list/array of layers to the map
+	// L05: DONE 2: Add a list/array of layers to the map
+	List<MapLayer*> maplayers;
 };
 
 class Map : public Module
@@ -89,6 +118,12 @@ private:
 	// L05
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
 	bool LoadAllLayers(pugi::xml_node mapNode);
+
+	// L06: TODO 
+	TileSet* GetTilesetFromTileId(int gid) const;
+
+	// L06: TODO 6: Load a group of properties 
+	bool LoadProperties(pugi::xml_node& node, Properties& properties);
 
 public: 
 

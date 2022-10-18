@@ -28,7 +28,6 @@ public:
 private:
 
 	//L02: DONE 1: Declare player parameters
-	iPoint pos;
 	SDL_Texture* texture;
 	const char* texturePath;
 

@@ -17,8 +17,8 @@ Item::~Item() {}
 
 bool Item::Awake() {
 
-	pos.x = parameters.attribute("x").as_int();
-	pos.y = parameters.attribute("y").as_int();
+	position.x = parameters.attribute("x").as_int();
+	position.y = parameters.attribute("y").as_int();
 	texturePath = parameters.attribute("texturepath").as_string();
 
 	return true;
@@ -33,7 +33,7 @@ bool Item::Start() {
 
 bool Item::Update()
 {
-	app->render->DrawTexture(texture, pos.x, pos.y);
+	app->render->DrawTexture(texture, position.x, position.y);
 	return true;
 }
 

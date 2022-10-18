@@ -28,7 +28,6 @@ public:
 
 private:
 
-	iPoint pos;
 	SDL_Texture* texture;
 	const char* texturePath;
 
