@@ -36,12 +36,34 @@ enum MapTypes
 	MAPTYPE_STAGGERED
 };
 
-// L06: TODO 5: Create a generic structure to hold properties
+// L06: DONE 5: Create a generic structure to hold properties
 struct Properties
 {
+	struct Property
+	{
+		SString name;
+		bool value;
+	};
 
-	// L06: TODO 7: Method to ask for the value of a custom property
+	~Properties()
+	{
+		//...
+		ListItem<Property*>* item;
+		item = list.start;
 
+		while (item != NULL)
+		{
+			RELEASE(item->data);
+			item = item->next;
+		}
+
+		list.Clear();
+	}
+
+	// L06: DONE 7: Method to ask for the value of a custom property
+	Property* GetProperty(const char* name);
+
+	List<Property*> list;
 };
 
 // L05: DONE 1: Create a struct for the map layer
@@ -53,7 +75,8 @@ struct MapLayer
 	int height;
 	uint* data;
 
-	// L06: TODO7: Store custom properties
+	// L06: DONE: Store custom properties
+	Properties properties;
 
 	MapLayer() : data(NULL)
 	{}
@@ -119,10 +142,10 @@ private:
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
 	bool LoadAllLayers(pugi::xml_node mapNode);
 
-	// L06: TODO 
+	// L06: DONE 2
 	TileSet* GetTilesetFromTileId(int gid) const;
 
-	// L06: TODO 6: Load a group of properties 
+	// L06: DONE 6: Load a group of properties 
 	bool LoadProperties(pugi::xml_node& node, Properties& properties);
 
 public: 
