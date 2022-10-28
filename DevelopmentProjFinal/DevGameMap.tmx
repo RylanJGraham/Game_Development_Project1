@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.2" tiledversion="1.3.5" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="1">
- <tileset firstgid="1" source="TexturesGame/Tiles.tsx"/>
- <tileset firstgid="65" source="TexturesGame/TX Struct.tsx"/>
- <tileset firstgid="321" source="TexturesGame/TX Tileset Wall.tsx"/>
- <tileset firstgid="577" source="TexturesGame/TX Tileset Stone Ground.tsx"/>
- <tileset firstgid="641" source="TexturesGame/Trees.tsx"/>
- <tileset firstgid="897" source="TexturesGame/TX Props.tsx"/>
- <tileset firstgid="1153" source="TexturesGame/TX Shadow.tsx"/>
- <tileset firstgid="1409" source="TexturesGame/TX Shadow Plant.tsx"/>
+ <tileset firstgid="1" source="Output/Assets/Maps/Tiles.tsx"/>
+ <tileset firstgid="65" source="Output/Assets/Maps/TX Struct.tsx"/>
+ <tileset firstgid="321" source="Output/Assets/Maps/TX Tileset Wall.tsx"/>
+ <tileset firstgid="577" source="Output/Assets/Maps/TX Tileset Stone Ground.tsx"/>
+ <tileset firstgid="641" source="Output/Assets/Maps/Trees.tsx"/>
+ <tileset firstgid="897" source="Output/Assets/Maps/TX Props.tsx"/>
+ <tileset firstgid="1153" source="Output/Assets/Maps/TX Shadow.tsx"/>
+ <tileset firstgid="1409" source="Output/Assets/Maps/TX Shadow Plant.tsx"/>
  <layer id="1" name="Capa de patrones 1" width="100" height="100">
   <data>
    <tile gid="1"/>
