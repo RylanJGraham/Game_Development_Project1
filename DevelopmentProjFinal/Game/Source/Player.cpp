@@ -68,29 +68,33 @@ bool Player::Update()
 		
 	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
 		vel.x -= speed;
-		app->render->camera.x += 1;
+		app->render->camera.x += 2;
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
 		vel.x += speed;
-		app->render->camera.x -= 1;
+		app->render->camera.x -= 2;
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+		if (!isJumping) {
 			isJumping = true;
-			Jump = 5;
+			Jump = 5.5;
 			vel.y = 0;
+		}
 	}
 
-	if (isJumping) {
+	if (isJumping && Jump > 0) {
 		vel.y -= Jump;
 		Jump += GRAVITY_Y;
 	}
 	
 	if (Jump <= 0) {
-		isJumping = false;
 		if (vel.y < 20) {
 			vel.y -= GRAVITY_Y;
+		}
+		else {
+			isJumping = false;
 		}
 	}
 
