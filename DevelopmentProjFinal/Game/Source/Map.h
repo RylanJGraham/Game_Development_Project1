@@ -148,6 +148,8 @@ private:
 	// L06: DONE 6: Load a group of properties 
 	bool LoadProperties(pugi::xml_node& node, Properties& properties);
 
+	bool LoadCollisions(int Colgid);
+
 public: 
 
 	// L04: DONE 1: Declare a variable data of the struct MapData
