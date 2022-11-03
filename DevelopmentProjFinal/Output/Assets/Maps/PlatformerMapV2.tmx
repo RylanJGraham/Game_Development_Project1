@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="100" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="1">
- <tileset firstgid="1" source="Output/Assets/Maps/Texture/TX Tileset Ground.tsx"/>
- <tileset firstgid="257" source="Output/Assets/Maps/Texture/TX Village Props.tsx"/>
- <tileset firstgid="1281" source="Output/Assets/Maps/Texture/background_0.tsx"/>
- <tileset firstgid="1326" source="Output/Assets/Maps/Texture/background_1.tsx"/>
+<map version="1.2" tiledversion="1.3.5" orientation="orthogonal" renderorder="right-down" width="100" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="1">
+ <tileset firstgid="1" source="Output/Assets/Maps/TX Tileset Ground.tsx"/>
+ <tileset firstgid="257" source="Output/Assets/Maps/TX Village Props.tsx"/>
+ <tileset firstgid="1281" source="Output/Assets/Maps/background_0.tsx"/>
+ <tileset firstgid="1326" source="Output/Assets/Maps/background_1.tsx"/>
  <layer id="6" name="fill back" width="100" height="50">
   <data encoding="csv">
 1284,1285,1286,1287,1288,1289,1289,1289,1289,1289,1289,1289,1289,1289,1284,1285,1286,1287,1281,1282,1283,1284,1285,1286,1287,1288,1289,1287,1288,1289,1285,1286,1287,1288,1289,1284,1285,1286,1282,1283,1284,1285,1286,1287,1288,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,1285,
