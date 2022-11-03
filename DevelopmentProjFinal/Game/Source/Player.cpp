@@ -28,7 +28,9 @@ bool Player::Awake() {
 	//L02: DONE 5: Get Player parameters from XML
 	position.x = parameters.attribute("x").as_int();
 	position.y = parameters.attribute("y").as_int();
-	texturePath = parameters.attribute("texturepath").as_string();
+	texturePathIdle = parameters.attribute("texturepathidle").as_string();
+	texturePathRun = parameters.attribute("texturepathrun").as_string();
+	texturePathJump = parameters.attribute("texturepathjump").as_string();
 
 	return true;
 }
@@ -36,12 +38,22 @@ bool Player::Awake() {
 bool Player::Start() {
 
 	//initilize textures
-	texture = app->tex->Load(texturePath);
+	textureIdle = app->tex->Load(texturePathIdle);
+	textureRun = app->tex->Load(texturePathRun);
+	textureJump = app->tex->Load(texturePathJump);
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
 	pbody = app->physics->CreateCircle(position.x+16, position.y-6, 32, bodyType::DYNAMIC);
 	pbody->listener = this;
 	pbody->ctype = ColliderType::PLAYER;
+
+	IdleL.PushBack({ 0, 0, 72, 86 });
+	IdleL.PushBack({ 72, 0, 72, 86 });
+	IdleL.PushBack({ 144, 0, 72, 86 });
+	IdleL.PushBack({ 216,0, 72, 86 });
+	IdleL.speed = 0.5f;
+	IdleL.loop = true;
+
 	return true;
 }
 
@@ -106,24 +118,18 @@ bool Player::Update()
 	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x)-46;
 	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y)-52;
 
-	SDL_Rect Pdims;
-	Pdims.x = 0;
-	Pdims.y = 0;
-	Pdims.h = 86;
-	Pdims.w = 72;
-
-	SDL_Rect* sect = &Pdims;
-
+	currentAnim = &IdleL;
 	
+	SDL_Rect frame = currentAnim->GetCurrentFrame();
 
-	app->render->DrawTexture(texture, position.x , position.y, sect);
+	app->render->DrawTexture(textureIdle, position.x , position.y, &frame);
+	currentAnim->Update();
 
 	return true;
 }
 
 bool Player::CleanUp()
 {
-
 	return true;
 }
 
