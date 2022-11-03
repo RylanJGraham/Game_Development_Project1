@@ -1,10 +1,11 @@
 #pragma once
 #include "Module.h"
+#include "Entity.h"
 
 #include "Box2D/Box2D/Box2D.h"
 
 #define GRAVITY_X 0.0f
-#define GRAVITY_Y -20.0f
+#define GRAVITY_Y -0.5f
 
 #define PIXELS_PER_METER 32.0f // if touched change METER_PER_PIXEL too
 #define METER_PER_PIXEL 0.03125f // this is 1 / PIXELS_PER_METER !
@@ -25,6 +26,14 @@ enum bodyType {
 	KINEMATIC
 };
 
+enum class ColliderType {
+	PLAYER,
+	ITEM,
+	PLATFORM,
+	UNKNOWN
+	// ..
+};
+
 // Small class to return to other modules to track position and rotation of physics bodies
 class PhysBody
 {
@@ -40,7 +49,8 @@ public:
 public:
 	int width, height;
 	b2Body* body;
-	Module* listener;
+	Entity* listener;
+	ColliderType ctype;
 };
 
 // Module --------------------------------------
