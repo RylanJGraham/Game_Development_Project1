@@ -58,7 +58,7 @@ void Map::Draw()
     while (mapLayerItem != NULL) {
 
         //L06: DONE 7: use GetProperty method to ask each layer if your “Draw” property is true.
-        if (mapLayerItem->data->properties.GetProperty("Draw") != NULL && mapLayerItem->data->properties.GetProperty("Draw")->value) {
+
 
             for (int x = 0; x < mapLayerItem->data->width; x++)
             {
@@ -73,13 +73,16 @@ void Map::Draw()
                     SDL_Rect r = tileset->GetTileRect(gid);
                     iPoint pos = MapToWorld(x, y);
 
-                    app->render->DrawTexture(tileset->texture,
-                        pos.x,
-                        pos.y,
-                        &r);
+                    if (mapLayerItem->data->properties.GetProperty("Draw") != NULL && mapLayerItem->data->properties.GetProperty("Draw")->value) {
+
+                        app->render->DrawTexture(tileset->texture,
+                            pos.x,
+                            pos.y,
+                            &r);
+                    }
                 }
             }
-        }
+        
         mapLayerItem = mapLayerItem->next;
 
     }
@@ -110,7 +113,6 @@ SDL_Rect TileSet::GetTileRect(int gid) const
 
     return rect;
 }
-
 
 // L06: DONE 2: Pick the right Tileset based on a tile id
 TileSet* Map::GetTilesetFromTileId(int gid) const
@@ -190,12 +192,17 @@ bool Map::Load()
     {
         ret = LoadAllLayers(mapFileXML.child("map"));
     }
+
+    if (ret == true)
+    {
+        ret = LoadCollisions(49); //HAY QUE HACERLO ASI
+    }
     
     // L07 DONE 3: Create colliders
     // Later you can create a function here to load and create the colliders from the map
-    app->physics->CreateRectangle(224 + 128, 543 + 32, 256, 64, STATIC);
+    /*app->physics->CreateRectangle(224 + 128, 543 + 32, 256, 64, STATIC);
     app->physics->CreateRectangle(352 + 64, 384 + 32, 128, 64, STATIC);
-    app->physics->CreateRectangle(256, 704 + 32, 576, 64, STATIC);
+    app->physics->CreateRectangle(256, 704 + 32, 576, 64, STATIC);*/
 
     if(ret == true)
     {
@@ -350,6 +357,37 @@ bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
     }
 
     return ret;
+}
+
+bool Map::LoadCollisions(int Colgid)
+{
+
+    bool ret = true;
+    int i = 0;
+    pugi::xml_node tile;
+    ListItem<MapLayer*>* mapLayerItem;
+    mapLayerItem = mapData.maplayers.start;
+
+    while (mapLayerItem != NULL)
+    {
+
+        for (int i = 0; i < mapLayerItem->data->height; i++) {
+            for (int j = 0; j < mapLayerItem->data->width; j++) {
+                if (mapLayerItem->data->name == "Colisions" && (mapLayerItem->data->Get(j, i)) == Colgid) {
+
+                    iPoint p = MapToWorld(j, i);
+                    app->physics->CreateRectangle(p.x + (mapData.tileWidth / 2), p.y + (mapData.tileHeight / 2), mapData.tileWidth, mapData.tileHeight, STATIC);
+
+                }
+            }
+        }
+        mapLayerItem = mapLayerItem->next;
+    }
+
+
+    
+    return ret;
+    
 }
 
 

@@ -34,6 +34,8 @@ bool Physics::Start()
 	LOG("Creating Physics 2D environment");
 
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
+
+
 	
 
 	return true;
@@ -77,7 +79,7 @@ PhysBody* Physics::CreateRectangle(int x, int y, int width, int height, bodyType
 
 	b2FixtureDef fixture;
 	fixture.shape = &box;
-	fixture.density = 1.0f;
+	//fixture.density = 1.0f;
 	b->ResetMassData();
 
 	b->CreateFixture(&fixture);
