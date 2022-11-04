@@ -377,7 +377,7 @@ bool Map::LoadCollisions(int Colgid)
 
                     iPoint p = MapToWorld(j, i);
                     app->physics->CreateRectangle(p.x + (mapData.tileWidth / 2), p.y + (mapData.tileHeight / 2), mapData.tileWidth, mapData.tileHeight, STATIC);
-
+                    
                 }
             }
         }

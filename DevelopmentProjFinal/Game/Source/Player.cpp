@@ -29,9 +29,11 @@ bool Player::Awake() {
 	position.x = parameters.attribute("x").as_int();
 	position.y = parameters.attribute("y").as_int();
 	texturePathIdle = parameters.attribute("texturepathidle").as_string();
-	texturePathIdle2 = parameters.attribute("texturepathidle").as_string();
+	texturePathIdle2 = parameters.attribute("texturepathidle2").as_string();
 	texturePathRun = parameters.attribute("texturepathrun").as_string();
+	texturePathRun2 = parameters.attribute("texturepathrun2").as_string();
 	texturePathJump = parameters.attribute("texturepathjump").as_string();
+	texturePathJump2 = parameters.attribute("texturepathjump2").as_string();
 
 	return true;
 }
@@ -66,8 +68,8 @@ bool Player::Start() {
 	IdleR.PushBack({ 134, 0, 72, 86 });
 	IdleR.PushBack({ 134, 0, 72, 86 });
 	IdleR.PushBack({ 201,0, 72, 86 });
-	IdleL.speed = 0.05f;
-	IdleL.loop = true;
+	IdleR.speed = 0.05f;
+	IdleR.loop = true;
 
 	return true;
 }
@@ -132,9 +134,6 @@ bool Player::Update()
 		if (vel.y < 20) {
 			vel.y -= GRAVITY_Y;
 		}
-		else {
-			isJumping = false;
-		}
 	}
 
 	//Set the velocity of the pbody of the player
@@ -174,6 +173,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		//app->audio->PlayFx(pickCoinFxId); 
 		break;
 	case ColliderType::PLATFORM:
+		isJumping = false;
 		LOG("Collision PLATFORM");
 		break;
 	case ColliderType::UNKNOWN:
