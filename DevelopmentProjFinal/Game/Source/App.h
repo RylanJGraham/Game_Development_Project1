@@ -15,6 +15,8 @@ class Input;
 class Render;
 class Textures;
 class Audio;
+class ModuleFadeToBlack;
+class TitleScreen;
 class Scene;
 class EntityManager;
 class Map;
@@ -44,7 +46,7 @@ public:
 	bool CleanUp();
 
 	// Add a new module to handle
-	void AddModule(Module* module);
+	void AddModule(Module* module, bool active);
 
 	// Exposing some properties for reading
 	int GetArgc() const;
@@ -86,6 +88,8 @@ public:
 	Render* render;
 	Textures* tex;
 	Audio* audio;
+	ModuleFadeToBlack* fade;
+	TitleScreen* titlescreen;
 	Scene* scene;
 	EntityManager* entityManager;
 	Map* map;
@@ -113,6 +117,8 @@ private:
 	// L03: DONE 1: Create control variables to control that the real Load and Save happens at the end of the frame
     bool saveGameRequested;
 	bool loadGameRequested;
+
+	bool active;
 };
 
 extern App* app;

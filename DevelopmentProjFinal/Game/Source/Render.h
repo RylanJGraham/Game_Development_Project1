@@ -6,6 +6,8 @@
 #include "Point.h"
 
 #include "SDL/include/SDL.h"
+#include "SDL/include/SDL_Rect.h"
+
 
 class Render : public Module
 {
@@ -27,8 +29,12 @@ public:
 	bool Update(float dt);
 	bool PostUpdate();
 
+	
 	// Called before quitting
 	bool CleanUp();
+
+	bool Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section = nullptr, float speed = 1.0f, bool useCamera = true);
+
 
 	void SetViewPort(const SDL_Rect& rect);
 	void ResetViewPort();

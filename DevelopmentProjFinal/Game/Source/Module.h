@@ -72,11 +72,27 @@ public:
 
 	}
 
+	void Enable() {
+		if (!active)
+		{
+			active = true;
+			Start();
+		}
+	}
+
+	void Disable() {
+		if (active)
+		{
+			active = false;
+			CleanUp();
+		}
+	}
+
 public:
 
 	SString name;
 	bool active;
-
+	
 };
 
 #endif // __MODULE_H__

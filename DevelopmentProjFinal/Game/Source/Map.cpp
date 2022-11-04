@@ -102,7 +102,7 @@ iPoint Map::MapToWorld(int x, int y) const
 // Get relative Tile rectangle
 SDL_Rect TileSet::GetTileRect(int gid) const
 {
-    SDL_Rect rect = { 0 };
+    SDL_Rect rect = { 0 };  
     int relativeIndex = gid - firstgid;
 
     // L05: DONE 7: Get relative Tile rectangle

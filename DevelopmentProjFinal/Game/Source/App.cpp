@@ -8,6 +8,8 @@
 #include "EntityManager.h"
 #include "Map.h"
 #include "Physics.h"
+#include "ModuleFadeToBlack.h"
+#include "TitleScreen.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -30,21 +32,27 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	scene = new Scene();
 	entityManager = new EntityManager();
 	map = new Map();
+	fade = new ModuleFadeToBlack();
+	titlescreen = new TitleScreen();
+
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
-	AddModule(input);
-	AddModule(win);
-	AddModule(tex);
-	AddModule(audio);
-	//L07 DONE 2: Add Physics module
-	AddModule(physics);
-	AddModule(scene);
-	AddModule(entityManager);
-	AddModule(map);
+	AddModule(input, true);
+	AddModule(win, true);
+	AddModule(tex, true);
+	AddModule(audio, true);
+	AddModule(fade, true);
+	//L07 TODO 2: Add Physics module
+	AddModule(physics, false);
+	AddModule(scene, false);
+	AddModule(entityManager, false);
+	AddModule(titlescreen, true);
+	AddModule(map, false);
+	/*AddModule(endingscreen, false);*/
 
 	// Render last to swap buffer
-	AddModule(render);
+	AddModule(render, true);
 }
 
 // Destructor
@@ -62,9 +70,11 @@ App::~App()
 	modules.Clear();
 }
 
-void App::AddModule(Module* module)
+void App::AddModule(Module* module, bool active)
 {
-	module->Init();
+	if (active == true)
+		module->Init();
+
 	modules.Add(module);
 }
 
