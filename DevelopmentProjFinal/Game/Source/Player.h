@@ -26,8 +26,6 @@ public:
 
 	void OnCollision(PhysBody* physA, PhysBody* physB);
 
-	void LoadAnimation();
-
 public:
 
 private:
@@ -36,9 +34,15 @@ private:
 	SDL_Texture* textureIdle;
 	SDL_Texture* textureRun;
 	SDL_Texture* textureJump;
+	SDL_Texture* textureIdle2;
+	SDL_Texture* textureRun2;
+	SDL_Texture* textureJump2;
 	const char* texturePathIdle;
 	const char* texturePathRun;
 	const char* texturePathJump;
+	const char* texturePathIdle2;
+	const char* texturePathRun2;
+	const char* texturePathJump2;
 	Animation IdleL;
 	Animation RunL;
 	Animation JumpL;

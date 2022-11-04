@@ -29,6 +29,7 @@ bool Player::Awake() {
 	position.x = parameters.attribute("x").as_int();
 	position.y = parameters.attribute("y").as_int();
 	texturePathIdle = parameters.attribute("texturepathidle").as_string();
+	texturePathIdle2 = parameters.attribute("texturepathidle").as_string();
 	texturePathRun = parameters.attribute("texturepathrun").as_string();
 	texturePathJump = parameters.attribute("texturepathjump").as_string();
 
@@ -41,6 +42,9 @@ bool Player::Start() {
 	textureIdle = app->tex->Load(texturePathIdle);
 	textureRun = app->tex->Load(texturePathRun);
 	textureJump = app->tex->Load(texturePathJump);
+	textureIdle2 = app->tex->Load(texturePathIdle2);
+	textureRun2 = app->tex->Load(texturePathRun2);
+	textureJump2 = app->tex->Load(texturePathJump2);
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
 	pbody = app->physics->CreateCircle(position.x+16, position.y-6, 32, bodyType::DYNAMIC);
@@ -48,16 +52,28 @@ bool Player::Start() {
 	pbody->ctype = ColliderType::PLAYER;
 
 	IdleL.PushBack({ 0, 0, 72, 86 });
-	IdleL.PushBack({ 72, 0, 72, 86 });
-	IdleL.PushBack({ 144, 0, 72, 86 });
-	IdleL.PushBack({ 216,0, 72, 86 });
-	IdleL.speed = 0.5f;
+	IdleL.PushBack({ 0, 0, 72, 86 });
+	IdleL.PushBack({ 67, 0, 72, 86 });
+	IdleL.PushBack({ 134, 0, 72, 86 });
+	IdleL.PushBack({ 134, 0, 72, 86 });
+	IdleL.PushBack({ 201,0, 72, 86 });
+	IdleL.speed = 0.05f;
+	IdleL.loop = true;
+
+	IdleR.PushBack({ 0, 0, 72, 86 });
+	IdleR.PushBack({ 0, 0, 72, 86 });
+	IdleR.PushBack({ 67, 0, 72, 86 });
+	IdleR.PushBack({ 134, 0, 72, 86 });
+	IdleR.PushBack({ 134, 0, 72, 86 });
+	IdleR.PushBack({ 201,0, 72, 86 });
+	IdleL.speed = 0.05f;
 	IdleL.loop = true;
 
 	return true;
 }
 
 bool isJumping = false;
+bool FacingFront = true;
 b2Vec2 vel = b2Vec2(0, -GRAVITY_Y);
 float Jump = 5;
 
@@ -71,6 +87,13 @@ bool Player::Update()
 	//pbody->listener->OnCollision(pbody, );
 	int speed = 15; 
 
+	if (FacingFront) {
+		currentAnim = &IdleL;
+	}
+	else {
+		currentAnim = &IdleR;
+	}
+
 	//L02: DONE 4: modify the position of the player using arrow keys and render the texture
 	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
 		//
@@ -81,11 +104,14 @@ bool Player::Update()
 		
 	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
 		vel.x -= speed;
+		FacingFront = false;
 		app->render->camera.x += 2;
+		
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
 		vel.x += speed;
+		FacingFront = true;
 		app->render->camera.x -= 2;
 	}
 
@@ -118,11 +144,15 @@ bool Player::Update()
 	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x)-46;
 	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y)-52;
 
-	currentAnim = &IdleL;
-	
 	SDL_Rect frame = currentAnim->GetCurrentFrame();
 
-	app->render->DrawTexture(textureIdle, position.x , position.y, &frame);
+	if (FacingFront) {
+		app->render->DrawTexture(textureIdle, position.x, position.y, &frame);
+	}
+	else {
+		app->render->DrawTexture(textureIdle2, position.x, position.y, &frame);
+	}
+
 	currentAnim->Update();
 
 	return true;
