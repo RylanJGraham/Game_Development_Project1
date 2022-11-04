@@ -41,7 +41,7 @@ bool TitleScreen::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool TitleScreen::Start()
 {
-	img = app->tex->Load("Assets/Textures/TitleScreen.png");
+	img = app->tex->Load("Assets/Textures/titlescreen.png");
 
 
 	return true;
@@ -72,7 +72,6 @@ bool TitleScreen::PostUpdate()
 {
 	bool ret = true;
 
-	//app->render->DrawTexture(img, 0, 0, NULL);
 
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
@@ -92,3 +91,4 @@ bool TitleScreen::CleanUp()
 
 	return true;
 }
+
