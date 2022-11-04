@@ -30,13 +30,7 @@ bool Player::Awake() {
 	startPos.y = parameters.attribute("y").as_int();
 
 
-	texturePathIdle = parameters.attribute("texturepathidle").as_string();
-	texturePathIdle2 = parameters.attribute("texturepathidle2").as_string();
-	texturePathRun = parameters.attribute("texturepathrun").as_string();
-	texturePathRun2 = parameters.attribute("texturepathrun2").as_string();
-	texturePathJump = parameters.attribute("texturepathjump").as_string();
-	texturePathJump2 = parameters.attribute("texturepathjump2").as_string();
-
+	texturePath = parameters.attribute("texturepath").as_string();
 
 	width = 32;
 	height = 32;
@@ -47,15 +41,10 @@ bool Player::Awake() {
 bool Player::Start() {
 
 	//initilize textures
-	textureIdle = app->tex->Load(texturePathIdle);
-	textureRun = app->tex->Load(texturePathRun);
-	textureJump = app->tex->Load(texturePathJump);
-	textureIdle2 = app->tex->Load(texturePathIdle2);
-	textureRun2 = app->tex->Load(texturePathRun2);
-	textureJump2 = app->tex->Load(texturePathJump2);
+	texture = app->tex->Load(texturePath);
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
-	pbody = app->physics->CreateCircle(position.x+16, position.y-6, 32, bodyType::DYNAMIC);
+	pbody = app->physics->CreateCircle(position.x + 16, position.y - 6, 32, bodyType::DYNAMIC);
 	pbody->listener = this;
 	pbody->ctype = ColliderType::PLAYER;
 
@@ -68,14 +57,46 @@ bool Player::Start() {
 	IdleL.speed = 0.05f;
 	IdleL.loop = true;
 
-	IdleR.PushBack({ 0, 0, 72, 86 });
-	IdleR.PushBack({ 0, 0, 72, 86 });
-	IdleR.PushBack({ 67, 0, 72, 86 });
-	IdleR.PushBack({ 134, 0, 72, 86 });
-	IdleR.PushBack({ 134, 0, 72, 86 });
-	IdleR.PushBack({ 201,0, 72, 86 });
+	IdleR.PushBack({ 0, 86, 72, 86 });
+	IdleR.PushBack({ 0, 86, 72, 86 });
+	IdleR.PushBack({ 67, 86, 72, 86 });
+	IdleR.PushBack({ 134, 86, 72, 86 });
+	IdleR.PushBack({ 134, 86, 72, 86 });
+	IdleR.PushBack({ 201, 86, 72, 86 });
 	IdleR.speed = 0.05f;
 	IdleR.loop = true;
+
+	RunL.PushBack({ 0, 172, 72, 86 });
+	RunL.PushBack({ 72, 172, 72, 86 });
+	RunL.PushBack({ 144, 172, 72, 86 });
+	RunL.PushBack({ 216, 172, 72, 86 });
+	RunL.PushBack({ 288, 172, 72, 86 });
+	RunL.PushBack({ 360, 172, 72, 86 });
+	RunL.PushBack({ 432, 172, 72, 86 });
+	RunL.speed = 0.1f;
+	RunL.loop = true;
+
+	RunR.PushBack({ 432, 258, 72, 86 });
+	RunR.PushBack({ 360, 258, 72, 86 });
+	RunR.PushBack({ 288, 258, 72, 86 });
+	RunR.PushBack({ 216, 258, 72, 86 });
+	RunR.PushBack({ 144, 258, 72, 86 });
+	RunR.PushBack({ 72, 258, 72, 86 });
+	RunR.PushBack({ 0, 258, 72, 86 });
+	RunR.speed = 0.1f;
+	RunR.loop = true;
+
+	JumpL.PushBack({ 0, 344, 80, 86 });
+	JumpL.PushBack({ 80, 344, 80, 86 });
+	JumpL.PushBack({ 160, 344, 80, 86 });
+	JumpL.speed = 0.01f;
+	JumpL.loop = false;
+
+	JumpR.PushBack({ 400, 430, 80, 86 });
+	JumpR.PushBack({ 320, 430, 80, 86 });
+	JumpR.PushBack({ 240, 430, 80, 86 });
+	JumpR.speed = 0.01f;
+	JumpR.loop = false;
 
 	return true;
 }
@@ -131,6 +152,7 @@ bool Player::Update()
 		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
 			vel.x -= speed;
 			FacingFront = false;
+			currentAnim = &RunR;
 			app->render->camera.x += 2;
 
 		}
@@ -138,6 +160,7 @@ bool Player::Update()
 		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
 			vel.x += speed;
 			FacingFront = true;
+			currentAnim = &RunL;
 			app->render->camera.x -= 2;
 		}
 
@@ -160,6 +183,15 @@ bool Player::Update()
 			}
 		}
 
+	}
+
+	if (isJumping) {
+		if (FacingFront) {
+			currentAnim = &JumpL;
+		}
+		else {
+			currentAnim = &JumpR;
+		}
 	}
 
 	//L02: DONE 4: modify the position of the player using arrow keys and render the texture
