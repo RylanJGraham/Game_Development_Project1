@@ -205,12 +205,7 @@ bool Player::Update()
 
 	SDL_Rect frame = currentAnim->GetCurrentFrame();
 
-	if (FacingFront) {
-		app->render->DrawTexture(textureIdle, position.x, position.y, &frame);
-	}
-	else {
-		app->render->DrawTexture(textureIdle2, position.x, position.y, &frame);
-	}
+	app->render->DrawTexture(texture, position.x, position.y, &frame);
 
 	currentAnim->Update();
 
