@@ -62,6 +62,7 @@ bool Scene::Start()
 	app->win->SetTitle(title.GetString());
 	app->entityManager->Enable();
 	app->physics->Enable();
+	app->scene->player->ResetPlayerPos();
 
 	return true;
 }
@@ -93,6 +94,15 @@ bool Scene::Update(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		app->render->camera.x -= 10;
+
+	if (cameraFix == true)
+		app->render->camera.x = -player->position.x + (app->win->screenSurface->w) / 2;
+	else
+		app->render->camera.x = 0;
+
+	if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) {
+		player->godMode = !player->godMode;
+	}
 
 	//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
 

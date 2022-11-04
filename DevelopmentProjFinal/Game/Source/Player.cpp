@@ -26,10 +26,8 @@ bool Player::Awake() {
 	//texturePath = "Assets/Textures/player/idle1.png";
 
 	//L02: DONE 5: Get Player parameters from XML
-	startingPosition.x = parameters.attribute("x").as_int();
-	startingPosition.y = parameters.attribute("y").as_int();
-	position.x = parameters.attribute("x").as_int();
-	position.y = parameters.attribute("y").as_int();
+	startPos.x = parameters.attribute("x").as_int();
+	startPos.y = parameters.attribute("y").as_int();
 
 
 	texturePathIdle = parameters.attribute("texturepathidle").as_string();
@@ -38,6 +36,10 @@ bool Player::Awake() {
 	texturePathRun2 = parameters.attribute("texturepathrun2").as_string();
 	texturePathJump = parameters.attribute("texturepathjump").as_string();
 	texturePathJump2 = parameters.attribute("texturepathjump2").as_string();
+
+
+	width = 32;
+	height = 32;
 
 	return true;
 }
@@ -78,11 +80,10 @@ bool Player::Start() {
 	return true;
 }
 
-bool isJumping = false;
-bool FacingFront = true;
-b2Vec2 vel = b2Vec2(0, -GRAVITY_Y);
-float Jump = 5;
 
+bool Player::PreUpdate() {
+	return true;
+}
 
 
 bool Player::Update()
@@ -92,6 +93,7 @@ bool Player::Update()
 	vel.x = 0;
 	//pbody->listener->OnCollision(pbody, );
 	int speed = 15; 
+	vel = b2Vec2(0, -GRAVITY_Y);
 
 	if (FacingFront) {
 		currentAnim = &IdleL;
@@ -100,46 +102,68 @@ bool Player::Update()
 		currentAnim = &IdleR;
 	}
 
+	if (godMode == true) {
+
+		vel = { 0, 0 };
+
+		// Fly around the map
+		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
+			vel.y = -5;
+		}
+		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
+			vel.y = 5;
+		}
+		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+			vel.x = -5;
+		}
+		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+			vel.x = 5;
+		}
+	}
+	else {
+		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
+			//
+		}
+		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
+			//
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+			vel.x -= speed;
+			FacingFront = false;
+			app->render->camera.x += 2;
+
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+			vel.x += speed;
+			FacingFront = true;
+			app->render->camera.x -= 2;
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+			if (!isJumping) {
+				isJumping = true;
+				Jump = 5.5;
+				vel.y = 0;
+			}
+		}
+
+		if (isJumping && Jump > 0) {
+			vel.y -= Jump;
+			Jump += GRAVITY_Y;
+		}
+
+		if (Jump <= 0) {
+			if (vel.y < 20) {
+				vel.y -= GRAVITY_Y;
+			}
+		}
+
+	}
+
 	//L02: DONE 4: modify the position of the player using arrow keys and render the texture
-	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
-		//
-	}
-	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
-		//
-	}
-		
-	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-		vel.x -= speed;
-		FacingFront = false;
-		app->render->camera.x += 2;
-		
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-		vel.x += speed;
-		FacingFront = true;
-		app->render->camera.x -= 2;
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
-		if (!isJumping) {
-			isJumping = true;
-			Jump = 5.5;
-			vel.y = 0;
-		}
-	}
-
-	if (isJumping && Jump > 0) {
-		vel.y -= Jump;
-		Jump += GRAVITY_Y;
-	}
 	
-	if (Jump <= 0) {
-		if (vel.y < 20) {
-			vel.y -= GRAVITY_Y;
-		}
-	}
-
 	//Set the velocity of the pbody of the player
 	pbody->body->SetLinearVelocity(vel);
 
@@ -161,6 +185,10 @@ bool Player::Update()
 	return true;
 }
 
+bool Player::PostUpdate() {
+	return true;
+}
+
 bool Player::CleanUp()
 {
 	return true;
@@ -178,6 +206,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		break;
 	case ColliderType::PLATFORM:
 		isJumping = false;
+		startPos = startPos;
 		LOG("Collision PLATFORM");
 		break;
 	case ColliderType::UNKNOWN:
@@ -185,6 +214,17 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		break;
 	}
 
+}
+
+void Player::ResetPlayerPos() {
+
+	pbody->body->SetSleepingAllowed(false);
+	vel = { 0, 0 };
+	pbody->body->SetTransform(PIXEL_TO_METERS(startPos), 0.0f);
+	//position = startingPosition;
+	//app->scene->cameraFix = false;
+
+	LOG("--RESETING PLAYER--");
 }
 
 

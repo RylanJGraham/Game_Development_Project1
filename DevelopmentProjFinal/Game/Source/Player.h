@@ -28,7 +28,15 @@ public:
 
 	void ResetPlayerPos();
 
+	bool PreUpdate();
+
+	bool PostUpdate();
+
 public:
+
+	bool dead = false;
+	bool godMode = false;
+	PhysBody* pbody;
 
 private:
 
@@ -53,8 +61,18 @@ private:
 	Animation JumpR;
 	Animation* currentAnim = nullptr;
 
+	b2Vec2 startPos;
+
+	int width;
+	int height;
+
+	bool isJumping = false;
+	bool FacingFront = true;
+	b2Vec2 vel;
+	float Jump = 5;
+
 	// L07 DONE 5: Add physics to the player - declare a Physics body
-	PhysBody* pbody;
+
 
 };
 
