@@ -26,8 +26,12 @@ bool Player::Awake() {
 	//texturePath = "Assets/Textures/player/idle1.png";
 
 	//L02: DONE 5: Get Player parameters from XML
+	startingPosition.x = parameters.attribute("x").as_int();
+	startingPosition.y = parameters.attribute("y").as_int();
 	position.x = parameters.attribute("x").as_int();
 	position.y = parameters.attribute("y").as_int();
+
+
 	texturePathIdle = parameters.attribute("texturepathidle").as_string();
 	texturePathIdle2 = parameters.attribute("texturepathidle2").as_string();
 	texturePathRun = parameters.attribute("texturepathrun").as_string();
@@ -181,7 +185,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		break;
 	}
 
-
-
 }
+
 

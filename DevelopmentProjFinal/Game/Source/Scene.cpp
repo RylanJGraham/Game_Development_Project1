@@ -5,6 +5,7 @@
 #include "Render.h"
 #include "Window.h"
 #include "Scene.h"
+#include "Physics.h"
 #include "EntityManager.h"
 #include "Map.h"
 
@@ -59,6 +60,8 @@ bool Scene::Start()
 		app->map->mapData.tilesets.Count());
 
 	app->win->SetTitle(title.GetString());
+	app->entityManager->Enable();
+	app->physics->Enable();
 
 	return true;
 }
