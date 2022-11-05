@@ -72,7 +72,7 @@ struct Properties
 struct MapLayer
 {
 	SString	name;
-	int id; 
+	int id;
 	int width;
 	int height;
 	uint* data;
@@ -113,22 +113,22 @@ class Map : public Module
 {
 public:
 
-    Map();
+	Map();
 
-    // Destructor
-    virtual ~Map();
+	// Destructor
+	virtual ~Map();
 
-    // Called before render is available
-    bool Awake(pugi::xml_node& conf);
+	// Called before render is available
+	bool Awake(pugi::xml_node& conf);
 
-    // Called each loop iteration
-    void Draw();
+	// Called each loop iteration
+	void Draw();
 
-    // Called before quitting
-    bool CleanUp();
+	// Called before quitting
+	bool CleanUp();
 
-    // Load new map
-    bool Load();
+	// Load new map
+	bool Load();
 
 	// L05: DONE 8: Create a method that translates x,y coordinates from map positions to world positions
 	iPoint MapToWorld(int x, int y) const;
@@ -150,9 +150,9 @@ private:
 	// L06: DONE 6: Load a group of properties 
 	bool LoadProperties(pugi::xml_node& node, Properties& properties);
 
-	bool LoadColliders();
+	bool CreateColliders();
 
-public: 
+public:
 
 	// L04: DONE 1: Declare a variable data of the struct MapData
 	MapData mapData;
@@ -160,9 +160,9 @@ public:
 
 private:
 
-    SString mapFileName;
+	SString mapFileName;
 	SString mapFolder;
-    bool mapLoaded;
+	bool mapLoaded;
 };
 
 #endif // __MAP_H__

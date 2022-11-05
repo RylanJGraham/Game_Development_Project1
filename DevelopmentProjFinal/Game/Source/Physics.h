@@ -5,7 +5,7 @@
 #include "Box2D/Box2D/Box2D.h"
 
 #define GRAVITY_X 0.0f
-#define GRAVITY_Y -0.8f
+#define GRAVITY_Y -7.0f
 
 #define PIXELS_PER_METER 32.0f // if touched change METER_PER_PIXEL too
 #define METER_PER_PIXEL 0.03125f // this is 1 / PIXELS_PER_METER !
@@ -29,16 +29,24 @@ enum bodyType {
 enum class ColliderType {
 	PLAYER,
 	ITEM,
+	COIN,
+	ENEMY,
 	PLATFORM,
+	WALL,
+	WATER,
+	CAMERAFIX,
+	NONCAMERAFIX,
+	CAMERAFIX_2,
+	NONCAMERAFIX_2,
+	WIN_ZONE,
 	UNKNOWN
-	// ..
 };
 
 // Small class to return to other modules to track position and rotation of physics bodies
 class PhysBody
 {
 public:
-	PhysBody() : listener(NULL), body(NULL)
+	PhysBody() : listener(NULL), body(NULL), cType(ColliderType::UNKNOWN)
 	{}
 
 	void GetPosition(int& x, int& y) const;
@@ -50,7 +58,7 @@ public:
 	int width, height;
 	b2Body* body;
 	Entity* listener;
-	ColliderType ctype;
+	ColliderType cType;
 };
 
 // Module --------------------------------------
@@ -60,20 +68,21 @@ public:
 	Physics();
 	~Physics();
 
+	bool Awake() { return true; }
 	bool Start();
 	bool PreUpdate();
+	bool Update();
 	bool PostUpdate();
 	bool CleanUp();
 
-	
-	PhysBody* CreateRectangle(int x, int y, int width, int height, bodyType type);
-	PhysBody* CreateCircle(int x, int y, int radious, bodyType type);
-	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, bodyType type);
-	PhysBody* CreateChain(int x, int y, int* points, int size, bodyType type);
+	PhysBody* CreateRectangle(int x, int y, int width, int height, bodyType type, ColliderType ctype);
+	PhysBody* CreateCircle(int x, int y, int radious, bodyType type, ColliderType ctype);
+	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, bodyType type, ColliderType ctype);
+	PhysBody* CreateChain(int x, int y, int* points, int size, bodyType type, ColliderType ctype);
 	b2RevoluteJoint* CreateRevoluteJoint(PhysBody* A, b2Vec2 anchorA, PhysBody* B, b2Vec2 anchorB, float angle, bool collideConnected, bool enableLimit);
 	b2PrismaticJoint* CreatePrismaticJoint(PhysBody* A, b2Vec2 anchorA, PhysBody* B, b2Vec2 anchorB, b2Vec2 axys, float maxHeight, bool collideConnected, bool enableLimit);
 	b2WeldJoint* CreateWeldJoint(PhysBody* A, b2Vec2 anchorA, PhysBody* B, b2Vec2 anchorB, float angle, bool collideConnected, bool enableLimit);
-	
+
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 
@@ -85,4 +94,3 @@ private:
 	b2MouseJoint* mouse_joint;
 	b2Body* ground;
 };
-

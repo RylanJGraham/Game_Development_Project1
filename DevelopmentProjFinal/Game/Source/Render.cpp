@@ -2,6 +2,8 @@
 #include "Window.h"
 #include "Render.h"
 #include "TitleScreen.h"
+
+
 #include "Defs.h"
 #include "Log.h"
 
@@ -11,7 +13,7 @@ Render::Render() : Module()
 {
 	name.Create("renderer");
 	background.r = 0;
-	background.g = 0;
+	background.g = 255;
 	background.b = 0;
 	background.a = 0;
 }
@@ -28,7 +30,7 @@ bool Render::Awake(pugi::xml_node& config)
 
 	Uint32 flags = SDL_RENDERER_ACCELERATED;
 
-	if (config.child("vsync").attribute("value").as_bool(true) == true)
+	if (limitFPS = config.child("vsync").attribute("value").as_bool(true) == true)
 	{
 		flags |= SDL_RENDERER_PRESENTVSYNC;
 		LOG("Using vsync");
@@ -36,7 +38,7 @@ bool Render::Awake(pugi::xml_node& config)
 
 	renderer = SDL_CreateRenderer(app->win->window, -1, flags);
 
-	if(renderer == NULL)
+	if (renderer == NULL)
 	{
 		LOG("Could not create the renderer! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
@@ -104,7 +106,7 @@ void Render::ResetViewPort()
 }
 
 // Blit to screen
-bool Render::DrawTexture(SDL_Texture* texture, int x, int y, const SDL_Rect* section, float speed, double angle, int pivotX, int pivotY) const
+bool Render::DrawTexture(SDL_Texture* texture, int x, int y, const SDL_Rect* section, SDL_RendererFlip flip_, float speed, double angle, int pivotX, int pivotY) const
 {
 	bool ret = true;
 	uint scale = app->win->GetScale();
@@ -113,7 +115,7 @@ bool Render::DrawTexture(SDL_Texture* texture, int x, int y, const SDL_Rect* sec
 	rect.x = (int)(camera.x * speed) + x * scale;
 	rect.y = (int)(camera.y * speed) + y * scale;
 
-	if(section != NULL)
+	if (section != NULL)
 	{
 		rect.w = section->w;
 		rect.h = section->h;
@@ -129,14 +131,15 @@ bool Render::DrawTexture(SDL_Texture* texture, int x, int y, const SDL_Rect* sec
 	SDL_Point* p = NULL;
 	SDL_Point pivot;
 
-	if(pivotX != INT_MAX && pivotY != INT_MAX)
+	if (pivotX != INT_MAX && pivotY != INT_MAX)
 	{
 		pivot.x = pivotX;
 		pivot.y = pivotY;
 		p = &pivot;
 	}
 
-	if(SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, SDL_FLIP_NONE) != 0)
+
+	if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, flip_) != 0)
 	{
 		LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
 		ret = false;
@@ -154,7 +157,7 @@ bool Render::DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
 
 	SDL_Rect rec(rect);
-	if(use_camera)
+	if (use_camera)
 	{
 		rec.x = (int)(camera.x + rect.x * scale);
 		rec.y = (int)(camera.y + rect.y * scale);
@@ -164,7 +167,7 @@ bool Render::DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint
 
 	int result = (filled) ? SDL_RenderFillRect(renderer, &rec) : SDL_RenderDrawRect(renderer, &rec);
 
-	if(result != 0)
+	if (result != 0)
 	{
 		LOG("Cannot draw quad to screen. SDL_RenderFillRect error: %s", SDL_GetError());
 		ret = false;
@@ -183,12 +186,12 @@ bool Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b,
 
 	int result = -1;
 
-	if(use_camera)
+	if (use_camera)
 		result = SDL_RenderDrawLine(renderer, camera.x + x1 * scale, camera.y + y1 * scale, camera.x + x2 * scale, camera.y + y2 * scale);
 	else
 		result = SDL_RenderDrawLine(renderer, x1 * scale, y1 * scale, x2 * scale, y2 * scale);
 
-	if(result != 0)
+	if (result != 0)
 	{
 		LOG("Cannot draw quad to screen. SDL_RenderFillRect error: %s", SDL_GetError());
 		ret = false;
@@ -212,7 +215,7 @@ bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uin
 
 	for (uint i = 0; i < 360; ++i)
 	{
-		if (app->titlescreen->active == true) {
+		if (app->titlescreen->active == true || app->logoscreen->active == true) {
 			points[i].x = (int)(camera.x + radius * cos(i * factor));
 			points[i].y = (int)(camera.y + radius * sin(i * factor));
 		}
@@ -220,11 +223,14 @@ bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uin
 			points[i].x = (int)(camera.x + x + radius * cos(i * factor));
 			points[i].y = (int)(camera.y + y + radius * sin(i * factor));
 		}
+		// TO HIDE THE CIRCLES DRAWED LINKED TO THE BODIES, DELETE THE "x" and "y" from the lines below.
+		/*points[i].x = (int)(camera.x + x + radius * cos(i * factor));
+		points[i].y = (int)(camera.y + y + radius * sin(i * factor));*/
 	}
 
 	result = SDL_RenderDrawPoints(renderer, points, 360);
 
-	if(result != 0)
+	if (result != 0)
 	{
 		LOG("Cannot draw quad to screen. SDL_RenderFillRect error: %s", SDL_GetError());
 		ret = false;

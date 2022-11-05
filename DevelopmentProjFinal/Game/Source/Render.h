@@ -6,8 +6,6 @@
 #include "Point.h"
 
 #include "SDL/include/SDL.h"
-#include "SDL/include/SDL_Rect.h"
-
 
 class Render : public Module
 {
@@ -29,18 +27,14 @@ public:
 	bool Update(float dt);
 	bool PostUpdate();
 
-	
 	// Called before quitting
 	bool CleanUp();
-
-	bool Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section = nullptr, float speed = 1.0f, bool useCamera = true);
-
 
 	void SetViewPort(const SDL_Rect& rect);
 	void ResetViewPort();
 
 	// Drawing
-	bool DrawTexture(SDL_Texture* texture, int x, int y, const SDL_Rect* section = NULL, float speed = 1.0f, double angle = 0, int pivotX = INT_MAX, int pivotY = INT_MAX) const;
+	bool DrawTexture(SDL_Texture* texture, int x, int y, const SDL_Rect* section = NULL, SDL_RendererFlip flip_ = SDL_FLIP_NONE, float speed = 1.0f, double angle = 0, int pivotX = INT_MAX, int pivotY = INT_MAX) const;
 	bool DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool filled = true, bool useCamera = true) const;
 	bool DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool useCamera = true) const;
 	bool DrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool useCamera = true) const;
@@ -54,8 +48,8 @@ public:
 
 public:
 
+	//Called for limit FPS to 60 in Main Funct, Takes the value from vsync config.xml--> If it is false then limit to 60, if is true use screen refresh rate
 	bool limitFPS;
-
 
 	SDL_Renderer* renderer;
 	SDL_Rect camera;
