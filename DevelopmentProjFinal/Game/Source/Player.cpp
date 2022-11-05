@@ -73,9 +73,8 @@ bool Player::Start() {
 	texture = app->tex->Load(texturePath);
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
-	pbody = app->physics->CreateCircle(position.x + 16, position.y - 6, 32, bodyType::DYNAMIC);
+	pbody = app->physics->CreateCircle(position.x + 16, position.y - 6, 32, bodyType::DYNAMIC, ColliderType::PLAYER);
 	pbody->listener = this;
-	pbody->ctype = ColliderType::PLAYER;
 
 
 	IdleL.PushBack({ 0, 0, 72, 86 });
@@ -278,7 +277,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	startPos.x = parameters.attribute("x").as_int();
 	startPos.y = parameters.attribute("y").as_int();
 
-	switch (physB->ctype)
+	switch (physB->cType)
 	{
 	case ColliderType::ITEM:
 		LOG("Collision ITEM");

@@ -34,9 +34,7 @@ bool Item::Start() {
 	texture = app->tex->Load(texturePath);
 	
 	// L07 DONE 4: Add a physics to an item - initialize the physics body
-	pbody = app->physics->CreateCircle(position.x + 16, position.y + 16, 16, bodyType::DYNAMIC);
-	pbody->ctype = ColliderType::ITEM;
-
+	pbody = app->physics->CreateCircle(position.x + 16, position.y + 16, 16, bodyType::DYNAMIC, ColliderType::ITEM);
 	pbody->listener = this;
 	return true;
 }
@@ -70,7 +68,7 @@ bool Item::CleanUp()
 
 void Item::OnCollision(PhysBody* physA, PhysBody* physB) {
 
-	switch (physB->ctype)
+	switch (physB->cType)
 	{
 	case ColliderType::PLAYER:
 		LOG("Collision PLAYER");
