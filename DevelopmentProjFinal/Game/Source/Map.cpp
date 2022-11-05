@@ -434,7 +434,7 @@ bool Map::CreateColliders()
 
     while (mapLayerItem != NULL)
     {
-        if (mapLayerItem->data->name == "COLLISIONS")
+        if (mapLayerItem->data->name == "COLLIDERS")
         {
             int halfTileHeight = mapData.tileHeight / 2;
             int halfTileWidth = mapData.tileWidth / 2;
@@ -443,7 +443,7 @@ bool Map::CreateColliders()
             {
                 for (int y = 0; y < mapLayerItem->data->height; y++)
                 {
-                    if (mapLayerItem->data->Get(x, y) == 695)
+                    if (mapLayerItem->data->Get(x, y) == 266)
                     {
                         iPoint pos = MapToWorld(x, y);
                         app->physics->CreateRectangle(pos.x + halfTileHeight, pos.y + halfTileWidth, mapData.tileWidth, mapData.tileHeight, STATIC, ColliderType::PLATFORM);
