@@ -4,11 +4,12 @@
 #include "Audio.h"
 #include "Input.h"
 #include "Render.h"
+#include "Window.h"
 #include "Scene.h"
 #include "Log.h"
 #include "Point.h"
-#include "Physics.h"
-#include "Animation.h"
+#include "Map.h"
+#include "ModuleFadeToBlack.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -26,19 +27,20 @@ bool Player::Awake() {
 	//texturePath = "Assets/Textures/player/idle1.png";
 
 	//L02: DONE 5: Get Player parameters from XML
+	b2Vec2 startPos;
 	startPos.x = parameters.attribute("x").as_int();
 	startPos.y = parameters.attribute("y").as_int();
 
 
-<<<<<<< Updated upstream
+
 	texturePath = parameters.attribute("texturepath").as_string();
-=======
-	texturePathIdle = parameters.attribute("texturepathidle").as_string();
+
+	/*texturePathIdle = parameters.attribute("texturepathidle").as_string();
 	texturePathIdle2 = parameters.attribute("texturepathidle2").as_string();
 	texturePathRun = parameters.attribute("texturepathrun").as_string();
 	texturePathRun2 = parameters.attribute("texturepathrun2").as_string();
 	texturePathJump = parameters.attribute("texturepathjump").as_string();
-	texturePathJump2 = parameters.attribute("texturepathjump2").as_string();
+	texturePathJump2 = parameters.attribute("texturepathjump2").as_string();*/
 
 	IdleL.PushBack({ 0, 0, 72, 86 });
 	IdleL.PushBack({ 0, 0, 72, 86 });
@@ -57,7 +59,7 @@ bool Player::Awake() {
 	IdleR.PushBack({ 201,0, 72, 86 });
 	IdleR.speed = 0.05f;
 	IdleR.loop = true;
->>>>>>> Stashed changes
+
 
 	width = 32;
 	height = 32;
@@ -75,7 +77,7 @@ bool Player::Start() {
 	pbody->listener = this;
 	pbody->ctype = ColliderType::PLAYER;
 
-<<<<<<< Updated upstream
+
 	IdleL.PushBack({ 0, 0, 72, 86 });
 	IdleL.PushBack({ 0, 0, 72, 86 });
 	IdleL.PushBack({ 67, 0, 72, 86 });
@@ -93,10 +95,10 @@ bool Player::Start() {
 	IdleR.PushBack({ 201, 86, 72, 86 });
 	IdleR.speed = 0.05f;
 	IdleR.loop = true;
-=======
+
 	currentAnim = &IdleL;
 	dead = false;
->>>>>>> Stashed changes
+
 
 	RunL.PushBack({ 0, 172, 72, 86 });
 	RunL.PushBack({ 72, 172, 72, 86 });
@@ -143,10 +145,11 @@ bool Player::Update()
 {
 	currentAnim = &IdleL;
 	// L07 DONE 5: Add physics to the player - updated player position using physics
-	velocity.x = 0;
+	
 	//pbody->listener->OnCollision(pbody, );
 	int speed = 15; 
-	velocity = b2Vec2(0, -GRAVITY_Y);
+	b2Vec2 velocity = b2Vec2(0, -GRAVITY_Y);
+	velocity.x = 0;
 
 	
 
@@ -271,6 +274,9 @@ bool Player::CleanUp()
 void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 	// L07 DONE 7: Detect the type of collision
+	b2Vec2 startPos;
+	startPos.x = parameters.attribute("x").as_int();
+	startPos.y = parameters.attribute("y").as_int();
 
 	switch (physB->ctype)
 	{
@@ -292,7 +298,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 void Player::ResetPlayerPos() {
 
 	pbody->body->SetSleepingAllowed(false);
-	velocity = { 0, 0 };
+	b2Vec2 velocity = { 0, 0 };
+	b2Vec2 startPos;
+	startPos.x = parameters.attribute("x").as_int();
+	startPos.y = parameters.attribute("y").as_int();
 	pbody->body->SetTransform(PIXEL_TO_METERS(startPos), 0.0f);
 	/*position = startPos;*/
 	//app->scene->cameraFix = false;

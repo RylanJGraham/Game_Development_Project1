@@ -44,10 +44,10 @@ void Map::Draw()
     ListItem<TileSet*>* tileset;
     tileset = mapData.tilesets.start;
 
-    while (tileset != NULL) {
+   /* while (tileset != NULL) {
         app->render->DrawTexture(tileset->data->texture,0,0);
         tileset = tileset->next;
-    }
+    }*/
     
 
     // L05: DONE 5: Prepare the loop to draw all tiles in a layer + DrawTexture()
@@ -195,7 +195,7 @@ bool Map::Load()
 
     if (ret == true)
     {
-        ret = LoadCollisions(49); //HAY QUE HACERLO ASI
+        ret = LoadColliders(); //HAY QUE HACERLO ASI
     }
     
     // L07 DONE 3: Create colliders
@@ -360,35 +360,39 @@ bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
 }
 
 
-bool Map::LoadCollisions(int Colgid)
+bool Map::LoadColliders()
 {
-
     bool ret = true;
-    int i = 0;
-    pugi::xml_node tile;
+
     ListItem<MapLayer*>* mapLayerItem;
     mapLayerItem = mapData.maplayers.start;
 
     while (mapLayerItem != NULL)
     {
+        if (mapLayerItem->data->name == "COLLIDERS")
+        {
+            int halfTileHeight = mapData.tileHeight / 2;
+            int halfTileWidth = mapData.tileWidth / 2;
 
-        for (int i = 0; i < mapLayerItem->data->height; i++) {
-            for (int j = 0; j < mapLayerItem->data->width; j++) {
-                if (mapLayerItem->data->name == "Colisions" && (mapLayerItem->data->Get(j, i)) == Colgid) {
+            for (int x = 0; x < mapLayerItem->data->width; x++)
+            {
+                for (int y = 0; y < mapLayerItem->data->height; y++)
+                {
+                    if (mapLayerItem->data->Get(x, y) == 3139)
+                    {
+                        iPoint pos = MapToWorld(x, y);
+                        //app->physics->CreateRectangle(pos.x + halfTileHeight, pos.y + halfTileWidth, mapData.tileWidth, mapData.tileHeight, STATIC);
 
-                    iPoint p = MapToWorld(j, i);
-                    app->physics->CreateRectangle(p.x + (mapData.tileWidth / 2), p.y + (mapData.tileHeight / 2), mapData.tileWidth, mapData.tileHeight, STATIC);
-
+                        PhysBody* c1 = app->physics->CreateRectangle(pos.x + halfTileHeight, pos.y + halfTileWidth, mapData.tileWidth, mapData.tileHeight, STATIC);
+                        c1->ctype = ColliderType::PLATFORM;
+                    }
                 }
             }
         }
+
         mapLayerItem = mapLayerItem->next;
     }
-
-
-
     return ret;
-
 }
 
 

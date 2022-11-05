@@ -29,19 +29,22 @@ public:
 
 	bool isPicked = false;
 
+	//TODO 4: Add a physics to an item
+	PhysBody* pbody;
+
 private:
 
 	SDL_Texture* texture;
 	const char* texturePath;
 
-	//TODO 4: Add a physics to an item
-	PhysBody* pbody;
+
 	b2Vec2 velocity;
 
 	int timeMov = 0;
 
 	int width;
 	int height;
+
 };
 
 #endif // __ITEM_H__

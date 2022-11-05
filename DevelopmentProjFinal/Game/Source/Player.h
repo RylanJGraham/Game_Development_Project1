@@ -32,11 +32,13 @@ public:
 
 	bool PostUpdate();
 
+
 public:
 
 	bool dead = false;
 	bool godMode = false;
 	PhysBody* pbody;
+	
 	
 
 private:
@@ -52,8 +54,6 @@ private:
 	Animation JumpR;
 	Animation* currentAnim = nullptr;
 
-	b2Vec2 velocity;
-	b2Vec2 startPos;
 
 	int width;
 	int height;
