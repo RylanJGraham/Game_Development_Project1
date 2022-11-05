@@ -73,12 +73,14 @@ void Map::Draw()
                     SDL_Rect r = tileset->GetTileRect(gid);
                     iPoint pos = MapToWorld(x, y);
 
+                    app->render->DrawTexture(tileset->texture,
+                        pos.x,
+                        pos.y,
+                        &r);
+
                     if (mapLayerItem->data->properties.GetProperty("Draw") != NULL && mapLayerItem->data->properties.GetProperty("Draw")->value) {
 
-                        app->render->DrawTexture(tileset->texture,
-                            pos.x,
-                            pos.y,
-                            &r);
+                        
                     }
                 }
             }
