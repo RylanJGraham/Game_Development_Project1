@@ -7,6 +7,8 @@
 
 #include "PugiXml\src\pugixml.hpp"
 
+#define MAX_COLLIDERS 35
+
 // L04: DONE 2: Create a struct to hold information for a TileSet
 // Ignore Terrain Types and Tile Types for now, but we want the image!
 struct TileSet
@@ -154,6 +156,7 @@ public:
 
 	// L04: DONE 1: Declare a variable data of the struct MapData
 	MapData mapData;
+	PhysBody* bodies[MAX_COLLIDERS] = { nullptr };
 
 private:
 

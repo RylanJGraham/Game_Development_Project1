@@ -1,11 +1,11 @@
 <config>
   <app>
-    <title>Game Development Testbed</title>
+    <title>GameDevelopmentPlatformer</title>
     <organization>UPC</organization>
   </app>
 
   <renderer>
-    <vsync value="true"/>
+    <vsync value="false"/>
   </renderer>
 
   <window>
@@ -33,7 +33,7 @@
 
   <map>
     <mapfolder path="Assets/Maps/"/>
-    <mapfile path="Assets/Maps/MapTemplateS.tmx"/>
+    <mapfile path="Assets/Maps/MapTemplate.tmx"/>
   </map>
   
 </config>

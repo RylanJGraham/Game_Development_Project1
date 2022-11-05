@@ -59,7 +59,7 @@ void Map::Draw()
 
         //L06: DONE 7: use GetProperty method to ask each layer if your “Draw” property is true.
 
-
+        if (mapLayerItem->data->properties.GetProperty("Draw") != NULL && mapLayerItem->data->properties.GetProperty("Draw")->value) {
             for (int x = 0; x < mapLayerItem->data->width; x++)
             {
                 for (int y = 0; y < mapLayerItem->data->height; y++)
@@ -82,7 +82,7 @@ void Map::Draw()
                     }
                 }
             }
-        
+        }
         mapLayerItem = mapLayerItem->next;
 
     }
@@ -200,9 +200,9 @@ bool Map::Load()
     
     // L07 DONE 3: Create colliders
     // Later you can create a function here to load and create the colliders from the map
-    /*app->physics->CreateRectangle(224 + 128, 543 + 32, 256, 64, STATIC);
+    app->physics->CreateRectangle(224 + 128, 543 + 32, 256, 64, STATIC);
     app->physics->CreateRectangle(352 + 64, 384 + 32, 128, 64, STATIC);
-    app->physics->CreateRectangle(256, 704 + 32, 576, 64, STATIC);*/
+    app->physics->CreateRectangle(256, 704 + 32, 576, 64, STATIC);
 
     if(ret == true)
     {
@@ -359,6 +359,7 @@ bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
     return ret;
 }
 
+
 bool Map::LoadCollisions(int Colgid)
 {
 
@@ -377,7 +378,7 @@ bool Map::LoadCollisions(int Colgid)
 
                     iPoint p = MapToWorld(j, i);
                     app->physics->CreateRectangle(p.x + (mapData.tileWidth / 2), p.y + (mapData.tileHeight / 2), mapData.tileWidth, mapData.tileHeight, STATIC);
-                    
+
                 }
             }
         }
@@ -385,9 +386,9 @@ bool Map::LoadCollisions(int Colgid)
     }
 
 
-    
+
     return ret;
-    
+
 }
 
 
