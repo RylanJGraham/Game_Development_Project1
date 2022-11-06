@@ -21,19 +21,12 @@ Title::Title(bool startEnabled) : Module(startEnabled)
 Title::~Title()
 {}
 
-// Called before render is available
+
 bool Title::Awake(pugi::xml_node& config)
 {
 	LOG("Loading Scene");
 	bool ret = true;
 
-	// iterate all objects in the scene
-	// Check https://pugixml.org/docs/quickstart.html#access
-	/*for (pugi::xml_node itemNode = config.child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
-	{
-		Item* item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
-		item->parameters = itemNode;
-	}*/
 
 	return ret;
 }

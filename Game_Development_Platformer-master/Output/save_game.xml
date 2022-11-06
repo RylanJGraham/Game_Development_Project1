@@ -4,8 +4,13 @@
 	<window />
 	<textures />
 	<audio />
+	<:anonymous />
+	<scene />
+	<Title />
 	<scene />
 	<entitymanager />
+	<map />
+	<:anonymous />
 	<renderer>
 		<camera x="0" y="-448" />
 	</renderer>

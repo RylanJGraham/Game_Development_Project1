@@ -28,8 +28,8 @@
 
 ## Developers
 
- - {Héctor Báscones} - {Role(s)}
- - {Júlia Serra Trujillo} - {Role(s)}
+ - {Rylan} - {Role(s)}
+ - {Xavi} - {Role(s)}
 
 ## License
 
