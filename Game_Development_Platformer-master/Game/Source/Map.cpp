@@ -387,6 +387,13 @@ bool Map::CreateColliders()
                         switch (mapLayerItem->data->Get(x, y))
                         { 
                         case 3139: c1->ctype = ColliderType::PLATFORM; break;
+                            //Making everything ground to test
+                        case 7104:c1->ctype = ColliderType::GROUND; break;
+                        case 7101:c1->ctype = ColliderType::GROUND; break;
+                        case 7100:c1->ctype = ColliderType::GROUND; break;
+                        case 7103:c1->ctype = ColliderType::GROUND; break;
+                        case 7099:c1->ctype = ColliderType::GROUND; break;
+                            //
                         case 3140: c1->ctype = ColliderType::GROUND; break;
                         case 3141: c1->ctype = ColliderType::WALL; break;
                         case 3143: c1->ctype = ColliderType::DEATH; break;

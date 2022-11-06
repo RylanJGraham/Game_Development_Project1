@@ -123,9 +123,6 @@ bool Player::Update()
 		pbody->body->ApplyForce(b2Vec2(0, -force), pbody->body->GetWorldCenter(), true);
 		remainingJumpSteps--;	
 	}
-	else {
-		isGrounded = true;
-	}
 
 	//Update player position in pixels
 	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - 46;
@@ -267,12 +264,12 @@ void Player::LoadAnimations()
 	JumpL.PushBack({ 0, 344, 80, 86 });
 	JumpL.PushBack({ 80, 344, 80, 86 });
 	JumpL.PushBack({ 160, 344, 80, 86 });
-	JumpL.speed = 0.01f;
+	JumpL.speed = 0.5f;
 	JumpL.loop = false;
 
-	JumpR.PushBack({ 400, 430, 80, 86 });
-	JumpR.PushBack({ 320, 430, 80, 86 });
-	JumpR.PushBack({ 240, 430, 80, 86 });
-	JumpR.speed = 0.01f;
+	JumpR.PushBack({ 405, 430, 80, 86 });
+	JumpR.PushBack({ 325, 430, 80, 86 });
+	JumpR.PushBack({ 245, 430, 80, 86 });
+	JumpR.speed = 0.5f;
 	JumpR.loop = false;
 }
