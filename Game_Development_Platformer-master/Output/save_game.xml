@@ -12,6 +12,6 @@
 	<map />
 	<:anonymous />
 	<renderer>
-		<camera x="0" y="-448" />
+		<camera x="-400" y="-498" />
 	</renderer>
 </save_state>

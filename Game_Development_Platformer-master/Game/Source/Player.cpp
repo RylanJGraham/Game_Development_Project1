@@ -207,7 +207,8 @@ void Player::DebugKeys()
 
 	// F6: Load the previous state (even across levels)
 	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) {
-
+		position.x = savedPosition.x;
+		position.y = savedPosition.y;
 	}
 
 	// F9: View colliders / logic
