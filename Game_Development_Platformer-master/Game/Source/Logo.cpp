@@ -35,9 +35,6 @@ bool Logo::Start()
 {
 	img = app->tex->Load("Assets/Textures/XRLogo.png");
 
-	BackgroundSFX = app->audio->LoadFx("Assets/Audio/Music/medieval.wav");
-	selectSFX = app->audio->LoadFx("Assets/Audio/Fx/swordswing.wav");
-
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;
 
@@ -56,8 +53,6 @@ bool Logo::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
 		app->fade->FadeBlack(this, (Module*)app->titleScreen, 90);
-		app->audio->PlayFx(BackgroundSFX, 1);
-		app->audio->PlayFx(selectSFX);
 	}
 
 	return true;

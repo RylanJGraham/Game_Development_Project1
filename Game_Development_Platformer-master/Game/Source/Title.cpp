@@ -44,12 +44,10 @@ bool Title::Start()
 
 	LOG("--STARTS TITLE SCENE--");
 
-	selectSFX = app->audio->LoadFx("Assets/Audio/Fx/swordswing.wav");
-
 	img = app->tex->Load("Assets/Textures/titlescreen.png");
 
 	// Music
-	
+	app->audio->PlayMusic("Assets/Audio/Music/title_screen.ogg");
 
 	// Load SFXs
 	/*startSFX = app->audio->LoadFx("Assets/Audio/Fx/start_game.wav");*/
@@ -69,7 +67,7 @@ bool Title::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
 		LOG("PASA A GAME SCENE");
 		app->fade->FadeBlack(this, (Module*)app->scene, 90);
-		app->audio->PlayFx(selectSFX);
+		app->audio->PlayFx(startSFX);
 	}
 
 	app->render->DrawTexture(img, 0, 0, NULL);

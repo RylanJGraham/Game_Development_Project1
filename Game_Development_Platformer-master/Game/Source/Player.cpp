@@ -8,7 +8,6 @@
 #include "Log.h"
 #include "Point.h"
 #include "Physics.h"
-#include "FadeToBlack.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -40,8 +39,6 @@ bool Player::Start()
 
 	//initilize textures
 	texture = app->tex->Load(texturePath);
-
-	jumpSFX = app->audio->LoadFx("Assets/Audio/Fx/JumpKnight.wav");
 
 	remainingJumpSteps = 0;
 	idle = true;
@@ -111,7 +108,6 @@ bool Player::Update()
 
 		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isGrounded && remainingJumpSteps == 0) {
 			currentAnim = leftID ? &JumpL : &JumpR;
-			app->audio->PlayFx(jumpSFX);
 			remainingJumpSteps = 6;
 			idle = false;
 			isGrounded = false;
@@ -180,7 +176,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 	case ColliderType::DEATH:
 		LOG("Collision DEATH");
 		alive = false;
-		app->fade->FadeBlack(app->scene, (Module*)app->endScreen, 90);
 		break;
 	case ColliderType::UNKNOWN:
 		LOG("Collision UNKNOWN");
