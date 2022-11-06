@@ -38,6 +38,8 @@ public:
 
 private:
 	SDL_Texture* img = nullptr;
+	uint selectSFX = 0;
+	uint BackgroundSFX = 0;
 };
 
 #endif // __LOGO_H__

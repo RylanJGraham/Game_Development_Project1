@@ -7,6 +7,7 @@
 #include "Ending.h"
 #include "EntityManager.h"
 #include "Map.h"
+#include "Scene.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -40,21 +41,20 @@ bool Ending::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool Ending::Start()
 {
-	//img = app->tex->Load("Assets/Textures/test.png");
-	//app->audio->PlayMusic("Assets/Audio/Music/music_spy.ogg");
+	LOG("--STARTS ENDING SCENE--");
+	/*app->entityManager->Disable();
+	app->scene->Disable();
+	app->physics->Disable();
+	app->map->Disable();*/
 
-	// L03: DONE: Load map
-	app->map->Load();
+	img = app->tex->Load("Assets/Textures/endscreen.png");
+	/*app->scene->player->active = true;
+	app->scene->player.rese*/
+	selectSFX = app->audio->LoadFx("Assets/Audio/Fx/swordswing.wav");
 
-	// L04: DONE 7: Set the window title with map/tileset info
-	/*SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
-		app->map->mapData.width,
-		app->map->mapData.height,
-		app->map->mapData.tileWidth,
-		app->map->mapData.tileHeight,
-		app->map->mapData.tilesets.Count());*/
+	//app->scene->player->godMode = true;
 
-		/*app->win->SetTitle(title.GetString());*/
+	return true;
 
 	return true;
 }
@@ -68,29 +68,28 @@ bool Ending::PreUpdate()
 // Called each loop iteration
 bool Ending::Update(float dt)
 {
-	// L03: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
-	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
-		app->SaveGameRequest();
+	//// L03: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
+	//if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
+	//	app->SaveGameRequest();
 
-	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
-		app->LoadGameRequest();
+	//if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
+	//	app->LoadGameRequest();
 
-	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		app->render->camera.y += 1;
+	//if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	//	app->render->camera.y += 1;
 
-	if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		app->render->camera.y -= 1;
+	//if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	//	app->render->camera.y -= 1;
 
-	if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		app->render->camera.x += 1;
+	//if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+	//	app->render->camera.x += 1;
 
-	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		app->render->camera.x -= 1;
+	//if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+	//	app->render->camera.x -= 1;
 
 		//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
 
 		// Draw map
-	app->map->Draw();
 
 	return true;
 }

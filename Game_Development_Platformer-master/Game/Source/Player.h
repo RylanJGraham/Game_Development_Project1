@@ -29,6 +29,8 @@ public:
 
 private:
 	
+
+	uint jumpSFX = 0;
 	bool alive;
 	bool idle, leftID;
 	bool isGrounded;

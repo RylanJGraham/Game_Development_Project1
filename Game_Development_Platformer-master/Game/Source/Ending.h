@@ -37,7 +37,8 @@ public:
 public:
 
 private:
-	SDL_Texture* img;
+	uint selectSFX = 0;
+	SDL_Texture* img = nullptr;
 };
 
 #endif // __ENDING_H__
