@@ -180,6 +180,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 		LOG("Collision ITEM");
 		app->audio->PlayFx(chestopenSFX);
 		app->fade->FadeBlack((Module*)app->scene, (Module*)app->titleScreen, 90);
+		/*app->physics->Disable();
+		app->scene->Disable();*/
 		break;
 	case ColliderType::WALL:
 		LOG("Collision WALL");
