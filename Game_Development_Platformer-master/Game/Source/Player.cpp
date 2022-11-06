@@ -53,8 +53,9 @@ bool Player::Start()
 	pbody->ctype = ColliderType::PLAYER;
 
 	//initialize audio effect - !! Path is hardcoded, should be loaded from config.xml
-	pickCoinFxId = app->audio->LoadFx("Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg");
-
+	chestopenSFX = app->audio->LoadFx("Assets/Audio/Fx/chestopen.wav");
+	//jumpSFX = app->audio->LoadFx("Assets/Audio/Fx/JumpKnight.wav");
+	
 	LoadAnimations();
 
 	return true;
@@ -111,6 +112,7 @@ bool Player::Update()
 			remainingJumpSteps = 6;
 			idle = false;
 			isGrounded = false;
+			app->audio->PlayFx(jumpSFX);
 
 		}
 	}
@@ -160,7 +162,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 	{
 	case ColliderType::ITEM:
 		LOG("Collision ITEM");
-		app->audio->PlayFx(pickCoinFxId);
+		app->audio->PlayFx(chestopenSFX);
 		break;
 	case ColliderType::WALL:
 		LOG("Collision WALL");

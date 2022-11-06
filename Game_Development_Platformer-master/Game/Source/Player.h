@@ -31,6 +31,7 @@ private:
 	
 
 	uint jumpSFX = 0;
+	uint chestopenSFX = 0;
 	bool alive;
 	bool idle, leftID;
 	bool isGrounded;
