@@ -128,12 +128,12 @@ bool Player::Update()
 	}
 
 	//Update player position in pixels
-	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - 48;
-	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 66;
+	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - 46;
+	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 60;
 
 	//Animations
-	if (idle) { currentAnim = leftID ? &IdleL : &IdleR; }
-	if (!isGrounded) { currentAnim = leftID ? &JumpL : &JumpR; }
+	if (idle) { currentAnim = leftID ? &IdleR : &IdleL; }
+	if (!isGrounded) { currentAnim = leftID ? &JumpR : &JumpL; }
 	SDL_Rect rect2 = currentAnim->GetCurrentFrame();
 	app->render->DrawTexture(texture, position.x, position.y, &rect2);
 	currentAnim->Update();
