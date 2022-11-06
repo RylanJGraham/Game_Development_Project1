@@ -81,12 +81,14 @@ bool Ending::Update(float dt)
 // Called each loop iteration
 bool Ending::PostUpdate()
 {
-	bool ret = true;
+	app->render->DrawTexture(img, 0, 0);
 
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-		ret = false;
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
+		return false;
+	}
+		
 
-	return ret;
+	return true;
 }
 
 // Called before quitting

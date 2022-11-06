@@ -10,6 +10,7 @@
 #include "Point.h"
 #include "Physics.h"
 #include "Ending.h"
+#include "Title.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -178,7 +179,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 	case ColliderType::ITEM:
 		LOG("Collision ITEM");
 		app->audio->PlayFx(chestopenSFX);
-		
+		app->fade->FadeBlack((Module*)app->scene, (Module*)app->titleScreen, 90);
 		break;
 	case ColliderType::WALL:
 		LOG("Collision WALL");
