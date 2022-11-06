@@ -28,12 +28,8 @@ TitleScreen::~TitleScreen()
 // Called before render is available
 bool TitleScreen::Awake(pugi::xml_node& config)
 {
-	app->entityManager->Disable();
-	app->physics->Disable();
 	LOG("Loading TitleScreen");
 	bool ret = true;
-
-
 
 	return ret;
 }
@@ -41,8 +37,14 @@ bool TitleScreen::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool TitleScreen::Start()
 {
+
 	img = app->tex->Load("Assets/Textures/TitleScreen.png");
 
+	// Music
+	app->audio->PlayMusic("Assets/Audio/Music/medieval.ogg");
+
+	// Load SFXs
+	startSFX = app->audio->LoadFx("Assets/Audio/Fx/swordswing.wav");
 
 	return true;
 }
@@ -58,10 +60,12 @@ bool TitleScreen::Update(float dt)
 {
 
 
-	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
-		LOG("otra escena");
+	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+		LOG("PASA A OTRA PUTA ESCENA");
 		app->fade->FadeToBlack(this, (Module*)app->scene, 90);
+		app->audio->PlayFx(startSFX);
 	}
+
 	app->render->DrawTexture(img, 0, 0, NULL);
 
 	return true;
@@ -72,11 +76,8 @@ bool TitleScreen::PostUpdate()
 {
 	bool ret = true;
 
-	//app->render->DrawTexture(img, 0, 0, NULL);
-
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
-	//app->render->DrawTexture(img, 0, 0, NULL);
 
 	return ret;
 }

@@ -424,6 +424,23 @@ Properties::Property* Properties::GetProperty(const char* name)
 
     return p;
 }
+//
+//bool Map::Parallax() {
+//
+//    //// L05: DONE 9: Complete the draw function
+//    //int gid = mapLayerItem->data->Get(x, y);
+//
+//    //TileSet* tileset = GetTilesetFromTileId(gid);
+//
+//    //SDL_Rect r = tileset->GetTileRect(gid);
+//    //iPoint pos = MapToWorld(x, y);
+//
+//    //app->render->DrawTexture(tileset->texture,
+//    //    pos.x,
+//    //    pos.y,
+//    //    &r);
+//
+//}
 
 bool Map::CreateColliders()
 {
@@ -434,7 +451,7 @@ bool Map::CreateColliders()
 
     while (mapLayerItem != NULL)
     {
-        if (mapLayerItem->data->name == "COLLIDERS")
+        if (mapLayerItem->data->name == "Collisions")
         {
             int halfTileHeight = mapData.tileHeight / 2;
             int halfTileWidth = mapData.tileWidth / 2;
@@ -443,7 +460,7 @@ bool Map::CreateColliders()
             {
                 for (int y = 0; y < mapLayerItem->data->height; y++)
                 {
-                    if (mapLayerItem->data->Get(x, y) == 266)
+                    if (mapLayerItem->data->Get(x, y) == 695)
                     {
                         iPoint pos = MapToWorld(x, y);
                         app->physics->CreateRectangle(pos.x + halfTileHeight, pos.y + halfTileWidth, mapData.tileWidth, mapData.tileHeight, STATIC, ColliderType::PLATFORM);

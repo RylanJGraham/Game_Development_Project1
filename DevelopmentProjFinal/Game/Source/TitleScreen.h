@@ -34,6 +34,7 @@ public:
 	bool CleanUp();
 
 public:
+	uint startSFX = 0;
 
 private:
 	SDL_Texture* img = nullptr;
@@ -44,4 +45,4 @@ private:
 
 
 #endif // !__TITLESCREEN_H__
-#pragma once
+
