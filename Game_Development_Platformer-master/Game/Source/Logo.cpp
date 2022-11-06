@@ -50,7 +50,7 @@ bool Logo::PreUpdate()
 // Called each loop iteration
 bool Logo::Update(float dt)
 {
-	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
 		app->fade->FadeBlack(this, (Module*)app->titleScreen, 90);
 	}
