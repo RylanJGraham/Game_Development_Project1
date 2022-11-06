@@ -1,17 +1,15 @@
-# 2D Platformer - Kobayashi Studios
+# 2D Platformer - XR Studios
 
 ## Description
-
- - (logo, titleScreen and endScreen are commented on App.cpp in order to make the program work before we change it and make it function with enable() and disable())
-
-{project description}
+{Knights Vow}
+2D Platformer title, where you play as a Knight seeking to find and collect chests throughout the map. Enjoy exploring and jumping along the 8-bit platforms as you traverse the landscape. 
 
 ## Key Features
 
- - {Feature01}
- - {Feature02}
- - {Feature03}
- - {Feature04}
+ - {Traditional platformer movement and challenge}
+ - {Saveable progress}
+ - {Medieval audio effects}
+ - {clean character and setting design}
  
 ## Controls
 
@@ -28,8 +26,8 @@
 
 ## Developers
 
- - {Rylan} - {Role(s)}
- - {Xavi} - {Role(s)}
+ - {Rylan James Graham} - {Role(s)}
+ - {Xavier Pablo Alcañiz Carrillo} - {Role(s)}
 
 ## License
 
