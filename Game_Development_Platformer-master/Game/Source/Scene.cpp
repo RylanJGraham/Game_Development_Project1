@@ -126,7 +126,11 @@ bool Scene::PostUpdate()
 // Called before quitting
 bool Scene::CleanUp()
 {
-	LOG("Freeing scene");
+	LOG("Freeing GAME SCENE");
+
+	app->map->Disable();
+	app->entityManager->Disable();
+	app->physics->Disable();
 
 	return true;
 }

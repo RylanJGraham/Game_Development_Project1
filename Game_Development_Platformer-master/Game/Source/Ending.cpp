@@ -8,6 +8,7 @@
 #include "EntityManager.h"
 #include "Map.h"
 #include "Scene.h"
+#include "FadeToBlack.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -46,15 +47,14 @@ bool Ending::Start()
 	app->scene->Disable();
 	app->physics->Disable();
 	app->map->Disable();*/
-
+	app->render->camera.x = 0;
+	app->render->camera.y = 0;
 	img = app->tex->Load("Assets/Textures/endscreen.png");
 	/*app->scene->player->active = true;
 	app->scene->player.rese*/
 	selectSFX = app->audio->LoadFx("Assets/Audio/Fx/swordswing.wav");
 
 	//app->scene->player->godMode = true;
-
-	return true;
 
 	return true;
 }
@@ -68,28 +68,12 @@ bool Ending::PreUpdate()
 // Called each loop iteration
 bool Ending::Update(float dt)
 {
-	//// L03: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
-	//if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
-	//	app->SaveGameRequest();
-
-	//if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
-	//	app->LoadGameRequest();
-
-	//if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-	//	app->render->camera.y += 1;
-
-	//if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-	//	app->render->camera.y -= 1;
-
-	//if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-	//	app->render->camera.x += 1;
-
-	//if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-	//	app->render->camera.x -= 1;
-
-		//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
-
-		// Draw map
+	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+		LOG("PASA A GAME SCENE");
+		app->fade->FadeBlack(this, (Module*)app->scene, 90);
+		//app->scene->cameraFix = false;
+		/*app->audio->PlayFx(FX);*/
+	}
 
 	return true;
 }
@@ -108,7 +92,7 @@ bool Ending::PostUpdate()
 // Called before quitting
 bool Ending::CleanUp()
 {
-	LOG("Freeing scene");
-
-	return true;
+	if (img != nullptr) {
+		app->tex->UnLoad(img);
+	}
 }

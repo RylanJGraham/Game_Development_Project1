@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "App.h"
+#include "FadeToBlack.h"
 #include "Textures.h"
 #include "Audio.h"
 #include "Input.h"
@@ -8,6 +9,7 @@
 #include "Log.h"
 #include "Point.h"
 #include "Physics.h"
+#include "Ending.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -176,6 +178,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 	case ColliderType::ITEM:
 		LOG("Collision ITEM");
 		app->audio->PlayFx(chestopenSFX);
+		
 		break;
 	case ColliderType::WALL:
 		LOG("Collision WALL");
@@ -191,6 +194,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 	case ColliderType::DEATH:
 		LOG("Collision DEATH");
 		alive = false;
+		app->fade->FadeBlack((Module*)app->scene, (Module*)app->endScreen, 90);
 		break;
 	case ColliderType::UNKNOWN:
 		LOG("Collision UNKNOWN");
