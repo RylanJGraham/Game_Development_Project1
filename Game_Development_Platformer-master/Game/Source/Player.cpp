@@ -88,14 +88,14 @@ bool Player::Update()
 
 		//Left
 		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-			currentAnim = &RunL;
+			currentAnim = &RunR;
 			vel.x = -speed;
 			idle = false;
 			leftID = true;
 		}
 		//Right
 		else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-			currentAnim = &RunR;
+			currentAnim = &RunL;
 			vel.x = speed;
 			idle = false;
 			leftID = false;
@@ -123,10 +123,13 @@ bool Player::Update()
 		pbody->body->ApplyForce(b2Vec2(0, -force), pbody->body->GetWorldCenter(), true);
 		remainingJumpSteps--;	
 	}
+	else {
+		isGrounded = true;
+	}
 
 	//Update player position in pixels
-	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - 16;
-	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 18;
+	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - 48;
+	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 66;
 
 	//Animations
 	if (idle) { currentAnim = leftID ? &IdleL : &IdleR; }
