@@ -27,11 +27,11 @@
   <!-- L02: DONE: Add an element for the entity manager and add the player parameters -->
   <scene>
     <player x="112" y="511" texturepath="Assets/Textures/MC/Knight.png"/>
-    <item x="256" y="552" texturepath="Assets/Textures/ChestProp.png"/>
+    <item x="756" y="552" texturepath="Assets/Textures/ChestProp.png"/>
     <item x="416" y="552" texturepath="Assets/Textures/ChestProp.png"/>
     <item x="384" y="552" texturepath="Assets/Textures/ChestProp.png"/>
-    <item x="200" y="552" texturepath="Assets/Textures/ChestProp.png"/>
     <item x="500" y="552" texturepath="Assets/Textures/ChestProp.png"/>
+    <item x="900" y="552" texturepath="Assets/Textures/ChestProp.png"/>
   </scene>
 
   <map>

@@ -49,7 +49,7 @@ bool Scene::Start()
 	app->entityManager->Enable();
 
 	app->render->camera.x = 0;
-	app->render->camera.y = -448;
+	app->render->camera.y = -498;
 
 	//img = app->tex->Load("Assets/Textures/test.png");
 	//app->audio->PlayMusic("Assets/Audio/Music/music_spy.ogg");
@@ -105,28 +105,7 @@ bool Scene::Update(float dt)
 
 #pragma endregion DEBUG_KEYS
 
-
-	//Left
- //	if (player->position.x + app->render->camera.x < app->render->camera.w / (3))
-	//	app->render->camera.x = (-player->position.x + (app->render->camera.w / 3)) * scale;
-
-	////Right
-	//else if(player->position.x + app->render->camera.x > app->render->camera.w / (1.8))
-	//	app->render->camera.x = (-player->position.x + (app->render->camera.w / 1.8)) * scale;
-
-	////Up
-	//if (player->position.y + app->render->camera.y < app->render->camera.h / (3))
-	//	app->render->camera.y = (-player->position.y + (app->render->camera.h / 3) * scale);
-
-	////Down
-	//else if (player->position.y + app->render->camera.y > app->render->camera.h / (1.8))
-	//	app->render->camera.y = (-player->position.y + (app->render->camera.h / 1.8) * scale);
-
-	if (app->render->camera.x > 0)
-		app->render->camera.x = 0;
-
-	if (app->render->camera.y < -448)
-		app->render->camera.y = -448;
+	app->render->camera.x = (-player->position.x)*1.5f;
 
 
 	// Draw map
@@ -138,19 +117,8 @@ bool Scene::Update(float dt)
 // Called each loop iteration
 bool Scene::PostUpdate()
 {
-	int scale = app->win->GetScale();
-	//Draw Camera
-	rectCamera.x = -app->render->camera.x + (app->render->camera.w / (3));
-	rectCamera.y = -app->render->camera.y + (app->render->camera.h / (1.8));
-	rectCamera.w = app->render->camera.w / (3);
-	rectCamera.h = app->render->camera.h / (1.8);
-	app->render->DrawRectangle(rectCamera, 0, 255, 0, 255, false, true);
-
-
-
 	if(app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		return false;
-
 
 	return true;
 }

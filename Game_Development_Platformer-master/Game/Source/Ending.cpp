@@ -69,7 +69,7 @@ bool Ending::PreUpdate()
 bool Ending::Update(float dt)
 {
 	// L03: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
-	/*if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
 		app->SaveGameRequest();
 
 	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
@@ -85,7 +85,7 @@ bool Ending::Update(float dt)
 		app->render->camera.x += 1;
 
 	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		app->render->camera.x -= 1;*/
+		app->render->camera.x -= 1;
 
 		//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
 

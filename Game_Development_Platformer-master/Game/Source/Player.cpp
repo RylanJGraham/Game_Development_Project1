@@ -36,6 +36,7 @@ bool Player::Start()
 {
 	alive = true;
 	godMode = false;
+
 	//initilize textures
 	texture = app->tex->Load(texturePath);
 
@@ -92,6 +93,7 @@ bool Player::Update()
 			vel.x = -speed;
 			idle = false;
 			leftID = true;
+				app->render->camera.x += 5;
 		}
 		//Right
 		else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
@@ -99,6 +101,7 @@ bool Player::Update()
 			vel.x = speed;
 			idle = false;
 			leftID = false;
+				app->render->camera.x -= 5;
 		}
 		else
 			vel.x = 0;
@@ -108,9 +111,9 @@ bool Player::Update()
 			remainingJumpSteps = 6;
 			idle = false;
 			isGrounded = false;
+
 		}
 	}
-	
 
 	//Set the velocity of the pbody of the player
 	pbody->body->SetLinearVelocity(vel);
