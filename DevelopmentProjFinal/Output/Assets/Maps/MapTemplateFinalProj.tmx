@@ -12,7 +12,7 @@
  <tileset firstgid="1227" name="MapMetadata" tilewidth="32" tileheight="32" margin="1" tilecount="2" columns="2">
   <image source="MapMetadata.png" width="67" height="34"/>
  </tileset>
- <layer id="7" name="Background" width="64" height="24" locked="1">
+ <layer id="7" name="Background" width="64" height="24">
   <properties>
    <property name="Draw" type="bool" value="true"/>
   </properties>
@@ -1555,7 +1555,7 @@
    <tile gid="40"/>
   </data>
  </layer>
- <layer id="10" name="Terrain" width="64" height="24" locked="1">
+ <layer id="10" name="Terrain" width="64" height="24">
   <properties>
    <property name="Draw" type="bool" value="true"/>
   </properties>

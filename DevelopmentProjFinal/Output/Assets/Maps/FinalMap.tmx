@@ -4641,7 +4641,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="2" name="COLLIDERS" width="64" height="24">
+ <layer id="2" name="COLLIDERS" width="64" height="24" visible="0">
   <properties>
    <property name="Draw" type="bool" value="false"/>
   </properties>
