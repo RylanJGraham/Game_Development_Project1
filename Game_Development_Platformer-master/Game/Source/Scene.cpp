@@ -26,7 +26,6 @@ bool Scene::Awake(pugi::xml_node& config)
 {
 	LOG("Loading Scene");
 	bool ret = true;
-	numChests = 3;
 
 	// iterate all objects in the scene
 	// Check https://pugixml.org/docs/quickstart.html#access
@@ -48,13 +47,6 @@ bool Scene::Awake(pugi::xml_node& config)
 bool Scene::Start()
 {
 	app->entityManager->Enable();
-
-
-
-	NumChests1 = app->tex->Load("Assets/Textures/ChestNum1.png");
-	NumChests2 = app->tex->Load("Assets/Textures/ChestNum2.png");
-	NumChests3 = app->tex->Load("Assets/Textures/ChestNum3.png");
-
 
 	app->render->camera.x = 0;
 	app->render->camera.y = -448;
@@ -146,16 +138,6 @@ bool Scene::Update(float dt)
 // Called each loop iteration
 bool Scene::PostUpdate()
 {
-	switch (numChests) {
-	case(0):
-		/*endgame*/
-	case(1):
-		app->render->DrawTexture(NumChests1, 0, 0);
-	case(2):
-		app->render->DrawTexture(NumChests2, 0, 0);
-	case(3):
-		app->render->DrawTexture(NumChests3, 0, 0);
-	}
 	int scale = app->win->GetScale();
 	//Draw Camera
 	rectCamera.x = -app->render->camera.x + (app->render->camera.w / (3));

@@ -1,32 +1,37 @@
+#include "Title.h"
+
 #include "App.h"
 #include "Input.h"
 #include "Textures.h"
 #include "Audio.h"
 #include "Render.h"
 #include "Window.h"
-#include "Title.h"
+#include "Entity.h"
+#include "Physics.h"
 #include "EntityManager.h"
+#include "Scene.h"
 #include "Map.h"
 #include "FadeToBlack.h"
+
+#include "SDL/include/SDL_render.h"
+
 #include "Defs.h"
 #include "Log.h"
 
 Title::Title(bool startEnabled) : Module(startEnabled)
 {
-	name.Create("Title");
-	active = false;
+	name.Create("TitleScreen");
 }
 
 // Destructor
 Title::~Title()
 {}
 
-
+// Called before render is available
 bool Title::Awake(pugi::xml_node& config)
 {
-	LOG("Loading Scene");
+	LOG("Loading TitleScreen");
 	bool ret = true;
-
 
 	return ret;
 }
@@ -34,21 +39,18 @@ bool Title::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool Title::Start()
 {
-	//img = app->tex->Load("Assets/Textures/test.png");
-	//app->audio->PlayMusic("Assets/Audio/Music/music_spy.ogg");
 
-	// L03: DONE: Load map
-	app->map->Load();
+	app->render->camera.x = 0;
 
-	// L04: DONE 7: Set the window title with map/tileset info
-	/*SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
-		app->map->mapData.width,
-		app->map->mapData.height,
-		app->map->mapData.tileWidth,
-		app->map->mapData.tileHeight,
-		app->map->mapData.tilesets.Count());*/
+	LOG("--STARTS TITLE SCENE--");
 
-	/*app->win->SetTitle(title.GetString());*/
+	img = app->tex->Load("Assets/Textures/titlescreen.png");
+
+	// Music
+	app->audio->PlayMusic("Assets/Audio/Music/title_screen.ogg");
+
+	// Load SFXs
+	/*startSFX = app->audio->LoadFx("Assets/Audio/Fx/start_game.wav");*/
 
 	return true;
 }
@@ -62,29 +64,13 @@ bool Title::PreUpdate()
 // Called each loop iteration
 bool Title::Update(float dt)
 {
-	// L03: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
-	/*if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
-		app->SaveGameRequest();
+	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+		LOG("PASA A GAME SCENE");
+		app->fade->FadeBlack(this, (Module*)app->scene, 90);
+		app->audio->PlayFx(startSFX);
+	}
 
-	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
-		app->LoadGameRequest();
-
-	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		app->render->camera.y += 1;
-
-	if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		app->render->camera.y -= 1;
-
-	if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		app->render->camera.x += 1;
-
-	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		app->render->camera.x -= 1;*/
-
-	//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
-
-	// Draw map
-	app->map->Draw();
+	app->render->DrawTexture(img, 0, 0, NULL);
 
 	return true;
 }
@@ -96,11 +82,6 @@ bool Title::PostUpdate()
 
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
-	
-	// ENTER: BEGIN
-	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
-		app->fade->FadeBlack(this, (Module*)app->scene, 100);
-	}
 
 	return ret;
 }
@@ -108,8 +89,11 @@ bool Title::PostUpdate()
 // Called before quitting
 bool Title::CleanUp()
 {
-	LOG("Freeing scene");
-	//app->tex->UnLoad();
+	LOG("Freeing TITLE SCENE");
+
+	if (img != nullptr) {
+		app->tex->UnLoad(img);
+	}
 
 	return true;
 }

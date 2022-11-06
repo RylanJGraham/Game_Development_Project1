@@ -35,15 +35,8 @@ public:
 	bool CleanUp();
 
 public:
-
-	SDL_Texture* NumChests1 = nullptr;
-	SDL_Texture* NumChests2 = nullptr;
-	SDL_Texture* NumChests3 = nullptr;
-	int numChests;
 	//L02: DONE 3: Declare a Player attribute 
 	Player* player;
-	int movementmatchx;
-	int movementmatchy;
 
 private:
 	SDL_Texture* img;

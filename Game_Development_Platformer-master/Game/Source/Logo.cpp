@@ -33,7 +33,7 @@ bool Logo::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool Logo::Start()
 {
-	img = app->tex->Load("Assets/Textures/titlescreen.png");
+	img = app->tex->Load("Assets/Textures/XRLogo.png");
 
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;
@@ -52,7 +52,7 @@ bool Logo::Update(float dt)
 {
 	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		app->fade->FadeBlack(this, (Module*)app->scene, 90);
+		app->fade->FadeBlack(this, (Module*)app->titleScreen, 90);
 	}
 
 	return true;

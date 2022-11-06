@@ -2,8 +2,7 @@
 #define __TITLE_H__
 
 #include "Module.h"
-#include "Player.h"
-#include "Item.h"
+#include "SDL/include/SDL.h"
 
 struct SDL_Texture;
 
@@ -35,10 +34,11 @@ public:
 	bool CleanUp();
 
 public:
+	uint startSFX = 0;
 
 private:
-	SDL_Texture* img;
+	SDL_Texture* img = nullptr;
 
 };
 
-#endif // __TITLE_H__
+#endif // !__TITLE_H__
