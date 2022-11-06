@@ -85,11 +85,29 @@ bool Scene::Update(float dt)
 	// L03: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
 #pragma region DEBUG_KEYS
 
-	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
-		app->SaveGameRequest();
+	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
+		player->SetPos(112, 511);
+	}
 
-	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
+
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) {
+		player->SetPos(112, 511);
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) {
+		app->SaveGameRequest();
+		player->savedPosition.x = player->position.x;
+		player->savedPosition.y = player->position.y;
+
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) {
 		app->LoadGameRequest();
+		player->SetPos(player->savedPosition.x + 46, player->savedPosition.y + 60);
+	}
 
 	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		app->render->camera.y += camSpeed;

@@ -24,6 +24,7 @@ public:
 	void OnCollision(PhysBody* physA, PhysBody* physB);
 	void Player::DebugKeys();
 	void LoadAnimations();
+	void SetPos(int x, int y);
 
 public:
 

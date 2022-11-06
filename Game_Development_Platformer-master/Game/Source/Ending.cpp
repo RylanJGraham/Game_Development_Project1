@@ -97,4 +97,6 @@ bool Ending::CleanUp()
 	if (img != nullptr) {
 		app->tex->UnLoad(img);
 	}
+
+	return true;
 }

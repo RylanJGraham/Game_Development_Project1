@@ -64,6 +64,11 @@ bool Player::Start()
 	return true;
 }
 
+void Player::SetPos(int x, int y) {
+	b2Vec2 pos = { PIXEL_TO_METERS(x), PIXEL_TO_METERS(y) };
+	pbody->body->SetTransform(pos, 0);
+}
+
 bool Player::Update()
 {
 	b2Vec2 vel;
@@ -207,31 +212,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 
 void Player::DebugKeys()
 {
-	// F1/F2: Start from the first/second level
-	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
-
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
-
-	}
-
-	// F3: Start from the beginning of the current level
-	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) {
-
-	}
-
-	// F5: Save the current game state
-	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) {
-		savedPosition.x = position.x;
-		savedPosition.y = position.y;
-	}
-
-	// F6: Load the previous state (even across levels)
-	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) {
-		position.x = savedPosition.x;
-		position.y = savedPosition.y;
-	}
 
 	// F9: View colliders / logic
 	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {
