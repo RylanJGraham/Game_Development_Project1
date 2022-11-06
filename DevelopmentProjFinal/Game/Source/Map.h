@@ -7,8 +7,6 @@
 
 #include "PugiXml\src\pugixml.hpp"
 
-#define MAX_COLLIDERS 35
-
 // L04: DONE 2: Create a struct to hold information for a TileSet
 // Ignore Terrain Types and Tile Types for now, but we want the image!
 struct TileSet
@@ -113,7 +111,7 @@ class Map : public Module
 {
 public:
 
-	Map();
+	Map(bool startEnabled);
 
 	// Destructor
 	virtual ~Map();
@@ -143,6 +141,8 @@ private:
 	// L05
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
 	bool LoadAllLayers(pugi::xml_node mapNode);
+	bool CreateColliders();
+	void Parallax(TileSet* tileset, iPoint pos, SDL_Rect r, float x);
 
 	// L06: DONE 2
 	TileSet* GetTilesetFromTileId(int gid) const;
@@ -150,13 +150,10 @@ private:
 	// L06: DONE 6: Load a group of properties 
 	bool LoadProperties(pugi::xml_node& node, Properties& properties);
 
-	bool CreateColliders();
-
 public:
 
 	// L04: DONE 1: Declare a variable data of the struct MapData
 	MapData mapData;
-	PhysBody* bodies[MAX_COLLIDERS] = { nullptr };
 
 private:
 

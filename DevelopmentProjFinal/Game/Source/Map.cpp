@@ -3,7 +3,6 @@
 #include "Textures.h"
 #include "Map.h"
 #include "Physics.h"
-#include "Player.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -11,7 +10,7 @@
 #include <math.h>
 #include "SDL_image/include/SDL_image.h"
 
-Map::Map() : Module(), mapLoaded(false)
+Map::Map(bool startEnabled) : Module(startEnabled), mapLoaded(false)
 {
     name.Create("map");
 }
@@ -37,24 +36,28 @@ void Map::Draw()
     if (mapLoaded == false)
         return;
 
-    /*
-    // L04: DONE 6: Iterate all tilesets and draw all their
+
+    // L04: DONE 6: Iterate all tilesets and draw all their 
     // images in 0,0 (you should have only one tileset for now)
+
     ListItem<TileSet*>* tileset;
     tileset = mapData.tilesets.start;
-    while (tileset != NULL) {
-        app->render->DrawTexture(tileset->data->texture,0,0);
-        tileset = tileset->next;
-    }
-    */
 
-    // L05: DONE 5: Prepare the loop to draw all tiles in a layer + DrawTexture()
+    /* int i = 0;
+     while (tileset != null) {
+         i++;
+         app->render->drawtexture(tileset->data->texture,50*i,0);
+         tileset = tileset->next;
+     }*/
+
+
+     // L05: DONE 5: Prepare the loop to draw all tiles in a layer + DrawTexture()
 
     ListItem<MapLayer*>* mapLayerItem;
     mapLayerItem = mapData.maplayers.start;
 
-    while (mapLayerItem != NULL) {
-
+    while (mapLayerItem != NULL)
+    {
         //L06: DONE 7: use GetProperty method to ask each layer if your “Draw” property is true.
         if (mapLayerItem->data->properties.GetProperty("Draw") != NULL && mapLayerItem->data->properties.GetProperty("Draw")->value) {
 
@@ -71,10 +74,16 @@ void Map::Draw()
                     SDL_Rect r = tileset->GetTileRect(gid);
                     iPoint pos = MapToWorld(x, y);
 
-                    app->render->DrawTexture(tileset->texture,
-                        pos.x,
-                        pos.y,
-                        &r);
+
+                    switch (mapLayerItem->data->id)
+                    {
+                    case 6: Parallax(tileset, pos, r, 0); break; //0.1
+                    case 5: Parallax(tileset, pos, r, 0); break; //0.3
+                    case 4: Parallax(tileset, pos, r, 0); break; //0.6
+                    case 3: Parallax(tileset, pos, r, 0); break; //0.7
+                    case 2: Parallax(tileset, pos, r, 0); break; //0.9
+                    default: Parallax(tileset, pos, r, 0);  break; //0
+                    }
                 }
             }
         }
@@ -189,67 +198,13 @@ bool Map::Load()
         ret = LoadAllLayers(mapFileXML.child("map"));
     }
 
-    // L07 TODO 3: Create colliders
+    // L07 DONE 3: Create colliders
     // Later you can create a function here to load and create the colliders from the map
-    // GROUND colliders
-    //PhysBody* c1 = app->physics->CreateRectangle(0 + 16, (32 * 3) + 240, 32, 32 * 15, STATIC, ColliderType::PLATFORM);
-    //PhysBody* c2 = app->physics->CreateRectangle(32 + 16, (32 * 7) + 176, 32, 32 * 11, STATIC, ColliderType::PLATFORM);
-    //PhysBody* c3 = app->physics->CreateRectangle((32 * 2) + 16, (32 * 8) + 160, 32, 32 * 10, STATIC, ColliderType::PLATFORM);
-    //PhysBody* c4 = app->physics->CreateRectangle((32 * 3) + 224, (32 * 17) + 16, 32 * 14, 32, STATIC, ColliderType::PLATFORM);
-    //PhysBody* c5 = app->physics->CreateRectangle((32 * 17) + 48, (32 * 15) + 48, 32 * 3, 32 * 3, STATIC, ColliderType::PLATFORM);
-    //PhysBody* c6 = app->physics->CreateRectangle((32 * 15) + 32, (32 * 12) + 16, 32 * 2, 32, STATIC, ColliderType::PLATFORM);
-    //PhysBody* c7 = app->physics->CreateRectangle((32 * 20) + 80, (32 * 11) + 32, 32 * 5, 32 * 2, STATIC, ColliderType::PLATFORM);
-    //PhysBody* c8 = app->physics->CreateRectangle((32 * 28) + 64, (32 * 14) + 16, 32 * 4, 32, STATIC, ColliderType::PLATFORM);
-    //PhysBody* c9 = app->physics->CreateRectangle((32 * 34) + 32, (32 * 12) + 16, 32 * 2, 32, STATIC, ColliderType::PLATFORM);
-    //PhysBody* c10 = app->physics->CreateRectangle((32 * 38) + 192, (32 * 10) + 128, 32 * 12, 32 * 8, STATIC, ColliderType::PLATFORM);
-    //PhysBody* c11 = app->physics->CreateRectangle((32 * 50) + 64, (32 * 14) + 64, 32 * 4, 32 * 4, STATIC, ColliderType::PLATFORM);
+    if (ret == true)
+    {
+        ret = CreateColliders();
+    }
 
-    //int points1[6] = { 32 * 50, 32 * 10,
-    //                   32 * 50, 32 * 14,
-    //                   32 * 54, 32 * 14 };
-    //PhysBody* c12 = app->physics->CreateChain(0, 0, points1, 6, STATIC, ColliderType::PLATFORM);
-
-    //PhysBody* c13 = app->physics->CreateRectangle((32 * 57) + 16, (32 * 13) + 80, 32, 32 * 5, STATIC, ColliderType::PLATFORM);
-    //PhysBody* c14 = app->physics->CreateRectangle((32 * 61) + 48, (32 * 11) + 32, 32 * 3, 32 * 2, STATIC, ColliderType::PLATFORM);
-    //PhysBody* c15 = app->physics->CreateRectangle((32 * 67) + 48, (32 * 15) + 48, 32 * 3, 32 * 3, STATIC, ColliderType::PLATFORM);
-    //PhysBody* c16 = app->physics->CreateRectangle((32 * 68) + 48, (32 * 9) + 16, 32 * 3, 32, STATIC, ColliderType::PLATFORM);
-    //PhysBody* c17 = app->physics->CreateRectangle((32 * 72) + 32, (32 * 12) + 16, 32 * 2, 32, STATIC, ColliderType::PLATFORM);
-    //PhysBody* c18 = app->physics->CreateRectangle((32 * 75) + 32, (32 * 8) + 160, 32 * 2, 32 * 10, STATIC, ColliderType::PLATFORM);
-    //PhysBody* c19 = app->physics->CreateRectangle((32 * 77) + 16, (32 * 6) + 192, 32, 32 * 12, STATIC, ColliderType::PLATFORM);
-    //PhysBody* c20 = app->physics->CreateRectangle((32 * 78) + 64, (32 * 5) + 208, 32 * 4, 32 * 13, STATIC, ColliderType::PLATFORM);
-    //PhysBody* c21 = app->physics->CreateRectangle((32 * 82) + 32, (32 * 13) + 80, 32 * 2, 32 * 5, STATIC, ColliderType::PLATFORM);
-
-    //int points2[6] = { 32 * 82, 32 * 11,
-    //                   32 * 82, 32 * 13,
-    //                   32 * 84, 32 * 13 };
-    //PhysBody* c22 = app->physics->CreateChain(0, 0, points2, 6, STATIC, ColliderType::PLATFORM);
-
-    //PhysBody* c23 = app->physics->CreateRectangle((32 * 85) + 32, (32 * 4) + 16, 32 * 2, 32, STATIC, ColliderType::PLATFORM);
-    //PhysBody* c24 = app->physics->CreateRectangle((32 * 90) + 48, (32 * 6) + 32, 32 * 3, 32 * 2, STATIC, ColliderType::PLATFORM);
-    //PhysBody* c25 = app->physics->CreateRectangle((32 * 95) + 96, (32 * 11) + 112, 32 * 6, 32 * 7, STATIC, ColliderType::PLATFORM);
-    //PhysBody* c26 = app->physics->CreateRectangle((32 * 101) + 64, (32 * 15) + 48, 32 * 4, 32 * 3, STATIC, ColliderType::PLATFORM);
-
-    //int points3[6] = { 32 * 101, 32 * 11,
-    //                  32 * 101, 32 * 15,
-    //                  32 * 105, 32 * 15 };
-    //PhysBody* c27 = app->physics->CreateChain(0, 0, points3, 6, STATIC, ColliderType::PLATFORM);
-
-    //// WATER collider
-    //PhysBody* c28 = app->physics->CreateRectangle(0 + 1648, 560 + 40, 32 * 103, (32 * 2) + 16, STATIC, ColliderType::WATER);
-
-    ////Camera Fixed To Player Colliders (left side)
-    //PhysBody* c29 = app->physics->CreateRectangleSensor((32 * 16) + 27, 0 + 288, 10, 32 * 18, STATIC, ColliderType::CAMERAFIX);
-    //PhysBody* c30 = app->physics->CreateRectangleSensor((32 * 16) - 8, 0 + 288, 10, 32 * 18, STATIC, ColliderType::NONCAMERAFIX);
-
-    ////Camera Fixed To Player Colliders (right side)
-    //PhysBody* c31 = app->physics->CreateRectangleSensor((2858) - 24, 0 + 288, 10, 32 * 18, STATIC, ColliderType::NONCAMERAFIX_2);
-    //PhysBody* c32 = app->physics->CreateRectangleSensor((2858) + 8, 0 + 288, 10, 32 * 18, STATIC, ColliderType::CAMERAFIX_2);
-
-    //// WIN collider (if player touches it, player wins)
-    //PhysBody* c33 = app->physics->CreateRectangleSensor((32 * 103) + 16, (32 * 8) + 80, 32, 32 * 5, STATIC, ColliderType::WIN_ZONE);
-
-
-    //CreateColliders();
 
     if (ret == true)
     {
@@ -406,6 +361,54 @@ bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
     return ret;
 }
 
+bool Map::CreateColliders()
+{
+    bool ret = true;
+
+    ListItem<MapLayer*>* mapLayerItem;
+    mapLayerItem = mapData.maplayers.start;
+
+    while (mapLayerItem != NULL)
+    {
+        if (mapLayerItem->data->name == "COLLIDERS")
+        {
+            int halfTileHeight = mapData.tileHeight / 2;
+            int halfTileWidth = mapData.tileWidth / 2;
+
+            for (int x = 0; x < mapLayerItem->data->width; x++)
+            {
+                for (int y = 0; y < mapLayerItem->data->height; y++)
+                {
+                    if (mapLayerItem->data->Get(x, y) != 0)
+                    {
+                        iPoint pos = MapToWorld(x, y);
+                        PhysBody* c1 = app->physics->CreateRectangle(pos.x + halfTileHeight, pos.y + halfTileWidth, mapData.tileWidth, mapData.tileHeight, STATIC);
+
+                        switch (mapLayerItem->data->Get(x, y))
+                        {
+                        case 3139: c1->ctype = ColliderType::PLATFORM; break;
+                        case 3140: c1->ctype = ColliderType::GROUND; break;
+                        case 3141: c1->ctype = ColliderType::WALL; break;
+                        case 3143: c1->ctype = ColliderType::DEATH; break;
+                        default: break;
+                        }
+                    }
+                }
+            }
+        }
+
+        mapLayerItem = mapLayerItem->next;
+    }
+    return ret;
+}
+
+void Map::Parallax(TileSet* tileset, iPoint pos, SDL_Rect r, float x)
+{
+    app->render->DrawTexture(tileset->texture,
+        pos.x - (app->render->camera.x) * x,
+        pos.y,
+        &r);
+}
 
 // L06: DONE 7: Ask for the value of a custom property
 Properties::Property* Properties::GetProperty(const char* name)
@@ -423,53 +426,4 @@ Properties::Property* Properties::GetProperty(const char* name)
     }
 
     return p;
-}
-//
-//bool Map::Parallax() {
-//
-//    //// L05: DONE 9: Complete the draw function
-//    //int gid = mapLayerItem->data->Get(x, y);
-//
-//    //TileSet* tileset = GetTilesetFromTileId(gid);
-//
-//    //SDL_Rect r = tileset->GetTileRect(gid);
-//    //iPoint pos = MapToWorld(x, y);
-//
-//    //app->render->DrawTexture(tileset->texture,
-//    //    pos.x,
-//    //    pos.y,
-//    //    &r);
-//
-//}
-
-bool Map::CreateColliders()
-{
-    bool ret = true;
-
-    ListItem<MapLayer*>* mapLayerItem;
-    mapLayerItem = mapData.maplayers.start;
-
-    while (mapLayerItem != NULL)
-    {
-        if (mapLayerItem->data->name == "Collisions")
-        {
-            int halfTileHeight = mapData.tileHeight / 2;
-            int halfTileWidth = mapData.tileWidth / 2;
-
-            for (int x = 0; x < mapLayerItem->data->width; x++)
-            {
-                for (int y = 0; y < mapLayerItem->data->height; y++)
-                {
-                    if (mapLayerItem->data->Get(x, y) == 695)
-                    {
-                        iPoint pos = MapToWorld(x, y);
-                        app->physics->CreateRectangle(pos.x + halfTileHeight, pos.y + halfTileWidth, mapData.tileWidth, mapData.tileHeight, STATIC, ColliderType::PLATFORM);
-                    }
-                }
-            }
-        }
-
-        mapLayerItem = mapLayerItem->next;
-    }
-    return ret;
 }
