@@ -70,8 +70,21 @@ bool Player::Update()
 
 	if (godMode)
 	{
+		vel.x = 0;
+		vel.y = 0;
 		alive = true;
-		pbody->body->SetGravityScale(0);	
+		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+			vel.x = -speed;
+		}
+		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+			vel.x = speed;
+		}
+		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
+			vel.y = -speed;
+		}
+		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
+			vel.y = speed;
+		}
 	}
 	else
 	{
@@ -248,21 +261,21 @@ void Player::LoadAnimations()
 
 
 	RunL.PushBack({ 0, 172, 72, 86 });
-	RunL.PushBack({ 72, 172, 72, 86 });
-	RunL.PushBack({ 144, 172, 72, 86 });
-	RunL.PushBack({ 216, 172, 72, 86 });
-	RunL.PushBack({ 288, 172, 72, 86 });
-	RunL.PushBack({ 360, 172, 72, 86 });
-	RunL.PushBack({ 432, 172, 72, 86 });
+	RunL.PushBack({ 76, 172, 72, 86 });
+	RunL.PushBack({ 150, 172, 72, 86 });
+	RunL.PushBack({ 220, 172, 72, 86 });
+	RunL.PushBack({ 292, 172, 72, 86 });
+	RunL.PushBack({ 364, 172, 72, 86 });
+	RunL.PushBack({ 436, 172, 72, 86 });
 	RunL.speed = 0.1f;
 	RunL.loop = true;
 
-	RunR.PushBack({ 432, 258, 72, 86 });
-	RunR.PushBack({ 360, 258, 72, 86 });
-	RunR.PushBack({ 288, 258, 72, 86 });
-	RunR.PushBack({ 216, 258, 72, 86 });
-	RunR.PushBack({ 144, 258, 72, 86 });
-	RunR.PushBack({ 72, 258, 72, 86 });
+	RunR.PushBack({ 428, 258, 72, 86 });
+	RunR.PushBack({ 356, 258, 72, 86 });
+	RunR.PushBack({ 284, 258, 72, 86 });
+	RunR.PushBack({ 212, 258, 72, 86 });
+	RunR.PushBack({ 140, 258, 72, 86 });
+	RunR.PushBack({ 68, 258, 72, 86 });
 	RunR.PushBack({ 0, 258, 72, 86 });
 	RunR.speed = 0.1f;
 	RunR.loop = true;
