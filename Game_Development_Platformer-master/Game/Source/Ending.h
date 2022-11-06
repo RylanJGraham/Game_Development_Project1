@@ -35,9 +35,9 @@ public:
 	bool CleanUp();
 
 public:
-
+	uint selectSFX = 0;
 private:
-	SDL_Texture* img;
+	SDL_Texture* img = nullptr;
 };
 
 #endif // __ENDING_H__

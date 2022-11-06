@@ -7,6 +7,7 @@
 #include "Ending.h"
 #include "EntityManager.h"
 #include "Map.h"
+#include "FadeToBlack.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -40,21 +41,13 @@ bool Ending::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool Ending::Start()
 {
-	//img = app->tex->Load("Assets/Textures/test.png");
-	//app->audio->PlayMusic("Assets/Audio/Music/music_spy.ogg");
+	img = app->tex->Load("Assets/Textures/DeathScreen.png");
 
-	// L03: DONE: Load map
-	app->map->Load();
 
-	// L04: DONE 7: Set the window title with map/tileset info
-	/*SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
-		app->map->mapData.width,
-		app->map->mapData.height,
-		app->map->mapData.tileWidth,
-		app->map->mapData.tileHeight,
-		app->map->mapData.tilesets.Count());*/
+	selectSFX = app->audio->LoadFx("Assets/Audio/Fx/swordswing.wav");
 
-		/*app->win->SetTitle(title.GetString());*/
+	app->render->camera.x = 0;
+	app->render->camera.y = 0;
 
 	return true;
 }
@@ -68,6 +61,7 @@ bool Ending::PreUpdate()
 // Called each loop iteration
 bool Ending::Update(float dt)
 {
+<<<<<<< Updated upstream
 	// L03: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
 		app->SaveGameRequest();
@@ -91,6 +85,13 @@ bool Ending::Update(float dt)
 
 		// Draw map
 	app->map->Draw();
+=======
+	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+	{
+		app->fade->FadeBlack(this, (Module*)app->titleScreen, 90);
+		app->audio->PlayFx(selectSFX);
+	}
+>>>>>>> Stashed changes
 
 	return true;
 }

@@ -17,8 +17,8 @@
   </window>
 
   <audio>
-    <music volume="128"/>
-    <fx volume="128"/>
+    <music volume="50"/>
+    <fx volume="50"/>
   </audio>
 
 	<logo>
