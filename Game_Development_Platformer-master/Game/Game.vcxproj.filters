@@ -58,6 +58,9 @@
     <ClCompile Include="Source\Player.cpp">
       <Filter>Modules\Gameplay</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Enemy.cpp">
+      <Filter>Modules\Gameplay</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -140,6 +143,9 @@
       <Filter>Modules\Gameplay</Filter>
     </ClInclude>
     <ClInclude Include="Source\Player.h">
+      <Filter>Modules\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy.h">
       <Filter>Modules\Gameplay</Filter>
     </ClInclude>
   </ItemGroup>
