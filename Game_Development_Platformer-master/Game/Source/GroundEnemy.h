@@ -31,7 +31,7 @@ public:
 private:
 
 	bool alive;
-	bool idle, leftID;
+	bool leftID;
 	bool isGrounded;
 	bool stairs;
 	int remainingJumpSteps;
@@ -49,7 +49,7 @@ private:
 	const char* texturePath;
 
 	//Animation
-	Animation IdleL, IdleR;	// jump?
+	Animation AttackL, AttackR;	// jump?
 	Animation RunL, RunR, JumpL, JumpR;
 	Animation death, iddledeathanim;
 	Animation* currentAnim = nullptr;
