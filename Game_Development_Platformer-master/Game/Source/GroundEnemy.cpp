@@ -44,12 +44,11 @@ bool GroundEnemy::Start()
 	texture = app->tex->Load(texturePath);
 
 	remainingJumpSteps = 0;
-	idle = true;
 
 	//id = app->tex->LoadSprite(texturePath, 15, 8);
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
-	gebody = app->physics->CreateCircle(position.x - 20, position.y - 5, 20, bodyType::DYNAMIC);
+	gebody = app->physics->CreateRectangle(position.x - 20, position.y + 5, 20, 20, bodyType::DYNAMIC);
 
 	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
 	gebody->listener = this;
@@ -97,61 +96,55 @@ bool GroundEnemy::Update()
 
 	if (!alive)
 	{
-		idle = false;
 		currentAnim = &death;
 	}
 	else
 	{
-		idle = true;
 
 		//Left
-		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-			currentAnim = &RunR;
-			vel.x = -speed;
-			idle = false;
-			leftID = true;
-			app->render->camera.x += 5;
-		}
+		//if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+		//	currentAnim = &RunR;
+		//	vel.x = -speed;
+		//	leftID = true;
+		//	app->render->camera.x += 5;
+		//}
 		//Right
-		else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-			currentAnim = &RunL;
-			vel.x = speed;
-			idle = false;
-			leftID = false;
-			app->render->camera.x -= 5;
-		}
-		else
-			vel.x = 0;
+		//else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+		//	currentAnim = &RunL;
+		//	vel.x = speed;
+		//	leftID = false;
+		//	app->render->camera.x -= 5;
+		//}
+		//else
+		//	vel.x = 0;
 
-		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isGrounded && remainingJumpSteps == 0) {
-			currentAnim = leftID ? &JumpL : &JumpR;
-			remainingJumpSteps = 6;
-			idle = false;
-			isGrounded = false;
-			//app->audio->PlayFx(jumpSFX);
+		//if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isGrounded && remainingJumpSteps == 0) {
+		//	currentAnim = leftID ? &JumpL : &JumpR;
+		//	remainingJumpSteps = 6;
+		//	isGrounded = false;
+		//	//app->audio->PlayFx(jumpSFX);
 
-		}
+		//}
 	}
 
 	//Set the velocity of the pbody of the player
 	gebody->body->SetLinearVelocity(vel);
 
 	//Apply Jump Force
-	if (remainingJumpSteps > 0)
-	{
-		float force = gebody->body->GetMass() * 10 / 0.01666; //F = mv/t (t = 1/60fps)
-		force /= 6.0;
-		gebody->body->ApplyForce(b2Vec2(0, -force), gebody->body->GetWorldCenter(), true);
-		remainingJumpSteps--;
-	}
+	//if (remainingJumpSteps > 0)
+	//{
+	//	float force = gebody->body->GetMass() * 10 / 0.01666; //F = mv/t (t = 1/60fps)
+	//	force /= 6.0;
+	//	gebody->body->ApplyForce(b2Vec2(0, -force), gebody->body->GetWorldCenter(), true);
+	//	remainingJumpSteps--;
+	//}
 
 	//Update player position in pixels
-	position.x = METERS_TO_PIXELS(gebody->body->GetTransform().p.x) - 46;
-	position.y = METERS_TO_PIXELS(gebody->body->GetTransform().p.y) - 60;
+	position.x = METERS_TO_PIXELS(gebody->body->GetTransform().p.x);
+	position.y = METERS_TO_PIXELS(gebody->body->GetTransform().p.y);
 
 	//Animations
-	if (idle) { currentAnim = leftID ? &IdleR : &IdleL; }
-	if (!isGrounded) { currentAnim = leftID ? &JumpR : &JumpL; }
+	//if (!isGrounded) { currentAnim = leftID ? &JumpR : &JumpL; }
 	SDL_Rect rect2 = currentAnim->GetCurrentFrame();
 	app->render->DrawTexture(texture, position.x, position.y, &rect2);
 	currentAnim->Update();
@@ -191,8 +184,8 @@ void GroundEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 		LOG("Collision DEATH");
 		alive = false;
 		break;
-	case ColliderType::UNKNOWN:
-		LOG("Collision UNKNOWN");
+	case ColliderType::PLAYER:
+		LOG("Collision PLAYER");
 		break;
 	}
 }
@@ -212,26 +205,23 @@ void GroundEnemy::DebugKeys()
 
 void GroundEnemy::LoadAnimations()
 {
-	IdleL.PushBack({ 0, 0, 72, 86 });
-	IdleL.PushBack({ 0, 0, 72, 86 });
-	IdleL.PushBack({ 67, 0, 72, 86 });
-	IdleL.PushBack({ 134, 0, 72, 86 });
-	IdleL.PushBack({ 134, 0, 72, 86 });
-	IdleL.PushBack({ 201,0, 72, 86 });
-	IdleL.speed = 0.05f;
-	IdleL.loop = true;
+	AttackL.PushBack({ 5, 14, 43, 26 });
+	AttackL.PushBack({ 53, 14, 43, 26 });
+	AttackL.PushBack({ 99, 14, 43, 26 });
+	AttackL.PushBack({ 147, 14, 43, 26 });
+	AttackL.speed = 0.05f;
+	AttackL.loop = true;
 
-	IdleR.PushBack({ 0, 86, 72, 86 });
-	IdleR.PushBack({ 0, 86, 72, 86 });
-	IdleR.PushBack({ 67, 86, 72, 86 });
-	IdleR.PushBack({ 134, 86, 72, 86 });
-	IdleR.PushBack({ 134, 86, 72, 86 });
-	IdleR.PushBack({ 201, 86, 72, 86 });
-	IdleR.speed = 0.05f;
-	IdleR.loop = true;
+	currentAnim = &AttackL;
 
-	currentAnim = &IdleL;
-
+	AttackR.PushBack({ 0, 86, 72, 86 });
+	AttackR.PushBack({ 0, 86, 72, 86 });
+	AttackR.PushBack({ 67, 86, 72, 86 });
+	AttackR.PushBack({ 134, 86, 72, 86 });
+	AttackR.PushBack({ 134, 86, 72, 86 });
+	AttackR.PushBack({ 201, 86, 72, 86 });
+	AttackR.speed = 0.05f;
+	AttackR.loop = true;
 
 	RunL.PushBack({ 0, 172, 72, 86 });
 	RunL.PushBack({ 76, 172, 72, 86 });
