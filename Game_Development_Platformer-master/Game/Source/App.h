@@ -24,6 +24,7 @@ class FadeToBlack;
 class Logo;
 class Title;
 class Ending;
+class Pathfinding;
 
 class App
 {
@@ -99,6 +100,7 @@ public:
 	Logo* logo;
 	Title* titleScreen;
 	Ending* endScreen;
+	PathFinding* pathfinding;
 
 private:
 

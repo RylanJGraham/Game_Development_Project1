@@ -12,6 +12,7 @@
 #include "Logo.h"
 #include "Title.h"
 #include "Ending.h"
+#include "Pathfinding.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -38,6 +39,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	titleScreen = new Title(false);
 	scene = new Scene(false);
 	endScreen = new Ending(false);
+	pathfinding = new PathFinding(true);
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
