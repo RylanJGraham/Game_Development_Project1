@@ -197,7 +197,7 @@ void Enemy::OnCollision(PhysBody* physA, PhysBody* physB)
 	}
 }
 
-void Player::DebugKeys()
+void Enemy::DebugKeys()
 {
 
 	// F9: View colliders / logic
@@ -207,11 +207,10 @@ void Player::DebugKeys()
 
 	// F10: God Mode (fly around, cannot be killed, etc)
 	if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) {
-		godMode = !godMode;
 	}
 }
 
-void Player::LoadAnimations()
+void Enemy::LoadAnimations()
 {
 	IdleL.PushBack({ 0, 0, 72, 86 });
 	IdleL.PushBack({ 0, 0, 72, 86 });

@@ -24,7 +24,7 @@ class FadeToBlack;
 class Logo;
 class Title;
 class Ending;
-class Pathfinding;
+class PathFinding;
 
 class App
 {
