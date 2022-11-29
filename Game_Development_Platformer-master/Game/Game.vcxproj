@@ -96,7 +96,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Ending.cpp" />
-    <ClCompile Include="Source\Enemy.cpp" />
+    <ClCompile Include="Source\GroundEnemy.cpp" />
     <ClCompile Include="Source\EntityManager.cpp" />
     <ClCompile Include="Source\FadeToBlack.cpp" />
     <ClCompile Include="Source\Item.cpp" />
@@ -116,7 +116,7 @@
     <ClCompile Include="Source\Window.cpp" />
     <ClInclude Include="Source\Animation.h" />
     <ClInclude Include="Source\Ending.h" />
-    <ClInclude Include="Source\Enemy.h" />
+    <ClInclude Include="Source\GroundEnemy.h" />
     <ClInclude Include="Source\Entity.h" />
     <ClInclude Include="Source\EntityManager.h" />
     <ClInclude Include="Source\FadeToBlack.h" />
@@ -146,6 +146,9 @@
     <ClInclude Include="Source\External\PugiXml\src\pugiconfig.hpp" />
     <ClInclude Include="Source\External\PugiXml\src\pugixml.hpp" />
     <ClCompile Include="Source\External\PugiXml\src\pugixml.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\Output\config.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

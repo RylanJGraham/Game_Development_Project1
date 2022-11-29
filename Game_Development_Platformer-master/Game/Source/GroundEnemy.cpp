@@ -1,4 +1,4 @@
-#include "Enemy.h"
+#include "GroundEnemy.h"
 #include "App.h"
 #include "FadeToBlack.h"
 #include "Textures.h"
@@ -13,16 +13,16 @@
 #include "Title.h"
 #include "Player.h"
 
-Enemy::Enemy() : Entity(EntityType::ENEMY)
+GroundEnemy::GroundEnemy() : Entity(EntityType::GROUNDENEMY)
 {
-	name.Create("Enemy");
+	name.Create("GroundEnemy");
 }
 
-Enemy::~Enemy() {
+GroundEnemy::~GroundEnemy() {
 
 }
 
-bool Enemy::Awake() {
+bool GroundEnemy::Awake() {
 
 	//L02: DONE 1: Initialize Player parameters
 	//pos = position;
@@ -36,7 +36,7 @@ bool Enemy::Awake() {
 	return true;
 }
 
-bool Enemy::Start()
+bool GroundEnemy::Start()
 {
 	alive = true;
 
@@ -49,11 +49,11 @@ bool Enemy::Start()
 	//id = app->tex->LoadSprite(texturePath, 15, 8);
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
-	ebody = app->physics->CreateCircle(position.x - 20, position.y - 5, 20, bodyType::DYNAMIC);
+	gebody = app->physics->CreateCircle(position.x - 20, position.y - 5, 20, bodyType::DYNAMIC);
 
 	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
-	ebody->listener = this;
-	ebody->ctype = ColliderType::ENEMY;
+	gebody->listener = this;
+	gebody->ctype = ColliderType::ENEMY;
 
 	//initialize audio effect - !! Path is hardcoded, should be loaded from config.xml
 	//jumpSFX = app->audio->LoadFx("Assets/Audio/Fx/JumpKnight.wav");
@@ -63,12 +63,12 @@ bool Enemy::Start()
 	return true;
 }
 
-void Enemy::SetPos(int x, int y) {
+void GroundEnemy::SetPos(int x, int y) {
 	b2Vec2 pos = { PIXEL_TO_METERS(x), PIXEL_TO_METERS(y) };
-	ebody->body->SetTransform(pos, 0);
+	gebody->body->SetTransform(pos, 0);
 }
 
-bool Enemy::Update()
+bool GroundEnemy::Update()
 {
 	b2Vec2 vel;
 	int speed = 5;
@@ -91,8 +91,8 @@ bool Enemy::Update()
 	
 	if(1)
 	{
-		ebody->body->SetGravityScale(1);
-		vel = ebody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.0166);
+		gebody->body->SetGravityScale(1);
+		vel = gebody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.0166);
 	}
 
 	if (!alive)
@@ -134,20 +134,20 @@ bool Enemy::Update()
 	}
 
 	//Set the velocity of the pbody of the player
-	ebody->body->SetLinearVelocity(vel);
+	gebody->body->SetLinearVelocity(vel);
 
 	//Apply Jump Force
 	if (remainingJumpSteps > 0)
 	{
-		float force = ebody->body->GetMass() * 10 / 0.01666; //F = mv/t (t = 1/60fps)
+		float force = gebody->body->GetMass() * 10 / 0.01666; //F = mv/t (t = 1/60fps)
 		force /= 6.0;
-		ebody->body->ApplyForce(b2Vec2(0, -force), ebody->body->GetWorldCenter(), true);
+		gebody->body->ApplyForce(b2Vec2(0, -force), gebody->body->GetWorldCenter(), true);
 		remainingJumpSteps--;
 	}
 
 	//Update player position in pixels
-	position.x = METERS_TO_PIXELS(ebody->body->GetTransform().p.x) - 46;
-	position.y = METERS_TO_PIXELS(ebody->body->GetTransform().p.y) - 60;
+	position.x = METERS_TO_PIXELS(gebody->body->GetTransform().p.x) - 46;
+	position.y = METERS_TO_PIXELS(gebody->body->GetTransform().p.y) - 60;
 
 	//Animations
 	if (idle) { currentAnim = leftID ? &IdleR : &IdleL; }
@@ -159,20 +159,20 @@ bool Enemy::Update()
 	return true;
 }
 
-bool Enemy::PostUpdate()
+bool GroundEnemy::PostUpdate()
 {
 	//For highscore
 
 	return true;
 }
 
-bool Enemy::CleanUp()
+bool GroundEnemy::CleanUp()
 {
 
 	return true;
 }
 
-void Enemy::OnCollision(PhysBody* physA, PhysBody* physB)
+void GroundEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 {
 	switch (physB->ctype)
 	{
@@ -197,7 +197,7 @@ void Enemy::OnCollision(PhysBody* physA, PhysBody* physB)
 	}
 }
 
-void Enemy::DebugKeys()
+void GroundEnemy::DebugKeys()
 {
 
 	// F9: View colliders / logic
@@ -210,7 +210,7 @@ void Enemy::DebugKeys()
 	}
 }
 
-void Enemy::LoadAnimations()
+void GroundEnemy::LoadAnimations()
 {
 	IdleL.PushBack({ 0, 0, 72, 86 });
 	IdleL.PushBack({ 0, 0, 72, 86 });

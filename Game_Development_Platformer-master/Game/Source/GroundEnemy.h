@@ -8,12 +8,12 @@
 
 struct SDL_Texture;
 
-class Enemy : public Entity
+class GroundEnemy : public Entity
 {
 public:
 
-	Enemy();
-	virtual ~Enemy();
+	GroundEnemy();
+	virtual ~GroundEnemy();
 
 	bool Awake();
 	bool Start();
@@ -22,7 +22,7 @@ public:
 	bool CleanUp();
 
 	void OnCollision(PhysBody* physA, PhysBody* physB);
-	void Enemy::DebugKeys();
+	void GroundEnemy::DebugKeys();
 	void LoadAnimations();
 	void SetPos(int x, int y);
 
@@ -42,7 +42,7 @@ private:
 	uint deathSFX = 0;
 
 	//Physics
-	PhysBody* ebody;
+	PhysBody* gebody;
 
 	//Texture
 	SDL_Texture* texture;

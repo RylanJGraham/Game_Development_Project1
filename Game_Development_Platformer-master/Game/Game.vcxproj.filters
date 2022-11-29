@@ -58,7 +58,7 @@
     <ClCompile Include="Source\Player.cpp">
       <Filter>Modules\Gameplay</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Enemy.cpp">
+    <ClCompile Include="Source\GroundEnemy.cpp">
       <Filter>Modules\Gameplay</Filter>
     </ClCompile>
     <ClCompile Include="Source\Pathfinding.cpp">
@@ -148,7 +148,7 @@
     <ClInclude Include="Source\Player.h">
       <Filter>Modules\Gameplay</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Enemy.h">
+    <ClInclude Include="Source\GroundEnemy.h">
       <Filter>Modules\Gameplay</Filter>
     </ClInclude>
     <ClInclude Include="Source\Pathfinding.h">
@@ -180,5 +180,10 @@
     <Filter Include="Modules\Scenes">
       <UniqueIdentifier>{1d52225b-5837-41ff-be7c-d8c566c359ca}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\Output\config.xml">
+      <Filter>Utils</Filter>
+    </Xml>
   </ItemGroup>
 </Project>
