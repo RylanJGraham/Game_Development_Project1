@@ -147,7 +147,7 @@ bool Player::Update()
 		float force = pbody->body->GetMass() * 10 / 0.01666; //F = mv/t (t = 1/60fps)
 		force /= 6.0;
 		pbody->body->ApplyForce(b2Vec2(0, -force), pbody->body->GetWorldCenter(), true);
-		remainingJumpSteps--;	
+		remainingJumpSteps--;
 	}
 
 	//Update player position in pixels

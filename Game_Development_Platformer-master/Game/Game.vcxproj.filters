@@ -64,7 +64,7 @@
     <ClCompile Include="Source\Pathfinding.cpp">
       <Filter>Modules\Core</Filter>
     </ClCompile>
-    <ClCompile Include="AirEnemy.cpp">
+    <ClCompile Include="Source\AirEnemy.cpp">
       <Filter>Modules\Gameplay</Filter>
     </ClCompile>
   </ItemGroup>
@@ -157,7 +157,7 @@
     <ClInclude Include="Source\Pathfinding.h">
       <Filter>Modules\Core</Filter>
     </ClInclude>
-    <ClInclude Include="AirEnemy.h">
+    <ClInclude Include="Source\AirEnemy.h">
       <Filter>Modules\Gameplay</Filter>
     </ClInclude>
   </ItemGroup>

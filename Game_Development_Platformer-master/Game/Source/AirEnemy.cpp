@@ -56,7 +56,7 @@ bool AirEnemy::Start()
 
 	//initialize audio effect - !! Path is hardcoded, should be loaded from config.xml
 	//jumpSFX = app->audio->LoadFx("Assets/Audio/Fx/JumpKnight.wav");
-	damagedSFX = app->audio->LoadFx("Assets/Audio/Fx/AirEnemyDamage.wav")
+	damagedSFX = app->audio->LoadFx("Assets/Audio/Fx/AirEnemyDamage.wav");
 
 	LoadAnimations();
 
@@ -137,22 +137,22 @@ bool AirEnemy::Update()
 	//Apply Jump Force
 	if (remainingJumpSteps > 0)
 	{
-		float force = gebody->body->GetMass() * 10 / 0.01666; //F = mv/t (t = 1/60fps)
+		float force = aebody->body->GetMass() * 10 / 0.01666; //F = mv/t (t = 1/60fps)
 		force /= 6.0;
-		gebody->body->ApplyForce(b2Vec2(0, -force), gebody->body->GetWorldCenter(), true);
+		aebody->body->ApplyForce(b2Vec2(0, -force), aebody->body->GetWorldCenter(), true);
 		remainingJumpSteps--;
 	}
 
 	//Update player position in pixels
-	position.x = METERS_TO_PIXELS(gebody->body->GetTransform().p.x) - 46;
-	position.y = METERS_TO_PIXELS(gebody->body->GetTransform().p.y) - 60;
+	position.x = METERS_TO_PIXELS(aebody->body->GetTransform().p.x) - 46;
+	position.y = METERS_TO_PIXELS(aebody->body->GetTransform().p.y) - 60;
 
 	if (health = 0) {
 		alive = false;
 	}
 
 	//Animations
-	if (idle) { currentAnim = Idle; }
+	if (idle) { currentAnim = &Idle; }
 	/*if (!isGrounded) { currentAnim = leftID ? &JumpR : &JumpL; }*/
 	SDL_Rect rect2 = currentAnim->GetCurrentFrame();
 	app->render->DrawTexture(texture, position.x, position.y, &rect2);
