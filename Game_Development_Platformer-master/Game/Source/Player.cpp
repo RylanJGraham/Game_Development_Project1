@@ -49,7 +49,7 @@ bool Player::Start()
 	//id = app->tex->LoadSprite(texturePath, 15, 8);
 	
 	// L07 DONE 5: Add physics to the player - initialize physics body
-	pbody = app->physics->CreateCircle(position.x - 20, position.y - 5, 20, bodyType::DYNAMIC);
+	pbody = app->physics->CreateCircle(position.x - 20, position.y - 5, 18, bodyType::DYNAMIC);
 
 	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
 	pbody->listener = this;
@@ -158,7 +158,7 @@ bool Player::Update()
 	if (idle) { currentAnim = leftID ? &IdleR : &IdleL; }
 	if (!isGrounded) { currentAnim = leftID ? &JumpR : &JumpL; }
 	SDL_Rect rect2 = currentAnim->GetCurrentFrame();
-	app->render->DrawTexture(texture, position.x, position.y, &rect2);
+	app->render->DrawTexture(texture, position.x-8, position.y, &rect2);
 	currentAnim->Update();
 
 	return true;
@@ -226,56 +226,76 @@ void Player::DebugKeys()
 
 void Player::LoadAnimations()
 {
-	IdleL.PushBack({ 0, 0, 72, 86 });
-	IdleL.PushBack({ 0, 0, 72, 86 });
-	IdleL.PushBack({ 67, 0, 72, 86 });
-	IdleL.PushBack({ 134, 0, 72, 86 });
-	IdleL.PushBack({ 134, 0, 72, 86 });
-	IdleL.PushBack({ 201,0, 72, 86 });
-	IdleL.speed = 0.05f;
+	IdleL.PushBack({ 0, 320, 120, 80 });
+	IdleL.PushBack({ 120, 320, 120, 80 });
+	IdleL.PushBack({ 240, 320, 120, 80 });
+	IdleL.PushBack({ 360, 320, 120, 80 });
+	IdleL.PushBack({ 480, 320, 120, 80 });
+	IdleL.PushBack({ 600, 320, 120, 80 });
+	IdleL.PushBack({ 720, 320, 120, 80 });
+	IdleL.PushBack({ 840, 320, 120, 80 });
+	IdleL.PushBack({ 960, 320, 120, 80 });
+	IdleL.PushBack({ 1080, 320, 120, 80 });
+	IdleL.speed = 0.1f;
 	IdleL.loop = true;
 
-	IdleR.PushBack({ 0, 86, 72, 86 });
-	IdleR.PushBack({ 0, 86, 72, 86 });
-	IdleR.PushBack({ 67, 86, 72, 86 });
-	IdleR.PushBack({ 134, 86, 72, 86 });
-	IdleR.PushBack({ 134, 86, 72, 86 });
-	IdleR.PushBack({ 201, 86, 72, 86 });
-	IdleR.speed = 0.05f;
+	IdleR.PushBack({ 1080, 800, 120, 80 });
+	IdleR.PushBack({ 960, 800, 120, 80 });
+	IdleR.PushBack({ 840, 800, 120, 80 });
+	IdleR.PushBack({ 720, 800, 120, 80 });
+	IdleR.PushBack({ 600, 800, 120, 80 });
+	IdleR.PushBack({ 480, 800, 120, 80 });
+	IdleR.PushBack({ 360, 800, 120, 80 });
+	IdleR.PushBack({ 240, 800, 120, 80 });
+	IdleR.PushBack({ 120, 800, 120, 80 });
+	IdleR.PushBack({ 0, 800, 120, 80 });
+	IdleR.speed = 0.1f;
 	IdleR.loop = true;
 
 	currentAnim = &IdleL;
 
 
-	RunL.PushBack({ 0, 172, 72, 86 });
-	RunL.PushBack({ 76, 172, 72, 86 });
-	RunL.PushBack({ 150, 172, 72, 86 });
-	RunL.PushBack({ 220, 172, 72, 86 });
-	RunL.PushBack({ 292, 172, 72, 86 });
-	RunL.PushBack({ 364, 172, 72, 86 });
-	RunL.PushBack({ 436, 172, 72, 86 });
-	RunL.speed = 0.1f;
+	RunL.PushBack({ 0, 400, 120, 80 });
+	RunL.PushBack({ 120, 400, 120, 80 });
+	RunL.PushBack({ 240, 400, 120, 80 });
+	RunL.PushBack({ 360, 400, 120, 80 });
+	RunL.PushBack({ 480, 400, 120, 80 });
+	RunL.PushBack({ 600, 400, 120, 80 });
+	RunL.PushBack({ 720, 400, 120, 80 });
+	RunL.PushBack({ 840, 400, 120, 80 });
+	RunL.PushBack({ 960, 400, 120, 80 });
+	RunL.PushBack({ 1080, 400, 120, 80 });
+	RunL.speed = 0.2f;
 	RunL.loop = true;
 
-	RunR.PushBack({ 428, 258, 72, 86 });
-	RunR.PushBack({ 356, 258, 72, 86 });
-	RunR.PushBack({ 284, 258, 72, 86 });
-	RunR.PushBack({ 212, 258, 72, 86 });
-	RunR.PushBack({ 140, 258, 72, 86 });
-	RunR.PushBack({ 68, 258, 72, 86 });
-	RunR.PushBack({ 0, 258, 72, 86 });
-	RunR.speed = 0.1f;
+	RunR.PushBack({ 1080, 880, 120, 80 });
+	RunR.PushBack({ 960, 880, 120, 80 });
+	RunR.PushBack({ 840, 880, 120, 80 });
+	RunR.PushBack({ 720, 880, 120, 80 });
+	RunR.PushBack({ 600, 880, 120, 80 });
+	RunR.PushBack({ 480, 880, 120, 80 });
+	RunR.PushBack({ 360, 880, 120, 80 });
+	RunR.PushBack({ 240, 880, 120, 80 });
+	RunR.PushBack({ 120, 880, 120, 80 });
+	RunR.PushBack({ 0, 880, 120, 80 });
+	RunR.speed = 0.2f;
 	RunR.loop = true;
 
-	JumpL.PushBack({ 0, 344, 80, 86 });
-	JumpL.PushBack({ 80, 344, 80, 86 });
-	JumpL.PushBack({ 160, 344, 80, 86 });
+	JumpL.PushBack({ 0, 160, 120, 80 });
+	JumpL.PushBack({ 120, 160, 120, 80 });
+	JumpL.PushBack({ 240, 160, 120, 80 });
+	JumpL.PushBack({ 360, 160, 120, 80 });
+	JumpL.PushBack({ 480, 160, 120, 80 });
+	JumpL.PushBack({ 600, 160, 120, 80 });
 	JumpL.speed = 0.5f;
 	JumpL.loop = false;
 
-	JumpR.PushBack({ 405, 430, 80, 86 });
-	JumpR.PushBack({ 325, 430, 80, 86 });
-	JumpR.PushBack({ 245, 430, 80, 86 });
+	JumpR.PushBack({ 1080, 640, 120, 80 });
+	JumpR.PushBack({ 960, 640, 120, 80 });
+	JumpR.PushBack({ 840, 640, 120, 80 });
+	JumpR.PushBack({ 720, 640, 120, 80 });
+	JumpR.PushBack({ 600, 640, 120, 80 });
+	JumpR.PushBack({ 480, 640, 120, 80 });
 	JumpR.speed = 0.5f;
 	JumpR.loop = false;
 }

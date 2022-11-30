@@ -123,6 +123,10 @@ bool Scene::Update(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		app->render->camera.x -= camSpeed;
+	// F9: View colliders / logic
+	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {
+		app->physics->debug = !app->physics->debug;
+	}
 
 #pragma endregion DEBUG_KEYS
 

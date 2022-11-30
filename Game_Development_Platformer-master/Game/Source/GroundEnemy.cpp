@@ -48,7 +48,7 @@ bool GroundEnemy::Start()
 	//id = app->tex->LoadSprite(texturePath, 15, 8);
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
-	gebody = app->physics->CreateRectangle(position.x - 20, position.y + 5, 20, 20, bodyType::DYNAMIC);
+	gebody = app->physics->CreateCircle(position.x - 5, position.y + 10, 15, bodyType::DYNAMIC);
 
 	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
 	gebody->listener = this;
@@ -146,7 +146,7 @@ bool GroundEnemy::Update()
 	//Animations
 	//if (!isGrounded) { currentAnim = leftID ? &JumpR : &JumpL; }
 	SDL_Rect rect2 = currentAnim->GetCurrentFrame();
-	app->render->DrawTexture(texture, position.x, position.y, &rect2);
+	app->render->DrawTexture(texture, position.x-20, position.y-8, &rect2);
 	currentAnim->Update();
 
 	return true;
@@ -209,7 +209,7 @@ void GroundEnemy::LoadAnimations()
 	AttackL.PushBack({ 53, 14, 43, 26 });
 	AttackL.PushBack({ 99, 14, 43, 26 });
 	AttackL.PushBack({ 147, 14, 43, 26 });
-	AttackL.speed = 0.05f;
+	AttackL.speed = 0.1f;
 	AttackL.loop = true;
 
 	currentAnim = &AttackL;
