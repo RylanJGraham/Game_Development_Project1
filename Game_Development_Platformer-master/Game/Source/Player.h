@@ -28,15 +28,19 @@ public:
 
 public:
 
+	bool isGrounded;
+
 private:
 	
 
 	uint jumpSFX = 0;
 	uint chestopenSFX = 0;
+	uint attackCooldownMax;
+	uint attackCooldown;
 	bool alive;
 	bool idle, leftID;
-	bool isGrounded;
 	bool stairs;
+	bool isAttacking;
 	int remainingJumpSteps;
 
 	bool godMode;
@@ -51,7 +55,8 @@ private:
 	//Animation
 	Animation IdleL, IdleR;	// jump?
 	Animation RunL, RunR, JumpL, JumpR;
-	Animation death, iddledeathanim;
+	Animation DeathL, DeathR;
+	Animation AttackL, AttackR;
 	Animation* currentAnim = nullptr;
 
 	//FX

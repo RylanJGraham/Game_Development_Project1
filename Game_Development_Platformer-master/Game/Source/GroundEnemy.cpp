@@ -209,7 +209,7 @@ void GroundEnemy::LoadAnimations()
 	AttackL.PushBack({ 53, 14, 43, 26 });
 	AttackL.PushBack({ 99, 14, 43, 26 });
 	AttackL.PushBack({ 147, 14, 43, 26 });
-	AttackL.speed = 0.1f;
+	AttackL.speed = 0.15f;
 	AttackL.loop = true;
 
 	currentAnim = &AttackL;
@@ -220,7 +220,7 @@ void GroundEnemy::LoadAnimations()
 	AttackR.PushBack({ 134, 86, 72, 86 });
 	AttackR.PushBack({ 134, 86, 72, 86 });
 	AttackR.PushBack({ 201, 86, 72, 86 });
-	AttackR.speed = 0.05f;
+	AttackR.speed = 0.15f;
 	AttackR.loop = true;
 
 	RunL.PushBack({ 0, 172, 72, 86 });

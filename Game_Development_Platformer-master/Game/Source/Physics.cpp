@@ -9,6 +9,7 @@
 #include "Render.h"
 #include "Player.h"
 #include "Window.h"
+#include "Scene.h"
 #include "Box2D/Box2D/Box2D.h"
 
 #ifdef _DEBUG
@@ -45,15 +46,16 @@ bool Physics::PreUpdate()
 {
 	bool ret = true;
 	world->Step(1.0f / 60.0f, 6, 2);
-
+		
 	for (b2Contact* c = world->GetContactList(); c; c = c->GetNext())
 	{
 		if (c->IsTouching() && c->GetFixtureA()->IsSensor())
 		{
 			PhysBody* pb1 = (PhysBody*)c->GetFixtureA()->GetBody()->GetUserData();
 			PhysBody* pb2 = (PhysBody*)c->GetFixtureB()->GetBody()->GetUserData();
-			if (pb1 && pb2 && pb1->listener)
+			if (pb1 && pb2 && pb1->listener) {
 				pb1->listener->OnCollision(pb1, pb2);
+			}
 		}
 	}
 

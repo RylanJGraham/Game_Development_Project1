@@ -68,7 +68,7 @@ bool Title::Update(float dt)
 {
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
 		LOG("PASA A GAME SCENE");
-		app->fade->FadeBlack(this, (Module*)app->scene, 90);
+		app->fade->FadeBlack(this, (Module*)app->scene, 60);
 		app->audio->PlayFx(selectSFX);
 	}
 

@@ -26,9 +26,9 @@
 	</logo>
   <!-- L02: DONE: Add an element for the entity manager and add the player parameters -->
   <scene>
-    <player x="112" y="511" texturepath="Assets/Textures/NewKnight.png"/>
+    <player x="112" y="511" texturepath="Assets/Textures/NewKnight.png" attcooldown="300"/>
     <item x="1750" y="352" texturepath="Assets/Textures/ChestProp.png"/>
-	<groundEnemy x="300" y="200" texturepath="Assets/Textures/GroundEnemy.png"/>
+	<groundEnemy x="300" y="500" texturepath="Assets/Textures/GroundEnemy.png"/>
 	<airEnemy x="300" y="511" texturepath="Assets/Textures/AirEnemy.png"/>
 
 

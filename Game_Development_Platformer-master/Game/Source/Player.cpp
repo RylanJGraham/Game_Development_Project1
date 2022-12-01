@@ -31,6 +31,7 @@ bool Player::Awake() {
 	position.x = parameters.attribute("x").as_int();
 	position.y = parameters.attribute("y").as_int();
 	texturePath = parameters.attribute("texturepath").as_string();
+	attackCooldownMax = (parameters.attribute("attcooldown").as_float()) * 0.06; //*0.06 because the cooldown is in milliseconds and the game runs at 60 fps
 
 	return true;
 }
@@ -38,7 +39,9 @@ bool Player::Awake() {
 bool Player::Start()
 {
 	alive = true;
+	isAttacking = false;
 	godMode = false;
+	attackCooldown = attackCooldownMax;
 
 	//initilize textures
 	texture = app->tex->Load(texturePath);
@@ -103,14 +106,14 @@ bool Player::Update()
 	if (!alive)
 	{
 		idle = false;
-		currentAnim = &death;
+		currentAnim = leftID ? &DeathL : &DeathR;
 	}
 	else
 	{
 		idle = true;
 
 		//Left
-		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && !isAttacking) {
 			currentAnim = &RunR;
 			vel.x = -speed;
 			idle = false;
@@ -118,7 +121,7 @@ bool Player::Update()
 				app->render->camera.x += 5;
 		}
 		//Right
-		else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+		else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && !isAttacking) {
 			currentAnim = &RunL;
 			vel.x = speed;
 			idle = false;
@@ -128,13 +131,19 @@ bool Player::Update()
 		else
 			vel.x = 0;
 
-		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isGrounded && remainingJumpSteps == 0) {
+		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN && isGrounded && remainingJumpSteps == 0 && !isAttacking) {
 			currentAnim = leftID ? &JumpL : &JumpR;
 			remainingJumpSteps = 6;
 			idle = false;
 			isGrounded = false;
 			app->audio->PlayFx(jumpSFX);
 
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isGrounded && attackCooldown == attackCooldownMax) {
+			currentAnim = leftID ? &AttackR : &AttackL;
+			isAttacking = true;
+			attackCooldown = 0;
 		}
 	}
 
@@ -150,15 +159,24 @@ bool Player::Update()
 		remainingJumpSteps--;
 	}
 
+	if (attackCooldown < attackCooldownMax) {
+		attackCooldown += 1;
+	}
+
 	//Update player position in pixels
 	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - 46;
 	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 60;
 
 	//Animations
-	if (idle) { currentAnim = leftID ? &IdleR : &IdleL; }
+	if (AttackL.GetCurrentFrameint() == 3 || AttackR.GetCurrentFrameint() == 3) {
+		isAttacking = false;
+		AttackL.Reset();
+		AttackR.Reset();
+	}
+	if (idle && !isAttacking) { currentAnim = leftID ? &IdleR : &IdleL; }
 	if (!isGrounded) { currentAnim = leftID ? &JumpR : &JumpL; }
 	SDL_Rect rect2 = currentAnim->GetCurrentFrame();
-	app->render->DrawTexture(texture, position.x-8, position.y, &rect2);
+	app->render->DrawTexture(texture, position.x-11, position.y, &rect2);
 	currentAnim->Update();
 
 	return true;
@@ -179,12 +197,13 @@ bool Player::CleanUp()
 
 void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 {
+	isGrounded = false;
 	switch (physB->ctype)
 	{
 	case ColliderType::ITEM:
 		LOG("Collision ITEM");
 		app->audio->PlayFx(chestopenSFX);
-		app->fade->FadeBlack((Module*)app->scene, (Module*)app->titleScreen, 90);
+		app->fade->FadeBlack((Module*)app->scene, (Module*)app->titleScreen, 60);
 		/*app->physics->Disable();
 		app->scene->Disable();*/
 		break;
@@ -202,10 +221,11 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 	case ColliderType::DEATH:
 		LOG("Collision DEATH");
 		alive = false;
-		app->fade->FadeBlack((Module*)app->scene, (Module*)app->endScreen, 90);
+		app->fade->FadeBlack((Module*)app->scene, (Module*)app->endScreen, 60);
 		break;
 	case ColliderType::UNKNOWN:
 		LOG("Collision UNKNOWN");
+		isGrounded = false;
 		break;
 	}
 }
@@ -298,4 +318,44 @@ void Player::LoadAnimations()
 	JumpR.PushBack({ 480, 640, 120, 80 });
 	JumpR.speed = 0.5f;
 	JumpR.loop = false;
+
+	DeathL.PushBack({ 120, 240, 120, 80 });
+	DeathL.PushBack({ 120, 0, 120, 80 });
+	DeathL.PushBack({ 240, 0, 120, 80 });
+	DeathL.PushBack({ 320, 0, 120, 80 });
+	DeathL.PushBack({ 480, 0, 120, 80 });
+	DeathL.PushBack({ 600, 0, 120, 80 });
+	DeathL.PushBack({ 720, 0, 120, 80 });
+	DeathL.PushBack({ 840, 0, 120, 80 });
+	DeathL.PushBack({ 960, 0, 120, 80 });
+	DeathL.PushBack({ 1080, 0, 120, 80 });
+	DeathL.speed = 0.5f;
+	DeathL.loop = false;
+
+	DeathR.PushBack({ 960, 720, 120, 80 });
+	DeathR.PushBack({ 120, 480, 120, 80 });
+	DeathR.PushBack({ 240, 480, 120, 80 });
+	DeathR.PushBack({ 320, 480, 120, 80 });
+	DeathR.PushBack({ 480, 480, 120, 80 });
+	DeathR.PushBack({ 600, 480, 120, 80 });
+	DeathR.PushBack({ 720, 480, 120, 80 });
+	DeathR.PushBack({ 840, 480, 120, 80 });
+	DeathR.PushBack({ 960, 480, 120, 80 });
+	DeathR.PushBack({ 1080, 480, 120, 80 });
+	DeathR.speed = 0.5f;
+	DeathR.loop = false;
+
+	AttackL.PushBack({ 0, 80, 120, 80 });
+	AttackL.PushBack({ 125, 80, 120, 80 });
+	AttackL.PushBack({ 250, 80, 120, 80 });
+	AttackL.PushBack({ 375, 80, 120, 80 });
+	AttackL.speed = 0.35f;
+	AttackL.loop = false;
+
+	AttackR.PushBack({ 1080, 560, 120, 80 });
+	AttackR.PushBack({ 955, 560, 120, 80 });
+	AttackR.PushBack({ 830, 560, 120, 80 });
+	AttackR.PushBack({ 705, 560, 120, 80 });
+	AttackR.speed = 0.35f;
+	AttackR.loop = false;
 }
