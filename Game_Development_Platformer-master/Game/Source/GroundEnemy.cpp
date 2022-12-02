@@ -102,7 +102,7 @@ bool GroundEnemy::Update()
 
 	if (!alive)
 	{
-		currentAnim = leftID ? &DeathL : &DeathR;
+		currentAnim = leftID ? &DeathR : &DeathL;
 		app->physics->world->DestroyBody(gebody->body);
 	}
 	else
