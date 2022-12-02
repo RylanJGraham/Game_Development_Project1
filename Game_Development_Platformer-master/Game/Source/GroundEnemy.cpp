@@ -102,7 +102,7 @@ bool GroundEnemy::Update()
 
 	if (!alive)
 	{
-		currentAnim = &death;
+		currentAnim = leftID ? &DeathL : &DeathR;
 		app->physics->world->DestroyBody(gebody->body);
 	}
 	else
@@ -210,6 +210,7 @@ void GroundEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 	case ColliderType::PLAYERATTACK:
 		LOG("Collision ATTACK");
 		isHurt = true;
+		hp--;
 		break;
 	}
 }
