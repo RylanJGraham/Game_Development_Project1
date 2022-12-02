@@ -34,6 +34,7 @@ private:
 	bool leftID;
 	bool isGrounded;
 	bool stairs;
+	bool isHurt;
 	int remainingJumpSteps;
 
 	//SFX
@@ -51,6 +52,7 @@ private:
 	//Animation
 	Animation AttackL, AttackR;	// jump?
 	Animation RunL, RunR, JumpL, JumpR;
+	Animation HitL, HitR;
 	Animation death, iddledeathanim;
 	Animation* currentAnim = nullptr;
 

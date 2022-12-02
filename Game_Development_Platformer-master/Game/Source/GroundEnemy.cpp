@@ -39,6 +39,7 @@ bool GroundEnemy::Awake() {
 bool GroundEnemy::Start()
 {
 	alive = true;
+	isHurt = false;
 
 	//initilize textures
 	texture = app->tex->Load(texturePath);
@@ -125,6 +126,19 @@ bool GroundEnemy::Update()
 		//	//app->audio->PlayFx(jumpSFX);
 
 		//}
+
+		if (isHurt) {
+			currentAnim = &HitL;
+		}
+		else {
+			currentAnim = &AttackL;
+		}
+
+		if (HitL.GetCurrentFrameint() == 1 || HitR.GetCurrentFrameint() == 1) {
+			HitL.Reset();
+			HitR.Reset();
+			isHurt = false;
+		}
 	}
 
 	//Set the velocity of the pbody of the player
@@ -187,6 +201,10 @@ void GroundEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 	case ColliderType::PLAYER:
 		LOG("Collision PLAYER");
 		break;
+	case ColliderType::PLAYERATTACK:
+		LOG("Collision ATTACK");
+		isHurt = true;
+		break;
 	}
 }
 
@@ -212,7 +230,10 @@ void GroundEnemy::LoadAnimations()
 	AttackL.speed = 0.15f;
 	AttackL.loop = true;
 
-	currentAnim = &AttackL;
+	HitL.PushBack({ 5, 110, 43, 26 });
+	HitL.PushBack({ 53, 110, 43, 26 });
+	HitL.speed = 0.1f;
+	HitL.loop = false;
 
 	AttackR.PushBack({ 0, 86, 72, 86 });
 	AttackR.PushBack({ 0, 86, 72, 86 });
