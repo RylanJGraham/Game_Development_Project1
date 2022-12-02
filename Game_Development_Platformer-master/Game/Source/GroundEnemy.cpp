@@ -40,6 +40,7 @@ bool GroundEnemy::Start()
 {
 	alive = true;
 	isHurt = false;
+	hp = 3;
 
 	//initilize textures
 	texture = app->tex->Load(texturePath);
@@ -95,9 +96,14 @@ bool GroundEnemy::Update()
 		vel = gebody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.0166);
 	}
 
+	if (hp <= 0) {
+		alive = false;
+	}
+
 	if (!alive)
 	{
 		currentAnim = &death;
+		app->physics->world->DestroyBody(gebody->body);
 	}
 	else
 	{
@@ -234,6 +240,13 @@ void GroundEnemy::LoadAnimations()
 	HitL.PushBack({ 53, 110, 43, 26 });
 	HitL.speed = 0.1f;
 	HitL.loop = false;
+
+	DeathL.PushBack({ 5, 62, 43, 26 });
+	DeathL.PushBack({ 53, 62, 43, 26 });
+	DeathL.PushBack({ 99, 62, 43, 26 });
+	DeathL.PushBack({ 147, 62, 43, 26 });
+	DeathL.speed = 0.1f;
+	DeathL.loop = false;
 
 	AttackR.PushBack({ 0, 86, 72, 86 });
 	AttackR.PushBack({ 0, 86, 72, 86 });
