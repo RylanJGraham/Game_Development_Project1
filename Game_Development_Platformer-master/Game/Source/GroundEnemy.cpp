@@ -12,6 +12,7 @@
 #include "Ending.h"
 #include "Title.h"
 #include "Player.h"
+#include "EntityManager.h"
 
 GroundEnemy::GroundEnemy() : Entity(EntityType::GROUNDENEMY)
 {
@@ -90,23 +91,17 @@ bool GroundEnemy::Update()
 			vel.y = speed;
 		}*/
 	
-	if(1)
-	{
-		gebody->body->SetGravityScale(1);
-		vel = gebody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.0166);
-	}
+
+
 
 	if (hp <= 0) {
 		alive = false;
 	}
 
-	if (!alive)
-	{
-		currentAnim = leftID ? &DeathR : &DeathL;
-		app->physics->world->DestroyBody(gebody->body);
-	}
 	else
 	{
+		gebody->body->SetGravityScale(1);
+		vel = gebody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.0166);
 
 		//Left
 		//if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
@@ -145,10 +140,16 @@ bool GroundEnemy::Update()
 			HitR.Reset();
 			isHurt = false;
 		}
+
+		gebody->body->SetLinearVelocity(vel);
+
+		position.x = METERS_TO_PIXELS(gebody->body->GetTransform().p.x);
+		position.y = METERS_TO_PIXELS(gebody->body->GetTransform().p.y);
+		
 	}
 
 	//Set the velocity of the pbody of the player
-	gebody->body->SetLinearVelocity(vel);
+
 
 	//Apply Jump Force
 	//if (remainingJumpSteps > 0)
@@ -160,8 +161,7 @@ bool GroundEnemy::Update()
 	//}
 
 	//Update player position in pixels
-	position.x = METERS_TO_PIXELS(gebody->body->GetTransform().p.x);
-	position.y = METERS_TO_PIXELS(gebody->body->GetTransform().p.y);
+
 
 	//Animations
 	//if (!isGrounded) { currentAnim = leftID ? &JumpR : &JumpL; }
@@ -169,19 +169,26 @@ bool GroundEnemy::Update()
 	app->render->DrawTexture(texture, position.x-20, position.y-8, &rect2);
 	currentAnim->Update();
 
+	if (!alive)
+	{
+		currentAnim = leftID ? &DeathR : &DeathL;
+		app->physics->world->DestroyBody(gebody->body);
+		if (DeathL.GetCurrentFrameint() == 4 || DeathR.GetCurrentFrameint() == 4) {
+			CleanUp();
+		}
+	}
+
 	return true;
 }
 
 bool GroundEnemy::PostUpdate()
 {
-	//For highscore
-
 	return true;
 }
 
 bool GroundEnemy::CleanUp()
 {
-
+	app->entityManager->DestroyEntity(app->scene->groundenemy);
 	return true;
 }
 
@@ -238,10 +245,12 @@ void GroundEnemy::LoadAnimations()
 	AttackL.loop = true;
 
 	HitL.PushBack({ 5, 110, 43, 26 });
+	HitL.PushBack({ 5, 110, 43, 26 });
 	HitL.PushBack({ 53, 110, 43, 26 });
 	HitL.speed = 0.1f;
 	HitL.loop = false;
 
+	DeathL.PushBack({ 5, 110, 43, 26 });
 	DeathL.PushBack({ 5, 62, 43, 26 });
 	DeathL.PushBack({ 53, 62, 43, 26 });
 	DeathL.PushBack({ 99, 62, 43, 26 });
