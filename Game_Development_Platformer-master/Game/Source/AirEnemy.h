@@ -32,10 +32,11 @@ private:
 
 	bool alive;
 	bool idle;
+	bool ishurt;
 	bool isGrounded;
 	bool stairs;
 	int remainingJumpSteps;
-	int health;
+	uint health;
 
 	//SFX
 	uint SFX = 0;

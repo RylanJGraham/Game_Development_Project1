@@ -8,10 +8,11 @@
 	<scene />
 	<TitleScreen />
 	<scene />
+	<scene />
 	<entitymanager />
 	<map />
 	<:anonymous />
 	<renderer>
-		<camera x="-400" y="-498" />
+		<camera x="-102" y="-498" />
 	</renderer>
 </save_state>

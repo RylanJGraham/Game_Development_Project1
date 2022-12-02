@@ -115,6 +115,8 @@
     <ClCompile Include="Source\Textures.cpp" />
     <ClCompile Include="Source\Title.cpp" />
     <ClCompile Include="Source\Window.cpp" />
+    <ClInclude Include="PQueue.h" />
+    <ClInclude Include="Queue.h" />
     <ClInclude Include="Source\AirEnemy.h" />
     <ClInclude Include="Source\Animation.h" />
     <ClInclude Include="Source\Ending.h" />

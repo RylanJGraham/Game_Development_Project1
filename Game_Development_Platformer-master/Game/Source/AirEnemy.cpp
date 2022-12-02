@@ -39,16 +39,17 @@ bool AirEnemy::Awake() {
 bool AirEnemy::Start()
 {
 	alive = true;
-	health = 3;
+	health = 2;
+	ishurt = false;
 	//initilize textures
 	texture = app->tex->Load(texturePath);
 
-	idle = true;
+	/*idle = true;*/
 
 	//id = app->tex->LoadSprite(texturePath, 15, 8);
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
-	aebody = app->physics->CreateCircle(position.x - 20, position.y - 5, 20, bodyType::STATIC);
+	aebody = app->physics->CreateCircle(position.x - 5, position.y + 10, 15, bodyType::STATIC);
 
 	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
 	aebody->listener = this;
@@ -75,51 +76,54 @@ bool AirEnemy::Update()
 
 	DebugKeys();
 
-	//movement test keys
-	if (app->input->GetKey(SDL_SCANCODE_J) == KEY_REPEAT) {
-		vel.x = -speed;
-	}
-	if (app->input->GetKey(SDL_SCANCODE_L) == KEY_REPEAT) {
-		vel.x = speed;
-	}
-	if (app->input->GetKey(SDL_SCANCODE_I) == KEY_REPEAT) {
-		vel.y = -speed;
-	}
-	if (app->input->GetKey(SDL_SCANCODE_K) == KEY_REPEAT) {
-		vel.y = speed;
-	}
+	////movement test keys
+	//if (app->input->GetKey(SDL_SCANCODE_J) == KEY_REPEAT) {
+	//	vel.x = -speed;
+	//}
+	//if (app->input->GetKey(SDL_SCANCODE_L) == KEY_REPEAT) {
+	//	vel.x = speed;
+	//}
+	//if (app->input->GetKey(SDL_SCANCODE_I) == KEY_REPEAT) {
+	//	vel.y = -speed;
+	//}
+	//if (app->input->GetKey(SDL_SCANCODE_K) == KEY_REPEAT) {
+	//	vel.y = speed;
+	//}
 
 	if (1)
 	{
-		aebody->body->SetGravityScale(1);
+		aebody->body->SetGravityScale(0);
 		vel = aebody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.0166);
 	}
 
-	if (!alive)
+	if (health <= 0)
 	{
-		idle = false;
+		alive = false;
+	}
+	if (!alive) {
 		currentAnim = &Death;
+		app->physics->world->DestroyBody(aebody->body);
 	}
 	else
 	{
-		idle = true;
+		/*idle = true;*/
 
 		//Left
-		if (app->input->GetKey(SDL_SCANCODE_L) == KEY_REPEAT) {
-			currentAnim = &Movement;
-			vel.x = -speed;
-			idle = false;
-			app->render->camera.x += 5;
-		}
-		//Right
-		else if (app->input->GetKey(SDL_SCANCODE_J) == KEY_REPEAT) {
-			currentAnim = &Movement;
-			vel.x = speed;
-			idle = false;
-			app->render->camera.x -= 5;
-		}
-		else
-			vel.x = 0;
+		//if (app->input->GetKey(SDL_SCANCODE_L) == KEY_REPEAT) {
+		//	currentAnim = &Movement;
+		//	vel.x = -speed;
+		//	idle = false;
+		//	app->render->camera.x += 5;
+		//}
+		////Right
+		//else if (app->input->GetKey(SDL_SCANCODE_J) == KEY_REPEAT) {
+		//	currentAnim = &Movement;
+		//	vel.x = speed;
+		//	idle = false;
+		//	app->render->camera.x -= 5;
+		//}
+		//else
+		//	vel.x = 0;
 
 		//if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isGrounded && remainingJumpSteps == 0) {
 		//	currentAnim = leftID ? &JumpL : &JumpR;
@@ -129,33 +133,40 @@ bool AirEnemy::Update()
 		//	//app->audio->PlayFx(jumpSFX);
 
 		//}
+		if (ishurt) {
+			currentAnim = &Damaged;
+			/*app->audio->PlayFx("")*/
+		}
+		else{
+			currentAnim = &Attack;
+		}
+		if (Damaged.GetCurrentFrameint() == 1) {
+			Damaged.Reset();
+			ishurt = false;
+		}
+
 	}
 
 	//Set the velocity of the pbody of the player
 	aebody->body->SetLinearVelocity(vel);
 
-	//Apply Jump Force
-	if (remainingJumpSteps > 0)
-	{
-		float force = aebody->body->GetMass() * 10 / 0.01666; //F = mv/t (t = 1/60fps)
-		force /= 6.0;
-		aebody->body->ApplyForce(b2Vec2(0, -force), aebody->body->GetWorldCenter(), true);
-		remainingJumpSteps--;
-	}
+	////Apply Jump Force
+	//if (remainingJumpSteps > 0)
+	//{
+	//	float force = aebody->body->GetMass() * 10 / 0.01666; //F = mv/t (t = 1/60fps)
+	//	force /= 6.0;
+	//	aebody->body->ApplyForce(b2Vec2(0, -force), aebody->body->GetWorldCenter(), true);
+	//}
 
 	//Update player position in pixels
-	position.x = METERS_TO_PIXELS(aebody->body->GetTransform().p.x) - 46;
-	position.y = METERS_TO_PIXELS(aebody->body->GetTransform().p.y) - 60;
-
-	if (health = 0) {
-		alive = false;
-	}
+	position.x = METERS_TO_PIXELS(aebody->body->GetTransform().p.x);
+	position.y = METERS_TO_PIXELS(aebody->body->GetTransform().p.y);
 
 	//Animations
-	if (idle) { currentAnim = &Idle; }
+	/*if (idle) { currentAnim = &Idle; }*/
 	/*if (!isGrounded) { currentAnim = leftID ? &JumpR : &JumpL; }*/
 	SDL_Rect rect2 = currentAnim->GetCurrentFrame();
-	app->render->DrawTexture(texture, position.x, position.y, &rect2);
+	app->render->DrawTexture(texture, position.x-20, position.y-8, &rect2);
 	currentAnim->Update();
 
 	return true;
@@ -190,7 +201,7 @@ void AirEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 		isGrounded = true;
 		break;
 	case ColliderType::PLAYER:
-		LOG("Collision PLATFORM");
+		LOG("Collision PLAYER");
 		app->audio->PlayFx(damagedSFX);
 		health--;
 	case ColliderType::DEATH:
@@ -200,7 +211,12 @@ void AirEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 	case ColliderType::UNKNOWN:
 		LOG("Collision UNKNOWN");
 		break;
-	}
+	case ColliderType::PLAYERATTACK:
+		LOG("Collision ATTACK");
+		ishurt = true;
+		health--;
+		break;
+}
 }
 
 void AirEnemy::DebugKeys()
@@ -239,7 +255,7 @@ void AirEnemy::LoadAnimations()
 	Death.PushBack({ 102, 57, 43, 41 });
 	Death.PushBack({ 147, 57, 46, 41 });
 	Death.speed = 0.1f;
-	Death.loop = true;
+	Death.loop = false;
 
 	Damaged.PushBack({ 7, 112, 42, 30 });
 	Damaged.PushBack({ 54, 112, 43, 30 });
@@ -251,5 +267,5 @@ void AirEnemy::LoadAnimations()
 	Movement.PushBack({ 102, 207, 43, 32 });
 	Movement.PushBack({ 147, 207, 46, 32 });
 	Movement.speed = 0.5f;
-	Movement.loop = false;
+	Movement.loop = true;
 }

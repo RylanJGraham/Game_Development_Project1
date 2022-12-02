@@ -42,6 +42,7 @@ bool Player::Start()
 	isAttacking = false;
 	godMode = false;
 	attackCooldown = attackCooldownMax;
+	lives = 3; 
 
 	//initilize textures
 	texture = app->tex->Load(texturePath);
@@ -229,7 +230,12 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 	case ColliderType::DEATH:
 		LOG("Collision DEATH");
 		alive = false;
-		app->fade->FadeBlack((Module*)app->scene, (Module*)app->endScreen, 60);
+		lives--;
+		
+		if (lives == 0) {
+			app->fade->FadeBlack((Module*)app->scene, (Module*)app->endScreen, 60);
+		}
+		
 		break;
 	case ColliderType::PLAYERATTACK:
 		LOG("Collision PLAYERATTACK");

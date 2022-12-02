@@ -42,6 +42,7 @@ private:
 	bool stairs;
 	bool isAttacking;
 	int remainingJumpSteps;
+	uint lives;
 
 	bool godMode;
 

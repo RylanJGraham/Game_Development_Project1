@@ -8,6 +8,7 @@
 #include "EntityManager.h"
 #include "Map.h"
 #include "GroundEnemy.h"
+#include "AirEnemy.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -42,6 +43,9 @@ bool Scene::Awake(pugi::xml_node& config)
 
 	groundenemy = (GroundEnemy*)app->entityManager->CreateEntity(EntityType::GROUNDENEMY);
 	groundenemy->parameters = config.child("groundEnemy");
+
+	airenemy = (AirEnemy*)app->entityManager->CreateEntity(EntityType::AIRENEMY);
+	airenemy->parameters = config.child("airEnemy");
 
 	return ret;
 }
