@@ -47,6 +47,7 @@ private:
 
 	//Physics
 	PhysBody* pbody;
+	PhysBody* hitbox;
 
 	//Texture
 	SDL_Texture* texture;

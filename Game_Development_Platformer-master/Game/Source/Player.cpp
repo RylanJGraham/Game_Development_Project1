@@ -141,9 +141,17 @@ bool Player::Update()
 		}
 
 		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isGrounded && attackCooldown == attackCooldownMax) {
-			currentAnim = leftID ? &AttackR : &AttackL;
+			vel.x = 0;
 			isAttacking = true;
+			currentAnim = leftID ? &AttackR : &AttackL;
 			attackCooldown = 0;
+			if (!leftID) {
+				hitbox = app->physics->CreateRectangleSensor(position.x + 82, position.y + 60, 30, 40, bodyType::STATIC);
+			}
+			else {
+				hitbox = app->physics->CreateRectangleSensor(position.x + 5, position.y + 60, 30, 40, bodyType::STATIC);
+			}
+			hitbox->ctype = ColliderType::PLAYERATTACK;
 		}
 	}
 
@@ -172,6 +180,7 @@ bool Player::Update()
 		isAttacking = false;
 		AttackL.Reset();
 		AttackR.Reset();
+		app->physics->world->DestroyBody(hitbox->body);
 	}
 	if (idle && !isAttacking) { currentAnim = leftID ? &IdleR : &IdleL; }
 	if (!isGrounded) { currentAnim = leftID ? &JumpR : &JumpL; }
@@ -197,7 +206,6 @@ bool Player::CleanUp()
 
 void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 {
-	isGrounded = false;
 	switch (physB->ctype)
 	{
 	case ColliderType::ITEM:
@@ -223,9 +231,11 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 		alive = false;
 		app->fade->FadeBlack((Module*)app->scene, (Module*)app->endScreen, 60);
 		break;
+	case ColliderType::PLAYERATTACK:
+		LOG("Collision PLAYERATTACK");
+		break;
 	case ColliderType::UNKNOWN:
 		LOG("Collision UNKNOWN");
-		isGrounded = false;
 		break;
 	}
 }
