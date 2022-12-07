@@ -132,6 +132,10 @@ bool Scene::Update(float dt)
 		app->physics->debug = !app->physics->debug;
 	}
 
+	if (!groundenemy->alive) {
+
+	}
+
 #pragma endregion DEBUG_KEYS
 
 	app->render->camera.x = (-player->position.x)*1.5f;

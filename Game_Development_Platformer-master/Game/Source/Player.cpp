@@ -250,9 +250,9 @@ void Player::DebugKeys()
 {
 
 	// F9: View colliders / logic
-	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {
-		app->physics->debug = !app->physics->debug;
-	}
+	//if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {
+	//	app->physics->debug = !app->physics->debug;
+	//}
 
 	// F10: God Mode (fly around, cannot be killed, etc)
 	if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) {

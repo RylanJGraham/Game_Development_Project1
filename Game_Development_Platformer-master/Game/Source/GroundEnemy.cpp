@@ -172,7 +172,10 @@ bool GroundEnemy::Update()
 	if (!alive)
 	{
 		currentAnim = leftID ? &DeathR : &DeathL;
-		app->physics->world->DestroyBody(gebody->body);
+		if (gebody != nullptr){
+			app->physics->world->DestroyBody(gebody->body);
+		}
+		gebody = nullptr;
 		if (DeathL.GetCurrentFrameint() == 4 || DeathR.GetCurrentFrameint() == 4) {
 			CleanUp();
 		}

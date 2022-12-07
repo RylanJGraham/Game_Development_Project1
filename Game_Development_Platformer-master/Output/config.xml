@@ -29,7 +29,7 @@
     <player x="112" y="511" texturepath="Assets/Textures/NewKnight.png" attcooldown="300"/>
     <item x="1750" y="352" texturepath="Assets/Textures/ChestProp.png"/>
 	<groundEnemy x="500" y="500" texturepath="Assets/Textures/GroundEnemy.png"/>
-	<airEnemy x="200" y="540" texturepath="Assets/Textures/AirEnemy.png"/>
+	<airEnemy x="200" y="240" texturepath="Assets/Textures/AirEnemy.png"/>
 	<airEnemy x="500" y="540" texturepath="Assets/Textures/AirEnemy.png"/>
 
 

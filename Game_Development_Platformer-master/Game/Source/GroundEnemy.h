@@ -57,6 +57,8 @@ private:
 	Animation DeathL, DeathR;
 	Animation* currentAnim = nullptr;
 
+	friend class Scene;
+
 
 };
 
