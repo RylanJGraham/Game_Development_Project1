@@ -176,9 +176,9 @@ bool GroundEnemy::Update()
 			app->physics->world->DestroyBody(gebody->body);
 		}
 		gebody = nullptr;
-		if (DeathL.GetCurrentFrameint() == 4 || DeathR.GetCurrentFrameint() == 4) {
-			CleanUp();
-		}
+		//if (DeathL.GetCurrentFrameint() == 4 || DeathR.GetCurrentFrameint() == 4) {
+		//	CleanUp();
+		//}
 	}
 
 	return true;
@@ -212,7 +212,7 @@ void GroundEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 		break;
 	case ColliderType::DEATH:
 		LOG("Collision DEATH");
-		alive = false;
+		hp = 0;
 		break;
 	case ColliderType::PLAYER:
 		LOG("Collision PLAYER");

@@ -8,6 +8,7 @@
 #include "Log.h"
 #include "Point.h"
 #include "Physics.h"
+#include "EntityManager.h"
 
 Item::Item() : Entity(EntityType::ITEM)
 {
@@ -34,6 +35,7 @@ bool Item::Start() {
 	pbody = app->physics->CreateCircle(position.x + 16, position.y + 16, 16, bodyType::DYNAMIC);
 	pbody->ctype = ColliderType::ITEM;
 	pbody->listener = this;
+	isPicked = false;
 
 	return true;
 }
@@ -41,16 +43,27 @@ bool Item::Start() {
 bool Item::Update()
 {
 	// L07 DONE 4: Add a physics to an item - update the position of the object from the physics.  
-	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - 18;
-	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 10;
+	if (!isPicked) {
+		position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - 18;
+		position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 10;
 
-	app->render->DrawTexture(texture, position.x, position.y);
+		app->render->DrawTexture(texture, position.x, position.y);
+	}
+	else{
+		if (pbody != nullptr) {
+		app->physics->world->DestroyBody(pbody->body);
+		}
+	pbody = nullptr;
+	CleanUp();
+	}
 
 	return true;
 }
 
 bool Item::CleanUp()
 {
+
+	app->entityManager->DestroyEntity(app->scene->item);
 	return true;
 }
 
@@ -60,8 +73,8 @@ void Item::OnCollision(PhysBody* physA, PhysBody* physB)
 	{
 	case ColliderType::PLAYER:
 		LOG("Collision PLAYER");
-		pbody->body->SetActive(false);
-		this->Disable();
+		isPicked = true;
+		//this->Disable();
 		break;
 	case ColliderType::PLATFORM:
 		LOG("Collision PLATFORM");

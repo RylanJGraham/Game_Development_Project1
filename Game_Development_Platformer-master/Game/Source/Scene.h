@@ -41,6 +41,7 @@ public:
 	Player* player;
 	GroundEnemy* groundenemy;
 	AirEnemy* airenemy;
+	Item* item;
 
 private:
 	SDL_Texture* img;

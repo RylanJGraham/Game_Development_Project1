@@ -27,7 +27,7 @@ public:
 
 public:
 
-	bool isPicked = false;
+	bool isPicked;
 
 private:
 
