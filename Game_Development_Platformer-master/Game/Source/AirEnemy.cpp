@@ -12,6 +12,7 @@
 #include "Ending.h"
 #include "Title.h"
 #include "Player.h"
+#include "Pathfinding.h"
 
 AirEnemy::AirEnemy() : Entity(EntityType::AIRENEMY)
 {
@@ -59,7 +60,10 @@ bool AirEnemy::Start()
 	//jumpSFX = app->audio->LoadFx("Assets/Audio/Fx/JumpKnight.wav");
 	damagedSFX = app->audio->LoadFx("Assets/Audio/Fx/AirEnemyDamage.wav");
 
+	refreshPathTime = 0;
+
 	LoadAnimations();
+
 
 	return true;
 }
@@ -74,7 +78,54 @@ bool AirEnemy::Update()
 	b2Vec2 vel;
 	int speed = 5;
 
+	iPoint playerTile = app->map->WorldToMap(app->scene->player->position.x + 32, app->scene->player->position.y);
+
+	//Check if the enemy is visible on camera, if not, don't create path and don't move
+	if (pbody->body->GetPosition().x > app->render->camera.x - app->render->camera.w / 2 && pbody->body->GetPosition().x < app->render->camera.x + app->render->camera.w / 2)
+	{
+		//Test compute path function
+		if (originSelected == true)
+		{
+			app->pathfinding->CreatePath(origin, playerTile);
+			refreshPathTime++;
+			originSelected = false;
+			/*if (refreshPathTime >= 150)
+				originSelected = false;*/
+		}
+		else
+		{
+			origin.x = pbody->body->GetPosition().x;
+			origin.y = pbody->body->GetPosition().y;
+			originSelected = true;
+			app->pathfinding->ClearLastPath();
+			refreshPathTime = 0;
+		}
+
+		MovementDirection(origin, playerTile);
+	}
+	else
+	{
+		app->pathfinding->ClearLastPath();
+		refreshPathTime = 0;
+	}
+
 	DebugKeys();
+
+	if (app->physics->debug)
+	{
+		// L12: Get the latest calculated path and draw
+		const DynArray<iPoint>* path = app->pathfinding->GetLastPath();
+		//LOG("Path Count: %d", path->Count());
+		for (uint i = 0; i < path->Count(); ++i)
+		{
+			iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+			app->render->DrawTexture(app->scene->batTilePathTex, pos.x, pos.y);
+		}
+
+		// L12: Debug pathfinding
+		iPoint originScreen = app->map->MapToWorld(origin.x, origin.y);
+		app->render->DrawTexture(app->scene->originTex, originScreen.x - 16, originScreen.y - 19);
+	}
 
 	////movement test keys
 	//if (app->input->GetKey(SDL_SCANCODE_J) == KEY_REPEAT) {
@@ -184,6 +235,27 @@ bool AirEnemy::CleanUp()
 
 	return true;
 }
+
+void AirEnemy::MovementDirection(const iPoint& origin, const iPoint& destination) {
+
+	float res = destination.x - origin.x;
+	iPoint playerTile = app->map->WorldToMap(app->scene->player->position.x, app->scene->player->position.y);
+	if (app->pathfinding->IsWalkable(playerTile) != 0) {
+		//Check if player is to the right or the left of the origin
+		if (res < 0) {
+			velocity.x = -2;
+			flipped = SDL_FLIP_NONE;
+		}
+		if (res > 0) {
+			velocity.x = +2;
+			flipped = SDL_FLIP_HORIZONTAL;
+		}
+	}
+	else {
+		velocity.x = 0;
+	}
+}
+
 
 void AirEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 {

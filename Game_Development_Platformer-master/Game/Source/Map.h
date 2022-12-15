@@ -93,6 +93,34 @@ struct MapLayer
 	}
 };
 
+struct Object
+{
+	int id;
+	int x, y;
+	int* chainPoints;
+	int size;
+
+	inline int Get(int x) const
+	{
+		return chainPoints[x];
+	}
+
+	Object() : chainPoints(NULL) {}
+
+	~Object()
+	{
+		RELEASE(chainPoints);
+	}
+};
+
+struct ObjectGroup
+{
+	SString name;
+	int id;
+
+	List<Object*> objects;
+};
+
 // L04: DONE 1: Create a struct needed to hold the information to Map node
 struct MapData
 {
@@ -131,6 +159,10 @@ public:
 	// L05: DONE 8: Create a method that translates x,y coordinates from map positions to world positions
 	iPoint MapToWorld(int x, int y) const;
 
+	iPoint Map::WorldToMap(int x, int y);
+	// L12: Create walkability map for pathfinding
+	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer) const;
+
 private:
 
 	bool LoadMap(pugi::xml_node mapFile);
@@ -144,6 +176,10 @@ private:
 	bool CreateColliders();
 	void Parallax(TileSet* tileset, iPoint pos, SDL_Rect r, float x);
 
+	bool LoadObject(pugi::xml_node& node, Object* object);
+	bool LoadObjectGroup(pugi::xml_node& node, ObjectGroup* objectGroup);
+	bool LoadAllObjectGroups(pugi::xml_node mapNode);
+
 	// L06: DONE 2
 	TileSet* GetTilesetFromTileId(int gid) const;
 
@@ -154,6 +190,7 @@ public:
 
 	// L04: DONE 1: Declare a variable data of the struct MapData
 	MapData mapData;
+	PhysBody* bodies[MAX_COLLIDERS] = { nullptr };
 
 private:
 

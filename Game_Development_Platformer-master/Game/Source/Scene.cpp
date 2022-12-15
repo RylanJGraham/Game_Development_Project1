@@ -9,6 +9,7 @@
 #include "Map.h"
 #include "GroundEnemy.h"
 #include "AirEnemy.h"
+#include "Pathfinding.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -28,6 +29,9 @@ bool Scene::Awake(pugi::xml_node& config)
 {
 	LOG("Loading Scene");
 	bool ret = true;
+
+	origintexturePath = config.child("originTexture").attribute("origintexturePath").as_string();
+	batTilePath = config.child("pathfinding").attribute("batPathTile").as_string();
 
 	// iterate all objects in the scene
 	// Check https://pugixml.org/docs/quickstart.html#access
@@ -53,7 +57,12 @@ bool Scene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool Scene::Start()
 {
+	app->physics->Enable();
+	app->pathfinding->Enable();
 	app->entityManager->Enable();
+	app->map->Enable();
+	LOG("--STARTS GAME SCENE--");
+	app->physics->debug = false;
 
 	app->render->camera.x = 0;
 	app->render->camera.y = -498;
@@ -63,6 +72,17 @@ bool Scene::Start()
 	
 	// L03: DONE: Load map
 	app->map->Load();
+
+	// L12 Create walkability map
+	if (app->map->Load()) {
+		int w, h;
+		uchar* data = NULL;
+
+		bool retWalkMap = app->map->CreateWalkabilityMap(w, h, &data);
+		if (retWalkMap) app->pathfinding->SetMap(w, h, data);
+
+		RELEASE_ARRAY(data);
+	}
 
 	// L04: DONE 7: Set the window title with map/tileset info
 	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
@@ -143,6 +163,7 @@ bool Scene::Update(float dt)
 
 	// Draw map
 	app->map->Draw();
+
 
 	return true;
 }

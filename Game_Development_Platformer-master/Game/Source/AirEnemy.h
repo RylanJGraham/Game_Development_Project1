@@ -23,6 +23,7 @@ public:
 
 	void OnCollision(PhysBody* physA, PhysBody* physB);
 	void AirEnemy::DebugKeys();
+	void MovementDirection(const iPoint& origin, const iPoint& destination);
 	void LoadAnimations();
 	void SetPos(int x, int y);
 
@@ -37,6 +38,8 @@ private:
 	bool stairs;
 	int remainingJumpSteps;
 	uint health;
+
+	SDL_RendererFlip flipped = SDL_FLIP_NONE;
 
 	//SFX
 	uint SFX = 0;
@@ -56,6 +59,15 @@ private:
 	Animation Movement, Damaged, Attack;
 	Animation Death;
 	Animation* currentAnim = nullptr;
+
+	b2Vec2 velocity;
+	b2Vec2 startPos;
+
+
+	//debug pathfinding
+	iPoint origin;
+	bool originSelected = false;
+	uint refreshPathTime;
 
 
 };
