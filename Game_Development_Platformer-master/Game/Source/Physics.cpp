@@ -11,6 +11,7 @@
 #include "Window.h"
 #include "Scene.h"
 #include "Box2D/Box2D/Box2D.h"
+#include "AirEnemy.h"
 
 #ifdef _DEBUG
 #pragma comment( lib, "../Game/Source/External/Box2D/libx86/DebugLib/Box2D.lib" )

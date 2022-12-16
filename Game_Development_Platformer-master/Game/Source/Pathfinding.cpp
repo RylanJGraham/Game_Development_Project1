@@ -5,7 +5,7 @@
 #include "Log.h"
 
 
-PathFinding::PathFinding() : Module(), map(NULL), lastPath(DEFAULT_PATH_LENGTH), width(0), height(0)
+PathFinding::PathFinding(bool startEnabled) : Module(startEnabled), map(NULL), lastPath(DEFAULT_PATH_LENGTH), width(0), height(0)
 {
 	name.Create("pathfinding");
 }

@@ -43,6 +43,12 @@ public:
 	AirEnemy* airenemy;
 	Item* item;
 
+	SDL_Texture* batTilePathTex = nullptr;
+	const char* batTilePath = nullptr;
+
+	SDL_Texture* originTex = nullptr;
+	const char* origintexturePath = nullptr;
+
 private:
 	SDL_Texture* img;
 	SDL_Rect rectCamera;

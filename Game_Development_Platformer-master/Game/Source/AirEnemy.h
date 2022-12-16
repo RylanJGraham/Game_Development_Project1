@@ -5,6 +5,7 @@
 #include "Point.h"
 #include "SDL/include/SDL.h"
 #include "Animation.h"
+#include "Physics.h"
 
 struct SDL_Texture;
 
@@ -60,8 +61,8 @@ private:
 	Animation Death;
 	Animation* currentAnim = nullptr;
 
-	b2Vec2 velocity;
-	b2Vec2 startPos;
+	b2Vec2 vel;
+	b2Vec2 pos;
 
 
 	//debug pathfinding

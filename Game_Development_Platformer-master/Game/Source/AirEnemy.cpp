@@ -13,6 +13,7 @@
 #include "Title.h"
 #include "Player.h"
 #include "Pathfinding.h"
+#include "Map.h"
 
 AirEnemy::AirEnemy() : Entity(EntityType::AIRENEMY)
 {
@@ -81,7 +82,7 @@ bool AirEnemy::Update()
 	iPoint playerTile = app->map->WorldToMap(app->scene->player->position.x + 32, app->scene->player->position.y);
 
 	//Check if the enemy is visible on camera, if not, don't create path and don't move
-	if (pbody->body->GetPosition().x > app->render->camera.x - app->render->camera.w / 2 && pbody->body->GetPosition().x < app->render->camera.x + app->render->camera.w / 2)
+	if (aebody->body->GetPosition().x > app->render->camera.x - app->render->camera.w / 2 && aebody->body->GetPosition().x < app->render->camera.x + app->render->camera.w / 2)
 	{
 		//Test compute path function
 		if (originSelected == true)
@@ -94,8 +95,8 @@ bool AirEnemy::Update()
 		}
 		else
 		{
-			origin.x = pbody->body->GetPosition().x;
-			origin.y = pbody->body->GetPosition().y;
+			origin.x = aebody->body->GetPosition().x;
+			origin.y = aebody->body->GetPosition().y;
 			originSelected = true;
 			app->pathfinding->ClearLastPath();
 			refreshPathTime = 0;
@@ -243,16 +244,16 @@ void AirEnemy::MovementDirection(const iPoint& origin, const iPoint& destination
 	if (app->pathfinding->IsWalkable(playerTile) != 0) {
 		//Check if player is to the right or the left of the origin
 		if (res < 0) {
-			velocity.x = -2;
+			vel.x = -2;
 			flipped = SDL_FLIP_NONE;
 		}
 		if (res > 0) {
-			velocity.x = +2;
+			vel.x = +2;
 			flipped = SDL_FLIP_HORIZONTAL;
 		}
 	}
 	else {
-		velocity.x = 0;
+		vel.x = 0;
 	}
 }
 

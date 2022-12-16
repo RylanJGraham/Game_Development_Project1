@@ -4,11 +4,14 @@
 #include "Module.h"
 #include "List.h"
 #include "Point.h"
+#include "Defs.h"
 
 #include "PugiXml\src\pugixml.hpp"
 
 // L04: DONE 2: Create a struct to hold information for a TileSet
 // Ignore Terrain Types and Tile Types for now, but we want the image!
+
+
 struct TileSet
 {
 	SString	name;
