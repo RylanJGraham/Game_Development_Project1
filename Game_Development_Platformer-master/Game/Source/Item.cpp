@@ -60,10 +60,17 @@ bool Item::Update()
 	return true;
 }
 
-bool Item::CleanUp()
+bool Item::PostUpdate()
 {
 
-	app->entityManager->DestroyEntity(app->scene->item);
+	// L07 TODO 4: Add a physics to an item - update the position of the object from the physics.  
+	app->render->DrawTexture(texture, position.x, position.y);
+
+	return true;
+}
+
+bool Item::CleanUp()
+{
 	return true;
 }
 
@@ -74,6 +81,8 @@ void Item::OnCollision(PhysBody* physA, PhysBody* physB)
 	case ColliderType::PLAYER:
 		LOG("Collision PLAYER");
 		isPicked = true;
+		pbody->body->SetActive(false);
+		this->Disable();
 		//this->Disable();
 		break;
 	case ColliderType::PLATFORM:

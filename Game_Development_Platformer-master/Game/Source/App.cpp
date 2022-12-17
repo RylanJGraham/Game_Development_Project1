@@ -114,6 +114,11 @@ bool App::Awake()
 // Called before the first frame
 bool App::Start()
 {
+
+	timer.Start();
+	startupTime.Start();
+	lastSecFrameTime.Start();
+
 	bool ret = true;
 	ListItem<Module*>* item;
 	item = modules.start;
@@ -293,6 +298,35 @@ const char* App::GetOrganization() const
 	return organization.GetString();
 }
 
+uint App::GetFPS()
+{
+	return framesPerSecond;
+}
+
+// ---------------------------------------
+float App::GetAverageFPS()
+{
+	return averageFps;
+}
+
+// ---------------------------------------
+float App::GetDT()
+{
+	return dt;
+}
+
+// ---------------------------------------
+float App::GetTimesSinceStart()
+{
+	return secondsSinceStartup;
+}
+
+// ---------------------------------------
+uint App::GetFrameCount()
+{
+	return frameCount;
+}
+
 // L02: DONE 1: Implement methods to request load / save and methods 
 // for the real execution of load / save (to be implemented in TODO 5 and 7)
 void App::LoadGameRequest()
@@ -361,6 +395,23 @@ bool App::SaveToFile()
 	ret = saveDoc->save_file("save_game.xml");
 
 	saveGameRequested = false;
+
+	return ret;
+}
+
+pugi::xml_node App::LoadConfigFileToVar()
+{
+	pugi::xml_node ret;
+	// L01: DONE 3: Load config.xml file using load_file() method from the xml_document class
+	pugi::xml_parse_result parseResult = configFile.load_file("config.xml");
+
+	// L01: DONE 3: Check result for loading errors
+	if (parseResult) {
+		ret = configFile.child("config");
+	}
+	else {
+		LOG("Error in App::LoadConfig(): %s", parseResult.description());
+	}
 
 	return ret;
 }

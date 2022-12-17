@@ -4,7 +4,6 @@
 #include "Module.h"
 #include "List.h"
 #include "Point.h"
-#include "Defs.h"
 
 #include "PugiXml\src\pugixml.hpp"
 
@@ -136,6 +135,9 @@ struct MapData
 
 	// L05: DONE 2: Add a list/array of layers to the map
 	List<MapLayer*> maplayers;
+
+	List<ObjectGroup*> mapObjectGroups;
+
 };
 
 class Map : public Module
@@ -176,24 +178,24 @@ private:
 	// L05
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
 	bool LoadAllLayers(pugi::xml_node mapNode);
-	bool CreateColliders();
-	void Parallax(TileSet* tileset, iPoint pos, SDL_Rect r, float x);
+
+	TileSet* GetTilesetFromTileId(int gid) const;
+
+	bool LoadProperties(pugi::xml_node& node, Properties& properties);
 
 	bool LoadObject(pugi::xml_node& node, Object* object);
 	bool LoadObjectGroup(pugi::xml_node& node, ObjectGroup* objectGroup);
 	bool LoadAllObjectGroups(pugi::xml_node mapNode);
 
-	// L06: DONE 2
-	TileSet* GetTilesetFromTileId(int gid) const;
-
-	// L06: DONE 6: Load a group of properties 
-	bool LoadProperties(pugi::xml_node& node, Properties& properties);
+	void Parallax(TileSet* tileset, iPoint pos, SDL_Rect r, float x);
+	bool CreateColliders();
 
 public: 
 
 	// L04: DONE 1: Declare a variable data of the struct MapData
 	MapData mapData;
-	PhysBody* bodies[MAX_COLLIDERS] = { nullptr };
+	List<PhysBody*> mapColliders;
+	pugi::xml_node node;
 
 private:
 

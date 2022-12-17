@@ -7,9 +7,10 @@
 #include "Scene.h"
 #include "EntityManager.h"
 #include "Map.h"
-#include "GroundEnemy.h"
-#include "AirEnemy.h"
-#include "Pathfinding.h"
+#include "Physics.h"
+#include "PathFinding.h"
+#include "FadeToBlack.h"
+#include "Ending.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -17,7 +18,6 @@
 Scene::Scene(bool startEnabled) : Module(startEnabled)
 {
 	name.Create("scene");
-	active = false;
 }
 
 // Destructor
@@ -30,7 +30,6 @@ bool Scene::Awake(pugi::xml_node& config)
 	LOG("Loading Scene");
 	bool ret = true;
 
-	origintexturePath = config.child("originTexture").attribute("origintexturePath").as_string();
 	batTilePath = config.child("pathfinding").attribute("batPathTile").as_string();
 
 	// iterate all objects in the scene
@@ -63,6 +62,7 @@ bool Scene::Start()
 	app->map->Enable();
 	LOG("--STARTS GAME SCENE--");
 	app->physics->debug = false;
+	app->scene->airenemy->health = 2;
 
 	app->render->camera.x = 0;
 	app->render->camera.y = -498;
@@ -84,15 +84,26 @@ bool Scene::Start()
 		RELEASE_ARRAY(data);
 	}
 
+	origintexturePath = app->configNode.child("scene").child("originTexture").attribute("origintexturePath").as_string();
+
+	// Texture to highligh mouse position 
+	batTilePathTex = app->tex->Load(batTilePath);
+	// Texture to show path origin 
+	originTex = app->tex->Load(origintexturePath);
+
+	SString title("Game Name");
+
 	// L04: DONE 7: Set the window title with map/tileset info
-	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
+	/*SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
 		app->map->mapData.width,
 		app->map->mapData.height,
 		app->map->mapData.tileWidth,
 		app->map->mapData.tileHeight,
-		app->map->mapData.tilesets.Count());
+		app->map->mapData.tilesets.Count());*/
 
 	app->win->SetTitle(title.GetString());
+
+	ResetScene();
 
 	return true;
 }
@@ -171,10 +182,12 @@ bool Scene::Update(float dt)
 // Called each loop iteration
 bool Scene::PostUpdate()
 {
-	if(app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-		return false;
+	bool ret = true;
 
-	return true;
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+		ret = false;
+
+	return ret;
 }
 
 // Called before quitting
@@ -182,9 +195,20 @@ bool Scene::CleanUp()
 {
 	LOG("Freeing GAME SCENE");
 
-	app->map->Disable();
+	app->render->camera.x = 0;
+	app->render->camera.y = 0;
+	/*app->map->Disable();
 	app->entityManager->Disable();
-	app->physics->Disable();
+	app->physics->Disable();*/
 
 	return true;
+}
+
+void Scene::ResetScene() {
+
+	/*app->audio->PlayMusic("Assets/Audio/Music/song1.ogg", 1.0f);*/
+	player->ResetPlayerPos();
+	player->lives = 3;
+
+	//coin->ResetCoin();
 }

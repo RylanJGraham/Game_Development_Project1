@@ -21,6 +21,8 @@ public:
 
 	bool Update();
 
+	bool PostUpdate();
+
 	bool CleanUp();
 
 	void OnCollision(PhysBody* physA, PhysBody* physB);
@@ -29,13 +31,21 @@ public:
 
 	bool isPicked;
 
+	//DONE 4: Add a physics to an item
+	PhysBody* pbody;
+
 private:
 
 	SDL_Texture* texture;
 	const char* texturePath;
 
-	//DONE 4: Add a physics to an item
-	PhysBody* pbody;
+	b2Vec2 velocity;
+
+	int timeMov = 0;
+
+	int width;
+	int height;
+
 };
 
 #endif // __ITEM_H__

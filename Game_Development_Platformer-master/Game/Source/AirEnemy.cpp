@@ -1,19 +1,17 @@
 #include "AirEnemy.h"
 #include "App.h"
-#include "FadeToBlack.h"
 #include "Textures.h"
 #include "Audio.h"
 #include "Input.h"
 #include "Render.h"
+#include "Window.h"
 #include "Scene.h"
 #include "Log.h"
 #include "Point.h"
-#include "Physics.h"
-#include "Ending.h"
-#include "Title.h"
-#include "Player.h"
-#include "Pathfinding.h"
 #include "Map.h"
+#include "PathFinding.h"
+#include "FadeToBlack.h"
+#include "EntityManager.h"
 
 AirEnemy::AirEnemy() : Entity(EntityType::AIRENEMY)
 {
@@ -31,31 +29,42 @@ bool AirEnemy::Awake() {
 	//texturePath = "Assets/Textures/player/idle1.png";
 
 	//L02: DONE 5: Get Player parameters from XML
-	position.x = parameters.attribute("x").as_int();
-	position.y = parameters.attribute("y").as_int();
+	startPos.x = parameters.attribute("x").as_int();
+	startPos.y = parameters.attribute("y").as_int();
+
+	origin.x = startPos.x;
+	origin.y = startPos.y;
+
 	texturePath = parameters.attribute("texturepath").as_string();
+
+	width = 32;
+	height = 32;
+
+	LoadAnimations();
 
 	return true;
 }
 
 bool AirEnemy::Start()
 {
+	texture = app->tex->Load(texturePath);
+
+	currentAnim = &Idle;
 	alive = true;
 	health = 2;
 	ishurt = false;
 	//initilize textures
-	texture = app->tex->Load(texturePath);
 
 	/*idle = true;*/
 
 	//id = app->tex->LoadSprite(texturePath, 15, 8);
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
-	aebody = app->physics->CreateCircle(position.x - 5, position.y + 10, 15, bodyType::STATIC);
+	pbody = app->physics->CreateCircle(position.x - 5, position.y + 10, 15, bodyType::STATIC,ColliderType::ENEMY);
+	//hitbox = app->physics->CreateRectangleSensor(METERS_TO_PIXELS(pbody->body->GetTransform().p.x), METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 15, 5, 2, bodyType::STATIC, ColliderType::SLIME_HITBOX);
 
 	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
-	aebody->listener = this;
-	aebody->ctype = ColliderType::ENEMY;
+	pbody->listener = this;
 
 	//initialize audio effect - !! Path is hardcoded, should be loaded from config.xml
 	//jumpSFX = app->audio->LoadFx("Assets/Audio/Fx/JumpKnight.wav");
@@ -63,26 +72,31 @@ bool AirEnemy::Start()
 
 	refreshPathTime = 0;
 
-	LoadAnimations();
 
+	return true;
+}
+
+bool AirEnemy::PreUpdate() {
 
 	return true;
 }
 
 void AirEnemy::SetPos(int x, int y) {
 	b2Vec2 pos = { PIXEL_TO_METERS(x), PIXEL_TO_METERS(y) };
-	aebody->body->SetTransform(pos, 0);
+	pbody->body->SetTransform(pos, 0);
 }
 
 bool AirEnemy::Update()
 {
-	b2Vec2 vel;
-	int speed = 5;
+
+	currentAnim = &Idle;
+
+	velocity = { 0, 0};
 
 	iPoint playerTile = app->map->WorldToMap(app->scene->player->position.x + 32, app->scene->player->position.y);
 
 	//Check if the enemy is visible on camera, if not, don't create path and don't move
-	if (aebody->body->GetPosition().x > app->render->camera.x - app->render->camera.w / 2 && aebody->body->GetPosition().x < app->render->camera.x + app->render->camera.w / 2)
+	if (pbody->body->GetPosition().x > app->render->camera.x - app->render->camera.w / 2 && pbody->body->GetPosition().x < app->render->camera.x + app->render->camera.w / 2)
 	{
 		//Test compute path function
 		if (originSelected == true)
@@ -95,8 +109,8 @@ bool AirEnemy::Update()
 		}
 		else
 		{
-			origin.x = aebody->body->GetPosition().x;
-			origin.y = aebody->body->GetPosition().y;
+			origin.x = pbody->body->GetPosition().x;
+			origin.y = pbody->body->GetPosition().y;
 			originSelected = true;
 			app->pathfinding->ClearLastPath();
 			refreshPathTime = 0;
@@ -109,6 +123,16 @@ bool AirEnemy::Update()
 		app->pathfinding->ClearLastPath();
 		refreshPathTime = 0;
 	}
+
+	pbody->body->SetLinearVelocity(velocity);
+
+	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x - (width / 4));
+	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y - (height / 3));
+
+	////hitbox->body->SetGravityScale(0);
+	//hitboxPos.x = pbody->body->GetTransform().p.x;
+	//hitboxPos.y = pbody->body->GetTransform().p.y - PIXEL_TO_METERS(10);
+	//hitbox->body->SetTransform({ hitboxPos.x, hitboxPos.y }, 0);
 
 	DebugKeys();
 
@@ -142,20 +166,18 @@ bool AirEnemy::Update()
 	//	vel.y = speed;
 	//}
 
-	if (1)
+	if (alive != true)
 	{
-		aebody->body->SetGravityScale(0);
-		vel = aebody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.0166);
+		currentAnim = &Death;
+
+		//Destroy entity
+		app->entityManager->DestroyEntity(app->scene->airenemy);
+		app->physics->world->DestroyBody(pbody->body);
+		//app->physics->world->DestroyBody(hitbox->body);
+		//app->audio->PlayFx(powerUpSFX);
+		alive = true;
 	}
 
-	if (health <= 0)
-	{
-		alive = false;
-	}
-	if (!alive) {
-		currentAnim = &Death;
-		app->physics->world->DestroyBody(aebody->body);
-	}
 	else
 	{
 		/*idle = true;*/
@@ -199,9 +221,6 @@ bool AirEnemy::Update()
 
 	}
 
-	//Set the velocity of the pbody of the player
-	aebody->body->SetLinearVelocity(vel);
-
 	////Apply Jump Force
 	//if (remainingJumpSteps > 0)
 	//{
@@ -211,8 +230,8 @@ bool AirEnemy::Update()
 	//}
 
 	//Update player position in pixels
-	position.x = METERS_TO_PIXELS(aebody->body->GetTransform().p.x);
-	position.y = METERS_TO_PIXELS(aebody->body->GetTransform().p.y);
+	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x);
+	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y);
 
 	//Animations
 	/*if (idle) { currentAnim = &Idle; }*/
@@ -244,23 +263,23 @@ void AirEnemy::MovementDirection(const iPoint& origin, const iPoint& destination
 	if (app->pathfinding->IsWalkable(playerTile) != 0) {
 		//Check if player is to the right or the left of the origin
 		if (res < 0) {
-			vel.x = -2;
+			velocity.x = -2;
 			flipped = SDL_FLIP_NONE;
 		}
 		if (res > 0) {
-			vel.x = +2;
+			velocity.x = +2;
 			flipped = SDL_FLIP_HORIZONTAL;
 		}
 	}
 	else {
-		vel.x = 0;
+		velocity.x = 0;
 	}
 }
 
 
 void AirEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 {
-	switch (physB->ctype)
+	switch (physB->cType)
 	{
 	case ColliderType::WALL:
 		LOG("Collision WALL");
@@ -288,8 +307,11 @@ void AirEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 		LOG("Collision ATTACK");
 		ishurt = true;
 		health--;
+		if (health <= 0) {
+			alive == false;
+		}
 		break;
-}
+	}
 }
 
 void AirEnemy::DebugKeys()
@@ -341,4 +363,11 @@ void AirEnemy::LoadAnimations()
 	Movement.PushBack({ 147, 207, 46, 32 });
 	Movement.speed = 0.5f;
 	Movement.loop = true;
+}
+
+void AirEnemy::ResetBat() {
+
+	pbody->body->SetSleepingAllowed(false);
+
+
 }
