@@ -67,7 +67,7 @@ public:
 class Physics : public Module, public b2ContactListener // TODO
 {
 public:
-	Physics();
+	Physics(bool startEnabled);
 	~Physics();
 
 	bool Awake() { return true; }
