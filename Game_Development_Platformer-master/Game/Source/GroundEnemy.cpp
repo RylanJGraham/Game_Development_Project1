@@ -51,11 +51,11 @@ bool GroundEnemy::Start()
 	//id = app->tex->LoadSprite(texturePath, 15, 8);
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
-	gebody = app->physics->CreateCircle(position.x - 5, position.y + 10, 15, bodyType::DYNAMIC,ColliderType::ENEMY);
+	gebody = app->physics->CreateCircle(position.x - 5, position.y + 10, 15, bodyType::DYNAMIC);
 
 	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
 	gebody->listener = this;
-	gebody->cType = ColliderType::ENEMY;
+	gebody->ctype = ColliderType::ENEMY;
 
 	//initialize audio effect - !! Path is hardcoded, should be loaded from config.xml
 	//jumpSFX = app->audio->LoadFx("Assets/Audio/Fx/JumpKnight.wav");
@@ -197,7 +197,7 @@ bool GroundEnemy::CleanUp()
 
 void GroundEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 {
-	switch (physB->cType)
+	switch (physB->ctype)
 	{
 	case ColliderType::WALL:
 		LOG("Collision WALL");

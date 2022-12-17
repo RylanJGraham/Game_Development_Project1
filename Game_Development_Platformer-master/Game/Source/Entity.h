@@ -14,7 +14,6 @@ enum class EntityType
 	ITEM,
 	GROUNDENEMY,
 	AIRENEMY,
-	ENEMY,
 	UNKNOWN
 };
 
@@ -34,17 +33,7 @@ public:
 		return true;
 	}
 
-	virtual bool PreUpdate()
-	{
-		return true;
-	}
-
 	virtual bool Update()
-	{
-		return true;
-	}
-
-	virtual bool PostUpdate()
 	{
 		return true;
 	}

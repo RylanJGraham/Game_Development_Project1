@@ -13,7 +13,7 @@
 #include "FadeToBlack.h"
 #include "EntityManager.h"
 
-AirEnemy::AirEnemy() : Entity(EntityType::ENEMY)
+AirEnemy::AirEnemy() : Entity(EntityType::AIRENEMY)
 {
 	name.Create("AirEnemy");
 }
@@ -363,4 +363,11 @@ void AirEnemy::LoadAnimations()
 	Movement.PushBack({ 147, 207, 46, 32 });
 	Movement.speed = 0.5f;
 	Movement.loop = true;
+}
+
+void AirEnemy::ResetBat() {
+
+	pbody->body->SetSleepingAllowed(false);
+
+
 }
