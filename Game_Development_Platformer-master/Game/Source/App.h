@@ -3,6 +3,8 @@
 
 #include "Module.h"
 #include "List.h"
+#include "PerfTimer.h"
+#include "Timer.h"
 
 #include "PugiXml/src/pugixml.hpp"
 
@@ -56,12 +58,20 @@ public:
 	const char* GetArgv(int index) const;
 	const char* GetTitle() const;
 	const char* GetOrganization() const;
+	uint GetFPS();
+	float GetAverageFPS();
+	float GetDT();
+	float GetTimesSinceStart();
+	uint GetFrameCount();
+
 
 	// L03: DONE 1: Create methods to control that the real Load and Save happens at the end of the frame
 	void LoadGameRequest();
 	void SaveGameRequest() ;
 	bool LoadFromFile();
 	bool SaveToFile() ;
+	pugi::xml_node LoadConfigFileToVar();
+
 
 private:
 
@@ -102,6 +112,12 @@ public:
 	Ending* endScreen;
 	PathFinding* pathfinding;
 
+	// L01: DONE 2: Create new variables from pugui namespace:
+	// xml_document to store the config file and
+	// xml_node(s) to read specific branches of the xml
+	pugi::xml_document configFile;
+	pugi::xml_node configNode;
+
 private:
 
 	int argc;
@@ -111,18 +127,31 @@ private:
 
 	List<Module*> modules;
 
-	// L01: DONE 2: Create new variables from pugui namespace:
-	// xml_document to store the config file and
-	// xml_node(s) to read specific branches of the xml
-	pugi::xml_document configFile;
-	pugi::xml_node configNode;
-
 	uint frames;
 	float dt;
 
 	// L03: DONE 1: Create control variables to control that the real Load and Save happens at the end of the frame
     bool saveGameRequested;
 	bool loadGameRequested;
+
+	// L13: TODO 4: Calculate some timing measures
+	// required variables are provided:
+	Timer timer;
+	PerfTimer ptimer;
+
+	Timer startupTime;
+	Timer frameTime;
+	Timer lastSecFrameTime;
+
+	uint64 frameCount = 0;
+	uint32 framesPerSecond = 0;
+	uint32 lastSecFrameCount = 0;
+
+	float averageFps = 0.0f;
+	float secondsSinceStartup = 0.0f;
+
+	uint32 maxFrameDuration = 0;
+
 };
 
 extern App* app;

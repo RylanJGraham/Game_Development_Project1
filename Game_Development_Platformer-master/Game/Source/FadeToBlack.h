@@ -2,7 +2,7 @@
 #define __FADETOBLACK_H__
 
 #include "Module.h"
-#include "SDL\include\SDL_rect.h"
+#include "SDL\include\SDL.h"
 
 class FadeToBlack : public Module
 {
@@ -13,9 +13,13 @@ public:
 	//Destructor
 	virtual ~FadeToBlack();
 
+	bool Awake(pugi::xml_node& config);
+
 	// Called when the module is activated
 	// Enables the blending mode for transparency
 	bool Start();
+
+	bool PreUpdate();
 
 	// Called at the middle of the application loop
 	// Updates the fade logic
@@ -49,6 +53,12 @@ private:
 	// The modules that should be switched after the first step
 	Module* moduleToEnable = nullptr;
 	Module* moduleToDisable = nullptr;
+
+	int width;
+	int height;
+	int size;
+
+	float fadeRatio;
 };
 
 #endif //__FADETOBLACK_H__

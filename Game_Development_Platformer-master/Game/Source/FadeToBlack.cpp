@@ -3,12 +3,13 @@
 #include "App.h"
 #include "Render.h"
 #include "Log.h"
+#include "Scene.h"
 #include "Window.h"
 #include "SDL/include/SDL_render.h"
 
 FadeToBlack::FadeToBlack(bool startEnabled) : Module(startEnabled)
 {
-	
+	name.Create("fade");
 }
 
 FadeToBlack::~FadeToBlack()
@@ -16,23 +17,46 @@ FadeToBlack::~FadeToBlack()
 
 }
 
+bool FadeToBlack::Awake(pugi::xml_node& config)
+{
+	LOG("Init FadeScreen");
+	bool ret = true;
+	width = config.child("resolution").attribute("width").as_int();
+	height = config.child("resolution").attribute("height").as_int();
+	size = config.child("resolution").attribute("scale").as_int();
+
+	if (SDL_Init(SDL_INIT_VIDEO) < 0)
+	{
+		LOG("SDL_VIDEO could not initialize! SDL_Error: %s\n", SDL_GetError());
+		ret = false;
+	}
+	else
+	{
+		screenRect = { 0, 0, width * size , height * size };
+
+	}
+
+	return ret;
+}
+
 bool FadeToBlack::Start()
 {
-	uint w, h;
-	app->win->GetWindowSize(w, h);
-	screenRect = { 0, 0, (int)w * (int)app->win->GetScale(), (int)h * (int)app->win->GetScale() };
 
-	LOG("Preparing Fade Screen");
-
-	// Enable blending mode for transparency
 	SDL_SetRenderDrawBlendMode(app->render->renderer, SDL_BLENDMODE_BLEND);
+
+	return true;
+}
+
+bool FadeToBlack::PreUpdate() {
 	return true;
 }
 
 bool FadeToBlack::Update(float dt)
 {
 	// Exit this function if we are not performing a fade
-	if (currentStep == Fade_Step::NONE) return true;
+	if (currentStep == Fade_Step::NONE) {
+		return true;
+	}
 
 	if (currentStep == Fade_Step::TO_BLACK)
 	{
@@ -43,6 +67,7 @@ bool FadeToBlack::Update(float dt)
 			moduleToEnable->Enable();
 
 			currentStep = Fade_Step::FROM_BLACK;
+
 		}
 	}
 	else
@@ -53,6 +78,12 @@ bool FadeToBlack::Update(float dt)
 			currentStep = Fade_Step::NONE;
 		}
 	}
+	fadeRatio = (float)frameCount / (float)maxFadeFrames;
+
+	// Render the black square with alpha on the screen
+	SDL_SetRenderDrawColor(app->render->renderer, 0, 0, 0, (Uint8)(fadeRatio * 255.0f));
+	LOG("%f", fadeRatio);
+
 
 	return true;
 }
@@ -61,10 +92,6 @@ bool FadeToBlack::PostUpdate()
 	// Exit this function if we are not performing a fade
 	if (currentStep == Fade_Step::NONE) return true;
 
-	float fadeRatio = (float)frameCount / (float)maxFadeFrames;
-
-	// Render the black square with alpha on the screen
-	SDL_SetRenderDrawColor(app->render->renderer, 0, 0, 0, (Uint8)(fadeRatio * 255.0f));
 	SDL_RenderFillRect(app->render->renderer, &screenRect);
 
 	return true;

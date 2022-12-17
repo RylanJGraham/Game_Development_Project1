@@ -5,6 +5,7 @@
 #include "Point.h"
 #include "SDL/include/SDL.h"
 #include "Animation.h"
+#include "Physics.h"
 
 struct SDL_Texture;
 
@@ -17,6 +18,7 @@ public:
 
 	bool Awake();
 	bool Start();
+	bool PreUpdate();
 	bool Update();	
 	bool PostUpdate();
 	bool CleanUp();
@@ -25,10 +27,21 @@ public:
 	void Player::DebugKeys();
 	void LoadAnimations();
 	void SetPos(int x, int y);
+	void ResetPlayerPos();
+
 
 public:
 
+	int lives;
+
 	bool isGrounded;
+
+
+	//Physics
+	PhysBody* pbody;
+
+	PhysBody* hitbox;
+	b2Vec2 hitboxPos;
 
 private:
 	
@@ -42,17 +55,19 @@ private:
 	bool stairs;
 	bool isAttacking;
 	int remainingJumpSteps;
-	uint lives;
+
 
 	bool godMode;
 
-	//Physics
-	PhysBody* pbody;
-	PhysBody* hitbox;
+	int width;
+	int height;
 
 	//Texture
 	SDL_Texture* texture;
 	const char* texturePath;
+
+	b2Vec2 velocity;
+	b2Vec2 startPos;
 
 	//Animation
 	Animation IdleL, IdleR;	// jump?
