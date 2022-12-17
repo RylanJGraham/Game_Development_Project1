@@ -1,15 +1,16 @@
 #include "Player.h"
 #include "App.h"
+#include "FadeToBlack.h"
 #include "Textures.h"
 #include "Audio.h"
 #include "Input.h"
 #include "Render.h"
-#include "Window.h"
 #include "Scene.h"
 #include "Log.h"
 #include "Point.h"
-#include "Map.h"
-#include "FadeToBlack.h"
+#include "Physics.h"
+#include "Ending.h"
+#include "Title.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -27,13 +28,9 @@ bool Player::Awake() {
 	//texturePath = "Assets/Textures/player/idle1.png";
 
 	//L02: DONE 5: Get Player parameters from XML
-	startPos.x = parameters.attribute("x").as_int();
-	startPos.y = parameters.attribute("y").as_int();
+	position.x = parameters.attribute("x").as_int();
+	position.y = parameters.attribute("y").as_int();
 	texturePath = parameters.attribute("texturepath").as_string();
-
-	width = 32;
-	height = 32;
-
 	attackCooldownMax = (parameters.attribute("attcooldown").as_float()) * 0.06; //*0.06 because the cooldown is in milliseconds and the game runs at 60 fps
 
 	return true;
@@ -41,6 +38,12 @@ bool Player::Awake() {
 
 bool Player::Start()
 {
+	alive = true;
+	isAttacking = false;
+	godMode = false;
+	attackCooldown = attackCooldownMax;
+	lives = 3; 
+
 	//initilize textures
 	texture = app->tex->Load(texturePath);
 
@@ -50,29 +53,17 @@ bool Player::Start()
 	//id = app->tex->LoadSprite(texturePath, 15, 8);
 	
 	// L07 DONE 5: Add physics to the player - initialize physics body
-	pbody = app->physics->CreateCircle(position.x - 20, position.y - 5, 18, bodyType::DYNAMIC, ColliderType::PLAYER);
+	pbody = app->physics->CreateCircle(position.x - 20, position.y - 5, 18, bodyType::DYNAMIC);
 
 	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
 	pbody->listener = this;
-
-	
+	pbody->ctype = ColliderType::PLAYER;
 
 	//initialize audio effect - !! Path is hardcoded, should be loaded from config.xml
 	chestopenSFX = app->audio->LoadFx("Assets/Audio/Fx/chestopen.wav");
 	//jumpSFX = app->audio->LoadFx("Assets/Audio/Fx/JumpKnight.wav");
 	
 	LoadAnimations();
-
-	alive = true;
-	isAttacking = false;
-	godMode = false;
-	attackCooldown = attackCooldownMax;
-	lives = 3;
-
-	return true;
-}
-
-bool Player::PreUpdate() {
 
 	return true;
 }
@@ -84,33 +75,31 @@ void Player::SetPos(int x, int y) {
 
 bool Player::Update()
 {
-	currentAnim = &IdleR;
-
 	b2Vec2 vel;
 	int speed = 5;
 
 	DebugKeys();
 
-	if (godMode == true)
+	if (godMode)
 	{
-		velocity = { 0, 0 };
+		vel.x = 0;
+		vel.y = 0;
 		alive = true;
 		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-			velocity.x = -speed;
+			vel.x = -speed;
 		}
 		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-			velocity.x = speed;
+			vel.x = speed;
 		}
 		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
-			velocity.y = -speed;
+			vel.y = -speed;
 		}
 		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
-			velocity.y = speed;
+			vel.y = speed;
 		}
 	}
-	else if (godMode == false && alive == true)
+	else
 	{
-		velocity = { 0, -GRAVITY_Y };
 		pbody->body->SetGravityScale(1);
 		vel = pbody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.0166);
 	}
@@ -119,7 +108,6 @@ bool Player::Update()
 	{
 		idle = false;
 		currentAnim = leftID ? &DeathL : &DeathR;
-		pbody->body->SetAwake(false);
 	}
 	else
 	{
@@ -128,7 +116,7 @@ bool Player::Update()
 		//Left
 		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && !isAttacking) {
 			currentAnim = &RunR;
-			velocity.x = -speed;
+			vel.x = -speed;
 			idle = false;
 			leftID = true;
 				app->render->camera.x += 5;
@@ -136,13 +124,13 @@ bool Player::Update()
 		//Right
 		else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && !isAttacking) {
 			currentAnim = &RunL;
-			velocity.x = speed;
+			vel.x = speed;
 			idle = false;
 			leftID = false;
 				app->render->camera.x -= 5;
 		}
 		else
-			velocity.x = 0;
+			vel.x = 0;
 
 		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN && isGrounded && remainingJumpSteps == 0 && !isAttacking) {
 			currentAnim = leftID ? &JumpL : &JumpR;
@@ -159,17 +147,17 @@ bool Player::Update()
 			currentAnim = leftID ? &AttackR : &AttackL;
 			attackCooldown = 0;
 			if (!leftID) {
-				hitbox = app->physics->CreateRectangleSensor(position.x + 82, position.y + 60, 30, 40, bodyType::STATIC, ColliderType::PLAYERATTACK);
+				hitbox = app->physics->CreateRectangleSensor(position.x + 82, position.y + 60, 30, 40, bodyType::STATIC);
 			}
 			else {
-				hitbox = app->physics->CreateRectangleSensor(position.x + 5, position.y + 60, 30, 40, bodyType::STATIC, ColliderType::PLAYERATTACK);
+				hitbox = app->physics->CreateRectangleSensor(position.x + 5, position.y + 60, 30, 40, bodyType::STATIC);
 			}
-			hitbox->cType = ColliderType::PLAYERATTACK;
+			hitbox->ctype = ColliderType::PLAYERATTACK;
 		}
 	}
 
 	//Set the velocity of the pbody of the player
-	pbody->body->SetLinearVelocity(velocity);
+	pbody->body->SetLinearVelocity(vel);
 
 	//Apply Jump Force
 	if (remainingJumpSteps > 0)
@@ -219,7 +207,7 @@ bool Player::CleanUp()
 
 void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 {
-	switch (physB->cType)
+	switch (physB->ctype)
 	{
 	case ColliderType::ITEM:
 		LOG("Collision ITEM");
@@ -243,22 +231,11 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 		LOG("Collision DEATH");
 		alive = false;
 		lives--;
+		
 		if (lives == 0) {
 			app->fade->FadeBlack((Module*)app->scene, (Module*)app->endScreen, 60);
 		}
-		break;
-	case ColliderType::ENEMY:
-		LOG("Collision ENEMY SLIME");
-		lives--;
-		if (lives <= 0) {
-			alive = false;
-		/*	app->audio->PlayFx(dieSFX);*/
-			app->fade->FadeBlack((Module*)app->scene, (Module*)app->endScreen, 60);
-		}
-		else {
-			app->scene->player->ResetPlayerPos();
-			//app->audio->PlayFx(hurtSFX);
-		}
+		
 		break;
 	case ColliderType::PLAYERATTACK:
 		LOG("Collision PLAYERATTACK");
@@ -397,17 +374,4 @@ void Player::LoadAnimations()
 	AttackR.PushBack({ 705, 560, 120, 80 });
 	AttackR.speed = 0.35f;
 	AttackR.loop = false;
-}
-
-void Player::ResetPlayerPos() {
-
-	pbody->body->SetSleepingAllowed(false);
-	velocity = { 0, 0 };
-	pbody->body->SetTransform(PIXEL_TO_METERS(startPos), 0.0f);
-	//app->scene->cameraFix2 = false;
-	//app->scene->cameraFix = false;
-	app->render->camera.x = 0;
-	alive = true;
-
-	LOG("--RESETING PLAYER--");
 }

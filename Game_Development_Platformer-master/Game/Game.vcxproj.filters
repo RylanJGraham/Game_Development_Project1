@@ -67,12 +67,6 @@
     <ClCompile Include="Source\AirEnemy.cpp">
       <Filter>Modules\Gameplay</Filter>
     </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>Modules\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="PerfTimer.cpp">
-      <Filter>Modules\Core</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -170,12 +164,6 @@
       <Filter>Modules\Core</Filter>
     </ClInclude>
     <ClInclude Include="Queue.h">
-      <Filter>Modules\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>Modules\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="PerfTimer.h">
       <Filter>Modules\Core</Filter>
     </ClInclude>
   </ItemGroup>

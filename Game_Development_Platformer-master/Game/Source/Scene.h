@@ -36,8 +36,6 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	void ResetScene();
-
 public:
 	//L02: DONE 3: Declare a Player attribute 
 	Player* player;
@@ -54,10 +52,6 @@ public:
 private:
 	SDL_Texture* img;
 	SDL_Rect rectCamera;
-
-	iPoint startPosition;
-	iPoint origin;
-	bool originSelected = false;
 
 };
 

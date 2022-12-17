@@ -8,7 +8,6 @@
 #include "Log.h"
 
 #include <math.h>
-#include <cmath>
 #include "SDL_image/include/SDL_image.h"
 
 Map::Map(bool startEnabled) : Module(startEnabled), mapLoaded(false)
@@ -95,8 +94,8 @@ void Map::Draw()
     // L04: DONE 6: Iterate all tilesets and draw all their 
     // images in 0,0 (you should have only one tileset for now)
 
-    //ListItem<TileSet*>* tileset;
-    //tileset = mapData.tilesets.start;
+    ListItem<TileSet*>* tileset;
+    tileset = mapData.tilesets.start;
 
    /* int i = 0;
     while (tileset != null) {
@@ -135,15 +134,15 @@ void Map::Draw()
                         &r);
 
                     
-                    //switch (mapLayerItem->data->id)
-                   // {
-                   // case 6: Parallax(tileset, pos, r, 0); break; //0.1
-                   // case 5: Parallax(tileset, pos, r, 0); break; //0.3
-                   // case 4: Parallax(tileset, pos, r, 0); break; //0.6
-                   // case 3: Parallax(tileset, pos, r, 0); break; //0.7
-                   // case 2: Parallax(tileset, pos, r, 0); break; //0.9
-                   // default: Parallax(tileset, pos, r, 0);  break; //0
-                   // }
+                    switch (mapLayerItem->data->id)
+                    {
+                    case 6: Parallax(tileset, pos, r, 0); break; //0.1
+                    case 5: Parallax(tileset, pos, r, 0); break; //0.3
+                    case 4: Parallax(tileset, pos, r, 0); break; //0.6
+                    case 3: Parallax(tileset, pos, r, 0); break; //0.7
+                    case 2: Parallax(tileset, pos, r, 0); break; //0.9
+                    default: Parallax(tileset, pos, r, 0);  break; //0
+                    }
                 }
             }
         }
@@ -252,38 +251,6 @@ bool Map::CleanUp()
         layerItem = layerItem->next;
     }
 
-    ListItem<PhysBody*>* collisionsItem;
-    collisionsItem = mapColliders.start;
-
-    while (collisionsItem != NULL)
-    {
-        collisionsItem->data->body->DestroyFixture(collisionsItem->data->body->GetFixtureList());
-        RELEASE(collisionsItem->data);
-        collisionsItem = collisionsItem->next;
-    }
-    mapColliders.Clear();
-
-    //Chain Collider Points clean up
-    ListItem<ObjectGroup*>* ObjectGroupItem;
-    ObjectGroupItem = mapData.mapObjectGroups.start;
-
-    while (ObjectGroupItem != NULL)
-    {
-        ListItem<Object*>* ObjectItem;
-        ObjectItem = ObjectGroupItem->data->objects.start;
-
-        while (ObjectItem != NULL)
-        {
-            RELEASE(ObjectGroupItem->data);
-            ObjectItem = ObjectItem->next;
-        }
-        //ObjectGroupItem->data->objects.Clear();
-
-        RELEASE(ObjectGroupItem->data);
-        ObjectGroupItem = ObjectGroupItem->next;
-    }
-    mapData.mapObjectGroups.Clear();
-
     return true;
 }
 
@@ -321,10 +288,9 @@ bool Map::Load()
     // Later you can create a function here to load and create the colliders from the map
     if (ret == true)
     {
-        ret = LoadAllObjectGroups(mapFileXML.child("map"));
+        ret = CreateColliders();
     }
 
-    CreateColliders();
 
     if(ret == true)
     {
@@ -477,143 +443,6 @@ bool Map::LoadAllLayers(pugi::xml_node mapNode) {
     return ret;
 }
 
-bool Map::LoadObject(pugi::xml_node& node, Object* object)
-{
-    bool ret = true;
-    int arrLenght = 0;
-    //Load the attributes
-    object->id = node.attribute("id").as_int();
-    object->x = node.attribute("x").as_int();
-    object->y = node.attribute("y").as_int();
-
-    //L06: DONE 6 Call Load Propoerties
-    SString polygonString;
-    polygonString = node.child("polygon").attribute("points").as_string();
-
-    //Reserve the memory for the data 
-    for (int a = 0; a < polygonString.Length(); a++, arrLenght++)
-    {
-        if ((polygonString.GetTerm(a) != ' ') && (polygonString.GetTerm(a) != ','))
-        {
-            arrLenght--;
-        }
-    }
-
-    object->chainPoints = new int[arrLenght];
-    memset(object->chainPoints, 0, arrLenght);
-
-
-    //char* temp = strtok(polygonString.GetCharString(), " ");
-    char* temp;
-    int arr[100];
-    int count = 0;
-    int j = 0;
-    bool negative = false;
-    /*SString clearString;
-    while (temp != NULL)
-    {
-        clearString += temp;
-    }*/
-    LOG("number %s", polygonString.GetString());
-    for (uint i = 0; i < polygonString.Length(); i++, j++)
-    {
-        //LOG("number %s", polygonString.GetTerm(i));
-        if ((polygonString.GetTerm(i) != ' ') && (polygonString.GetTerm(i) != ','))
-        {
-            if (polygonString.GetTerm(i) == '-')
-            {
-                negative = true;
-            }
-            else
-            {
-
-                arr[count] = ((int)polygonString.GetTerm(i)) - 48;
-                LOG("%i", arr[count]);
-                if (negative == true)
-                {
-                    arr[count] *= -1;
-                    negative = false;
-                }
-                count++;
-            }
-
-            j--;
-        }
-        else
-        {
-            count--;
-            int aux = 0;
-            for (int a = 0; count >= 0; a++, count--)
-            {
-                if (aux < 0)
-                {
-                    aux -= arr[a] * (pow(10, count));
-                }
-                else
-                {
-                    aux += arr[a] * (pow(10, count));
-                }
-
-            }
-            object->chainPoints[j] = aux;
-            LOG("AUX NUMBER %i", object->chainPoints[j]);
-            count = 0;
-        }
-    }
-    count--;
-    int aux = 0;
-    for (int a = 0; count >= 0; a++, count--)
-    {
-        aux += arr[a] * (pow(10, count));
-    }
-    object->chainPoints[j] = aux;
-    object->size = arrLenght + 1;
-    LOG("AUX NUMBER %i", object->chainPoints[j]);
-    LOG("Chain Size %d", object->size);
-
-    polygonString.Clear();
-
-    return ret;
-}
-
-bool Map::LoadObjectGroup(pugi::xml_node& node, ObjectGroup* objectGroup)
-{
-    bool ret = true;
-    //Load the attributes
-    objectGroup->id = node.attribute("id").as_int();
-    objectGroup->name = node.attribute("name").as_string();
-
-
-    for (pugi::xml_node objectNode = node.child("object"); objectNode && ret; objectNode = objectNode.next_sibling("object"))
-    {
-        //Load the object
-        Object* mapObject = new Object();
-        ret = LoadObject(objectNode, mapObject);
-
-        //add the object to the map
-        objectGroup->objects.Add(mapObject);
-    }
-
-    return ret;
-}
-
-bool Map::LoadAllObjectGroups(pugi::xml_node mapNode)
-{
-    bool ret = true;
-
-    for (pugi::xml_node objectGroupNode = mapNode.child("objectgroup"); objectGroupNode && ret; objectGroupNode = objectGroupNode.next_sibling("objectgroup"))
-    {
-        //Load the objectGroup
-        ObjectGroup* mapObjectGroup = new ObjectGroup();
-        ret = LoadObjectGroup(objectGroupNode, mapObjectGroup);
-
-        //add the objectGroup to the map
-        mapData.mapObjectGroups.Add(mapObjectGroup);
-    }
-
-    return ret;
-}
-
 // L06: DONE 6: Load a group of properties from a node and fill a list with it
 bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
 {
@@ -629,40 +458,6 @@ bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
     }
 
     return ret;
-}
-
-// L06: DONE 6: Load a group of properties from a node and fill a list with it
-bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
-{
-    bool ret = false;
-
-    for (pugi::xml_node propertieNode = node.child("properties").child("property"); propertieNode; propertieNode = propertieNode.next_sibling("property"))
-    {
-        Properties::Property* p = new Properties::Property();
-        p->name = propertieNode.attribute("name").as_string();
-        p->value = propertieNode.attribute("value").as_bool(); // (!!) I'm assuming that all values are bool !!
-
-        properties.list.Add(p);
-    }
-
-    return ret;
-}
-
-Properties::Property* Properties::GetProperty(const char* name)
-{
-    ListItem<Property*>* item = list.start;
-    Property* p = NULL;
-
-    while (item)
-    {
-        if (item->data->name == name) {
-            p = item->data;
-            break;
-        }
-        item = item->next;
-    }
-
-    return p;
 }
 
 bool Map::CreateColliders()

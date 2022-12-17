@@ -20,7 +20,7 @@
 		}					  \
 	}
 
-//// Deletes an array of buffers
+// Deletes an array of buffers
 #define RELEASE_ARRAY( x ) \
 	{							  \
 	if( x != NULL )			  \

@@ -11,6 +11,7 @@
 #include "Window.h"
 #include "Scene.h"
 #include "Box2D/Box2D/Box2D.h"
+#include "AirEnemy.h"
 
 #ifdef _DEBUG
 #pragma comment( lib, "../Game/Source/External/Box2D/libx86/DebugLib/Box2D.lib" )
@@ -18,7 +19,7 @@
 #pragma comment( lib, "../Game/Source/External/Box2D/libx86/ReleaseLib/Box2D.lib" )
 #endif
 
-Physics::Physics() : Module()
+Physics::Physics(bool startEnabled) : Module(startEnabled)
 {
 	world = NULL;
 	mouse_joint = NULL;
@@ -30,14 +31,12 @@ Physics::~Physics()
 {
 }
 
-
-
 bool Physics::Start()
 {
 	LOG("Creating Physics 2D environment");
+	debug = false;
 
-	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
-
+	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));	
 	world->SetContactListener(this);
 
 	return true;
@@ -48,6 +47,7 @@ bool Physics::PreUpdate()
 {
 	bool ret = true;
 	world->Step(1.0f / 60.0f, 6, 2);
+		
 
 	for (b2Contact* c = world->GetContactList(); c; c = c->GetNext())
 	{
@@ -55,8 +55,9 @@ bool Physics::PreUpdate()
 		{
 			PhysBody* pb1 = (PhysBody*)c->GetFixtureA()->GetBody()->GetUserData();
 			PhysBody* pb2 = (PhysBody*)c->GetFixtureB()->GetBody()->GetUserData();
-			if (pb1 && pb2 && pb1->listener)
+			if (pb1 && pb2 && pb1->listener) {
 				pb1->listener->OnCollision(pb1, pb2);
+			}
 		}
 	}
 
@@ -65,7 +66,7 @@ bool Physics::PreUpdate()
 
 
 
-PhysBody* Physics::CreateRectangle(int x, int y, int width, int height, bodyType type, ColliderType ctype)
+PhysBody* Physics::CreateRectangle(int x, int y, int width, int height, bodyType type)
 {
 	b2BodyDef body;
 
@@ -91,12 +92,11 @@ PhysBody* Physics::CreateRectangle(int x, int y, int width, int height, bodyType
 	b->SetUserData(pbody);
 	pbody->width = width * 0.5f;
 	pbody->height = height * 0.5f;
-	pbody->cType = ctype;
 
 	return pbody;
 }
 
-PhysBody* Physics::CreateCircle(int x, int y, int radious, bodyType type, ColliderType ctype)
+PhysBody* Physics::CreateCircle(int x, int y, int radious, bodyType type)
 {
 	b2BodyDef body;
 
@@ -122,12 +122,11 @@ PhysBody* Physics::CreateCircle(int x, int y, int radious, bodyType type, Collid
 	b->SetUserData(pbody);
 	pbody->width = radious * 0.5f;
 	pbody->height = radious * 0.5f;
-	pbody->cType = ctype;
 
 	return pbody;
 }
 
-PhysBody* Physics::CreateRectangleSensor(int x, int y, int width, int height, bodyType type, ColliderType ctype)
+PhysBody* Physics::CreateRectangleSensor(int x, int y, int width, int height, bodyType type)
 {
 	b2BodyDef body;
 
@@ -154,12 +153,11 @@ PhysBody* Physics::CreateRectangleSensor(int x, int y, int width, int height, bo
 	b->SetUserData(pbody);
 	pbody->width = width;
 	pbody->height = height;
-	pbody->cType = ctype;
 
 	return pbody;
 }
 
-PhysBody* Physics::CreateChain(int x, int y, int* points, int size, bodyType type, ColliderType ctype)
+PhysBody* Physics::CreateChain(int x, int y, int* points, int size, bodyType type)
 {
 	b2BodyDef body;
 
@@ -193,47 +191,6 @@ PhysBody* Physics::CreateChain(int x, int y, int* points, int size, bodyType typ
 	pbody->body = b;
 	b->SetUserData(pbody);
 	pbody->width = pbody->height = 0;
-	pbody->cType = ctype;
-
-	return pbody;
-}
-
-PhysBody* Physics::CreateSensorChain(int x, int y, int* points, int size, bodyType type, ColliderType ctype)
-{
-	b2BodyDef body;
-
-	if (type == DYNAMIC) body.type = b2_dynamicBody;
-	if (type == STATIC) body.type = b2_staticBody;
-	if (type == KINEMATIC) body.type = b2_kinematicBody;
-
-	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
-	b2Body* b = world->CreateBody(&body);
-
-	b2ChainShape shape;
-	b2Vec2* p = new b2Vec2[size / 2];
-
-	for (uint i = 0; i < size / 2; ++i)
-	{
-		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
-		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
-	}
-
-	shape.CreateLoop(p, size / 2);
-
-	b2FixtureDef fixture;
-	fixture.shape = &shape;
-	fixture.isSensor = true;
-
-	b->CreateFixture(&fixture);
-
-	delete p;
-
-	PhysBody* pbody = new PhysBody();
-	pbody->body = b;
-	b->SetUserData(pbody);
-	pbody->width = pbody->height = 0;
-	pbody->cType = ctype;
 
 	return pbody;
 }
@@ -242,7 +199,7 @@ PhysBody* Physics::CreateSensorChain(int x, int y, int* points, int size, bodyTy
 bool Physics::PostUpdate()
 {
 	bool ret = true;
-
+	
 	// Bonus code: this will iterate all objects in the world and draw the circles
 	// You need to provide your own macro to translate meters to pixels
 	if (debug)
@@ -260,10 +217,9 @@ bool Physics::PostUpdate()
 					uint width, height;
 					app->win->GetWindowSize(width, height);
 					b2Vec2 pos = f->GetBody()->GetPosition();
-					if (app->scene->active == false)
-						app->render->DrawCircle(METERS_TO_PIXELS(pos.x), METERS_TO_PIXELS(pos.y), METERS_TO_PIXELS(shape->m_radius) * 0, 255, 255, 255);
-					else
-						app->render->DrawCircle(METERS_TO_PIXELS(pos.x), METERS_TO_PIXELS(pos.y), METERS_TO_PIXELS(shape->m_radius) * app->win->GetScale(), 255, 255, 255);
+					app->render->DrawCircle(METERS_TO_PIXELS(pos.x) * app->win->GetScale(),
+											METERS_TO_PIXELS(pos.y) * app->win->GetScale(),
+											METERS_TO_PIXELS(shape->m_radius) * app->win->GetScale(), 255, 255, 255);
 				}
 				break;
 
@@ -339,7 +295,7 @@ bool Physics::CleanUp()
 
 	// Delete the whole physics world!
 	delete world;
-	world = nullptr;
+	world = NULL;
 
 	return true;
 }

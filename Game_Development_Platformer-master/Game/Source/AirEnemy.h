@@ -18,39 +18,29 @@ public:
 
 	bool Awake();
 	bool Start();
-	bool PreUpdate();
 	bool Update();
 	bool PostUpdate();
 	bool CleanUp();
 
-	void AirEnemy::DebugKeys();
-
-	void MovementDirection(const iPoint& origin, const iPoint& destination);
-
 	void OnCollision(PhysBody* physA, PhysBody* physB);
-
+	void AirEnemy::DebugKeys();
+	void MovementDirection(const iPoint& origin, const iPoint& destination);
 	void LoadAnimations();
-
 	void SetPos(int x, int y);
 
-	
 public:
 
-	int health;
-
-	//Animation
-	Animation Idle;
-	Animation Movement, Damaged, Attack;
-	Animation Death;
-	Animation* currentAnim = nullptr;
-
-	//Physics
-	PhysBody* pbody;
+private:
 
 	bool alive;
 	bool idle;
 	bool ishurt;
 	bool isGrounded;
+	bool stairs;
+	int remainingJumpSteps;
+	uint health;
+
+	SDL_RendererFlip flipped = SDL_FLIP_NONE;
 
 	//SFX
 	uint SFX = 0;
@@ -58,29 +48,28 @@ public:
 	uint deathSFX = 0;
 	uint damagedSFX = 0;
 
-private:
-
-	bool stairs;
-	int remainingJumpSteps;
-
-
-	SDL_RendererFlip flipped = SDL_FLIP_NONE;
-
+	//Physics
+	PhysBody* aebody;
 
 	//Texture
 	SDL_Texture* texture;
 	const char* texturePath;
 
-	int width;
-	int height;
+	//Animation
+	Animation Idle;
+	Animation Movement, Damaged, Attack;
+	Animation Death;
+	Animation* currentAnim = nullptr;
 
-	b2Vec2 velocity;
-	b2Vec2 startPos;
+	b2Vec2 vel;
+	b2Vec2 pos;
+
 
 	//debug pathfinding
 	iPoint origin;
 	bool originSelected = false;
 	uint refreshPathTime;
+
 
 };
 
