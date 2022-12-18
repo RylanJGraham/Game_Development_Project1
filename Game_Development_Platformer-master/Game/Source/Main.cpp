@@ -24,6 +24,14 @@ enum MainState
 	EXIT
 };
 
+void capFramerate(Uint32 startingTick)
+{
+	if ((1000 / app->fps) > SDL_GetTicks() - startingTick)
+	{
+		SDL_Delay(1000 / app->fps - (SDL_GetTicks() - startingTick));
+	}
+}
+
 App* app = NULL;
 
 int main(int argc, char* args[])
@@ -32,9 +40,11 @@ int main(int argc, char* args[])
 
 	MainState state = CREATE;
 	int result = EXIT_FAILURE;
+	Uint32 startingTicks;
 
 	while(state != EXIT)
 	{
+		startingTicks = SDL_GetTicks();
 		switch(state)
 		{
 			// Allocate the engine --------------------------------------------
@@ -104,6 +114,9 @@ int main(int argc, char* args[])
 			result = EXIT_FAILURE;
 			state = EXIT;
 			break;
+		}
+		if (state == LOOP) {
+			capFramerate(startingTicks);
 		}
 	}
 
