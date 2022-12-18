@@ -309,7 +309,7 @@ void AirEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 		ishurt = true;
 		health--;
 		if (health <= 0) {
-			alive == false;
+			alive = false;
 		}
 		break;
 	}
