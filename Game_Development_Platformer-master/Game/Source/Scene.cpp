@@ -216,6 +216,13 @@ bool Scene::CleanUp()
 
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;
+	if (player->lives == 0) {
+		if (player) { app->entityManager->DestroyEntity(player); }
+		if (airenemy) { app->entityManager->DestroyEntity(airenemy); }
+		if (groundenemy) { app->entityManager->DestroyEntity(groundenemy); }
+		if (item) { app->entityManager->DestroyEntity(item); }
+	}
+
 	/*app->map->Disable();
 	app->entityManager->Disable();
 	app->physics->Disable();*/
