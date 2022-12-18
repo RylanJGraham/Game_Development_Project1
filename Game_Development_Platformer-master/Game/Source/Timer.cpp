@@ -1,13 +1,8 @@
-// ----------------------------------------------------
-// Fast timer with milisecons precision
-// ----------------------------------------------------
-
 #include "Timer.h"
 #include "SDL\include\SDL_timer.h"
 #include "Log.h"
 
-// L13: TODO 1: Fill Start(), Read(), ReadSec() methods
-// they are simple, one line each!
+
 
 Timer::Timer()
 {

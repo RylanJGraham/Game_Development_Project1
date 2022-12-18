@@ -38,15 +38,10 @@ bool UI::Start()
 
 	/*Initialize*/
 	font1Path = app->configNode.child("ui").child("font1").attribute("texturepath").as_string();
-	font2Path = app->configNode.child("ui").child("font2").attribute("texturepath").as_string();
-
 
 	//Loading font 1
 	char lookupTableFont1[] = { "! @,_./0123456789$;<&?abcdefghijklmnopqrstuvwxyz" };
 	font1_id = app->fonts->Load(font1Path, lookupTableFont1, 2);
-
-	char lookupTableFont2[] = { "! %&'()*+,-./0123456789:;<=>abcdefghijklmnopqrstuvwxyz" };
-	font2_id = app->fonts->Load(font2Path, lookupTableFont2, 1);
 
 	return true;
 }
@@ -84,15 +79,15 @@ bool UI::CleanUp()
 void UI::BlitLives()
 {
 	char playerLives[20];
-	sprintf_s(playerLives, 20, "lives: %d", app->scene->player->lives);
-	app->fonts->BlitText(20, 15, font2_id, playerLives);
+	sprintf_s(playerLives, 20, "lives; %d", app->scene->player->lives);
+	app->fonts->BlitText(50, 50, font1_id, playerLives);
 }
 
 void UI::BlitItems()
 {
 	char playerItems[20];
-	sprintf_s(playerItems, 20, "Chests: %d", app->scene->player->Items);
-	app->fonts->BlitText(20, 35, font2_id, playerItems);
+	sprintf_s(playerItems, 20, "chests; %d", app->scene->player->Items);
+	app->fonts->BlitText(20, 35, font1_id, playerItems);
 }
 
 
@@ -101,35 +96,35 @@ void UI::BlitPlayerXPos()
 {
 	char playerXPos[25];
 	sprintf_s(playerXPos, 25, "position x: %d", app->scene->player->position.x);
-	app->fonts->BlitText(20, 55, font2_id, playerXPos);
+	app->fonts->BlitText(20, 55, font1_id, playerXPos);
 }
 
 void UI::BlitPlayerYPos()
 {
 	char playerYPos[25];
 	sprintf_s(playerYPos, 25, "position y: %d", app->scene->player->position.y);
-	app->fonts->BlitText(20, 75, font2_id, playerYPos);
+	app->fonts->BlitText(20, 75, font1_id, playerYPos);
 }
 
 void UI::BlitBatLives()
 {
 	char BatLives[25];
 	sprintf_s(BatLives, 20, "Bat lives: %d", app->scene->airenemy->health);
-	app->fonts->BlitText(20, 95, font2_id, BatLives);
+	app->fonts->BlitText(20, 95, font1_id, BatLives);
 }
 
 void UI::BlitPigLives()
 {
 	char PigLives[25];
 	sprintf_s(PigLives, 20, "Pig lives: %d", app->scene->groundenemy->hp);
-	app->fonts->BlitText(20, 95, font2_id, PigLives);
+	app->fonts->BlitText(20, 95, font1_id, PigLives);
 }
 
 void UI::BlitFPS()
 {
 	char fps[25];
 	sprintf_s(fps, 25, "fps: %d", app->GetFPS());
-	app->fonts->BlitText(825, 15, font2_id, fps);
+	app->fonts->BlitText(825, 15, font1_id, fps);
 }
 
 void UI::BlitAverageFPS()

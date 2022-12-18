@@ -95,9 +95,9 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Fonts.cpp" />
     <ClCompile Include="Source\AirEnemy.cpp" />
     <ClCompile Include="Source\Ending.cpp" />
+    <ClCompile Include="Source\Fonts.cpp" />
     <ClCompile Include="Source\GroundEnemy.cpp" />
     <ClCompile Include="Source\EntityManager.cpp" />
     <ClCompile Include="Source\FadeToBlack.cpp" />
@@ -109,21 +109,23 @@
     <ClCompile Include="Source\Input.cpp" />
     <ClCompile Include="Source\Map.cpp" />
     <ClCompile Include="Source\Pathfinding.cpp" />
+    <ClCompile Include="Source\PerfTimer.cpp" />
     <ClCompile Include="Source\Physics.cpp" />
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\Render.cpp" />
     <ClCompile Include="Source\Textures.cpp" />
+    <ClCompile Include="Source\Timer.cpp" />
     <ClCompile Include="Source\Title.cpp" />
+    <ClCompile Include="Source\UI.cpp" />
     <ClCompile Include="Source\Window.cpp" />
-    <ClCompile Include="UI.cpp" />
     <ClInclude Include="Entity.h" />
-    <ClInclude Include="Fonts.h" />
     <ClInclude Include="PQueue.h" />
     <ClInclude Include="Queue.h" />
     <ClInclude Include="Source\AirEnemy.h" />
     <ClInclude Include="Source\Animation.h" />
     <ClInclude Include="Source\Ending.h" />
+    <ClInclude Include="Source\Fonts.h" />
     <ClInclude Include="Source\GroundEnemy.h" />
     <ClInclude Include="Source\EntityManager.h" />
     <ClInclude Include="Source\FadeToBlack.h" />
@@ -131,6 +133,7 @@
     <ClInclude Include="Source\Logo.h" />
     <ClInclude Include="Source\Map.h" />
     <ClInclude Include="Source\Pathfinding.h" />
+    <ClInclude Include="Source\PerfTimer.h" />
     <ClInclude Include="Source\Physics.h" />
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\Queue.h" />
@@ -141,7 +144,9 @@
     <ClInclude Include="Source\Module.h" />
     <ClInclude Include="Source\Render.h" />
     <ClInclude Include="Source\Textures.h" />
+    <ClInclude Include="Source\Timer.h" />
     <ClInclude Include="Source\Title.h" />
+    <ClInclude Include="Source\UI.h" />
     <ClInclude Include="Source\Window.h" />
     <ClInclude Include="Source\Defs.h" />
     <ClInclude Include="Source\List.h" />
@@ -153,7 +158,6 @@
     <ClInclude Include="Source\External\PugiXml\src\pugiconfig.hpp" />
     <ClInclude Include="Source\External\PugiXml\src\pugixml.hpp" />
     <ClCompile Include="Source\External\PugiXml\src\pugixml.cpp" />
-    <ClInclude Include="UI.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Output\config.xml" />

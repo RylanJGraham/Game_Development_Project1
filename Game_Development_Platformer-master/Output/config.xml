@@ -21,6 +21,10 @@
     <fx volume="128"/>
   </audio>
 
+	<ui>
+		<font1 texturepath="Assets/Textures/font1.png"/>
+	</ui>
+
 	<logo>
 		<logoImage x="0" y="0" texturepath="Assets/Textures/logo.png"/>
 	</logo>

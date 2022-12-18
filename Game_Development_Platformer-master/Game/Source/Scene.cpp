@@ -61,6 +61,8 @@ bool Scene::Start()
 	app->pathfinding->Enable();
 	app->entityManager->Enable();
 	app->map->Enable();
+	app->ui->Enable();
+	app->fonts->Enable();
 	LOG("--STARTS GAME SCENE--");
 	app->physics->debug = false;
 	app->scene->airenemy->health = 2;

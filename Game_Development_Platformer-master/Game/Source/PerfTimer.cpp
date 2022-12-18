@@ -1,7 +1,3 @@
-// ----------------------------------------------------
-// Slow timer with microsecond precision
-// ----------------------------------------------------
-
 #include "PerfTimer.h"
 #include "SDL\include\SDL_timer.h"
 

@@ -8,11 +8,11 @@
 #include "EntityManager.h"
 #include "Map.h"
 #include "Physics.h"
+#include "Pathfinding.h"
 #include "FadeToBlack.h"
 #include "Logo.h"
 #include "Title.h"
 #include "Ending.h"
-#include "Pathfinding.h"
 #include "UI.h"
 #include "Fonts.h"
 
@@ -44,6 +44,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	ui = new UI();
 	endScreen = new Ending(false);
 	pathfinding = new PathFinding(true);
+
+
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -120,10 +122,9 @@ bool App::Awake()
 // Called before the first frame
 bool App::Start()
 {
-
-	//timer.Start();
-	//startupTime.Start();
-	//lastSecFrameTime.Start();
+	timer.Start();
+	startupTime.Start();
+	lastSecFrameTime.Start();
 
 	bool ret = true;
 	ListItem<Module*>* item;

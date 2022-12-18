@@ -19,4 +19,3 @@ private:
 };
 
 #endif //__TIMER_H__
-

@@ -6,6 +6,7 @@
 #include "PerfTimer.h"
 #include "Timer.h"
 
+
 #include "PugiXml/src/pugixml.hpp"
 
 #define CONFIG_FILENAME		"config.xml"
@@ -18,6 +19,8 @@ class Render;
 class Textures;
 class Audio;
 class Scene;
+class Fonts;
+class UI;
 class EntityManager;
 class Map;
 //L07 DONE 2: Add Physics module
@@ -138,12 +141,12 @@ private:
 
 	// L13: TODO 4: Calculate some timing measures
 	// required variables are provided:
-	//Timer timer;
-	//PerfTimer ptimer;
+	Timer timer;
+	PerfTimer ptimer;
 
-	//Timer startupTime;
-	//Timer frameTime;
-	//Timer lastSecFrameTime;
+	Timer startupTime;
+	Timer frameTime;
+	Timer lastSecFrameTime;
 
 	uint64 frameCount = 0;
 	uint32 framesPerSecond = 0;

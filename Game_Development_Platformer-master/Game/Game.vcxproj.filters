@@ -67,10 +67,16 @@
     <ClCompile Include="Source\AirEnemy.cpp">
       <Filter>Modules\Gameplay</Filter>
     </ClCompile>
-    <ClCompile Include="UI.cpp">
+    <ClCompile Include="Source\Fonts.cpp">
       <Filter>Modules\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Fonts.cpp">
+    <ClCompile Include="Source\UI.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PerfTimer.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Timer.cpp">
       <Filter>Modules\Core</Filter>
     </ClCompile>
   </ItemGroup>
@@ -172,10 +178,16 @@
     <ClInclude Include="Entity.h">
       <Filter>Modules\Core</Filter>
     </ClInclude>
-    <ClInclude Include="UI.h">
+    <ClInclude Include="Source\Fonts.h">
       <Filter>Modules\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Fonts.h">
+    <ClInclude Include="Source\UI.h">
+      <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PerfTimer.h">
+      <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Timer.h">
       <Filter>Modules\Core</Filter>
     </ClInclude>
   </ItemGroup>

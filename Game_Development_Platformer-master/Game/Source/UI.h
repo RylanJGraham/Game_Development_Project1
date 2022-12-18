@@ -49,7 +49,7 @@ public:
 	void BlitFrameCount();
 
 	uint font1_id = -1;
-	uint font2_id = -1;
+
 
 private:
 

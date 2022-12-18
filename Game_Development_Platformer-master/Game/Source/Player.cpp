@@ -31,8 +31,7 @@ bool Player::Awake() {
 	startPos.y = parameters.attribute("y").as_int();
 	texturePath = parameters.attribute("texturepath").as_string();
 
-	width = 32;
-	height = 32;
+
 
 	attackCooldownMax = (parameters.attribute("attcooldown").as_float()) * 0.06; //*0.06 because the cooldown is in milliseconds and the game runs at 60 fps
 
