@@ -57,14 +57,14 @@ bool AirEnemy::Start()
 	//id = app->tex->LoadSprite(texturePath, 15, 8);
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
-	pbody = app->physics->CreateCircle(position.x - 5, position.y + 10, 15, bodyType::STATIC,ColliderType::ENEMY);
+	aebody = app->physics->CreateCircle(position.x - 5, position.y + 10, 15, bodyType::STATIC,ColliderType::ENEMY);
 	//hitbox = app->physics->CreateRectangleSensor(METERS_TO_PIXELS(pbody->body->GetTransform().p.x), METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 15, 5, 2, bodyType::STATIC, ColliderType::SLIME_HITBOX);
 
 	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
-	pbody->listener = this;
-	pbody->cType = ColliderType::ENEMY;
+	aebody->listener = this;
+	aebody->cType = ColliderType::ENEMY;
 
-	hitbox = app->physics->CreateRectangleSensor(METERS_TO_PIXELS(pbody->body->GetTransform().p.x), METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 15, 5, 2, bodyType::STATIC, ColliderType::AIRENEMYHITBOX);
+	hitbox = app->physics->CreateRectangleSensor(METERS_TO_PIXELS(aebody->body->GetTransform().p.x), METERS_TO_PIXELS(aebody->body->GetTransform().p.y) - 15, 5, 2, bodyType::STATIC, ColliderType::AIRENEMYHITBOX);
 	//initialize audio effect - !! Path is hardcoded, should be loaded from config.xml
 	//jumpSFX = app->audio->LoadFx("Assets/Audio/Fx/JumpKnight.wav");
 	damagedSFX = app->audio->LoadFx("Assets/Audio/Fx/AirEnemyDamage.wav");
@@ -83,7 +83,7 @@ bool AirEnemy::PreUpdate() {
 
 void AirEnemy::SetPos(int x, int y) {
 	b2Vec2 pos = { PIXEL_TO_METERS(x), PIXEL_TO_METERS(y) };
-	pbody->body->SetTransform(pos, 0);
+	aebody->body->SetTransform(pos, 0);
 }
 
 bool AirEnemy::Update()
@@ -101,7 +101,7 @@ bool AirEnemy::Update()
 	iPoint playerTile = app->map->WorldToMap(app->scene->player->position.x + 32, app->scene->player->position.y);
 
 	//Check if the enemy is visible on camera, if not, don't create path and don't move
-	if (pbody->body->GetPosition().x > app->render->camera.x - app->render->camera.w / 2 && pbody->body->GetPosition().x < app->render->camera.x + app->render->camera.w / 2)
+	if (aebody->body->GetPosition().x > app->render->camera.x - app->render->camera.w / 2 && aebody->body->GetPosition().x < app->render->camera.x + app->render->camera.w / 2)
 	{
 		//Test compute path function
 		if (originSelected == true)
@@ -114,8 +114,8 @@ bool AirEnemy::Update()
 		}
 		else
 		{
-			origin.x = pbody->body->GetPosition().x;
-			origin.y = pbody->body->GetPosition().y;
+			origin.x = aebody->body->GetPosition().x;
+			origin.y = aebody->body->GetPosition().y;
 			originSelected = true;
 			app->pathfinding->ClearLastPath();
 			refreshPathTime = 0;
@@ -129,10 +129,10 @@ bool AirEnemy::Update()
 		refreshPathTime = 0;
 	}
 
-	pbody->body->SetLinearVelocity(velocity);
+	aebody->body->SetLinearVelocity(velocity);
 
-	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x - (width / 4));
-	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y - (height / 3));
+	position.x = METERS_TO_PIXELS(aebody->body->GetTransform().p.x - (width / 4));
+	position.y = METERS_TO_PIXELS(aebody->body->GetTransform().p.y - (height / 3));
 
 	////hitbox->body->SetGravityScale(0);
 	//hitboxPos.x = pbody->body->GetTransform().p.x;
@@ -177,7 +177,7 @@ bool AirEnemy::Update()
 
 		//Destroy entity
 		app->entityManager->DestroyEntity(app->scene->airenemy);
-		app->physics->world->DestroyBody(pbody->body);
+		app->physics->world->DestroyBody(aebody->body);
 		//app->physics->world->DestroyBody(hitbox->body);
 		//app->audio->PlayFx(powerUpSFX);
 		alive = true;
@@ -235,8 +235,8 @@ bool AirEnemy::Update()
 	//}
 
 	//Update player position in pixels
-	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x);
-	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y);
+	position.x = METERS_TO_PIXELS(aebody->body->GetTransform().p.x);
+	position.y = METERS_TO_PIXELS(aebody->body->GetTransform().p.y);
 
 	//Animations
 	/*if (idle) { currentAnim = &Idle; }*/

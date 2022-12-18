@@ -42,15 +42,12 @@ bool GroundEnemy::Awake() {
 
 bool GroundEnemy::Start()
 {
-
 	texture = app->tex->Load(texturePath);
 
-	currentAnim = &RunL;
+	currentAnim = &AttackL;
 	alive = true;
 	isHurt = false;
 	hp = 3;
-
-
 
 	//initilize textures
 
@@ -64,7 +61,7 @@ bool GroundEnemy::Start()
 	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
 	pbody->listener = this;
 
-	hitbox = app->physics->CreateRectangleSensor(METERS_TO_PIXELS(pbody->body->GetTransform().p.x), METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 15, 5, 2, bodyType::STATIC, ColliderType::GROUNDENEMYHITBOX);
+	hitbox = app->physics->CreateRectangleSensor(METERS_TO_PIXELS(pbody->body->GetTransform().p.x), METERS_TO_PIXELS(pbody->body->GetTransform().p.y) + 50, 5, 2, bodyType::STATIC, ColliderType::GROUNDENEMYHITBOX);
 
 	//initialize audio effect - !! Path is hardcoded, should be loaded from config.xml
 	//jumpSFX = app->audio->LoadFx("Assets/Audio/Fx/JumpKnight.wav");

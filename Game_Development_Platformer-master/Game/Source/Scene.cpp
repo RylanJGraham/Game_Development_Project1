@@ -159,7 +159,7 @@ bool Scene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		app->render->camera.x -= camSpeed;
 	// F9: View colliders / logic
-	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {
+	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN) {
 		app->physics->debug = !app->physics->debug;
 	}
 
@@ -236,7 +236,7 @@ bool Scene::LoadState(pugi::xml_node& data)
 	app->scene->groundenemy->hp = data.child("slimeLives").attribute("slimeLives").as_int();
 
 	b2Vec2 airenemyPos = { data.child("airenemyPosition").attribute("x").as_float(), data.child("airenemyPosition").attribute("y").as_float() };
-	app->scene->airenemy->pbody->body->SetTransform(groundenemyPos, 0);
+	app->scene->airenemy->aebody->body->SetTransform(groundenemyPos, 0);
 
 	//Load previous saved slime number of lives
 	app->scene->airenemy->health = data.child("airenemyLives").attribute("airenemyLives").as_int();
@@ -266,8 +266,8 @@ bool Scene::SaveState(pugi::xml_node& data)
 
 	// Save current airenemy position
 	pugi::xml_node airenemyPos = data.append_child("airenemyPosition");
-	airenemyPos.append_attribute("x") = app->scene->airenemy->pbody->body->GetTransform().p.x;
-	airenemyPos.append_attribute("y") = app->scene->airenemy->pbody->body->GetTransform().p.y;
+	airenemyPos.append_attribute("x") = app->scene->airenemy->aebody->body->GetTransform().p.x;
+	airenemyPos.append_attribute("y") = app->scene->airenemy->aebody->body->GetTransform().p.y;
 
 
 	// Save current groundenemy position
