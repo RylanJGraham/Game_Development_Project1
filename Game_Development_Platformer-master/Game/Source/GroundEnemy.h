@@ -25,27 +25,34 @@ public:
 
 	void MovementDirection(const iPoint& origin, const iPoint& destination);
 
+	void Attack(const iPoint& origin, const iPoint& destination);
+
 	void OnCollision(PhysBody* physA, PhysBody* physB);
 	void GroundEnemy::DebugKeys();
 	void LoadAnimations();
 
 	void ResetGroundEnemy();
 
-	void SetPos(int x, int y);
-
 public:
 
 	//Animation
+
+	Animation* currentAnim = nullptr;
+
 	Animation AttackL, AttackR;	// jump?
 	Animation RunL, RunR, JumpL, JumpR;
 	Animation HitL, HitR;
 	Animation DeathL, DeathR;
-	Animation* currentAnim = nullptr;
+
 
 	//SFX
 	uint SFX = 0;
 	uint attackSFX = 0;
 	uint deathSFX = 0;
+
+	bool onGround = false;
+	bool alive = true;
+	bool onCollision = false;
 
 	//Physics
 	PhysBody* pbody;
@@ -54,8 +61,6 @@ public:
 
 	PhysBody* hitbox;
 	b2Vec2 hitboxPos;
-	bool isGrounded;
-	bool alive;
 	bool isHurt;
 
 private:
@@ -69,6 +74,9 @@ private:
 	b2Vec2 velocity;
 	b2Vec2 startPos;
 
+	bool jump = false;
+	bool ableAttack = true;
+	uint attackCooldown = 0;
 
 	int width;
 	int height;

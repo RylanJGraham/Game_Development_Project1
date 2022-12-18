@@ -45,7 +45,7 @@ public:
 	Animation* currentAnim = nullptr;
 
 	//Physics
-	PhysBody* aebody;
+	PhysBody* pbody;
 
 
 	PhysBody* hitbox;

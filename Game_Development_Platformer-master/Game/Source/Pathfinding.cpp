@@ -67,6 +67,14 @@ const DynArray<iPoint>* PathFinding::GetLastPath() const
 	return &lastPath;
 }
 
+const int PathFinding::GetNextTileY(unsigned int index) const
+{
+	if (lastPath.At(index) != NULL)
+		return lastPath.At(index)->y;
+	else
+		return 0;
+}
+
 // To request all tiles involved in the last generated path
 void PathFinding::ClearLastPath()
 {

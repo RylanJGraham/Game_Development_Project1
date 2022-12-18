@@ -252,10 +252,10 @@ bool Scene::LoadState(pugi::xml_node& data)
 	app->scene->groundenemy->pbody->body->SetTransform(groundenemyPos, 0);
 
 	//Load previous saved slime number of lives
-	app->scene->groundenemy->hp = data.child("slimeLives").attribute("slimeLives").as_int();
+	app->scene->groundenemy->hp = data.child("groundenemyLives").attribute("groundenemyLives").as_int();
 
 	b2Vec2 airenemyPos = { data.child("airenemyPosition").attribute("x").as_float(), data.child("airenemyPosition").attribute("y").as_float() };
-	app->scene->airenemy->aebody->body->SetTransform(groundenemyPos, 0);
+	app->scene->airenemy->pbody->body->SetTransform(groundenemyPos, 0);
 
 	//Load previous saved slime number of lives
 	app->scene->airenemy->health = data.child("airenemyLives").attribute("airenemyLives").as_int();
@@ -285,8 +285,8 @@ bool Scene::SaveState(pugi::xml_node& data)
 
 	// Save current airenemy position
 	pugi::xml_node airenemyPos = data.append_child("airenemyPosition");
-	airenemyPos.append_attribute("x") = app->scene->airenemy->aebody->body->GetTransform().p.x;
-	airenemyPos.append_attribute("y") = app->scene->airenemy->aebody->body->GetTransform().p.y;
+	airenemyPos.append_attribute("x") = app->scene->airenemy->pbody->body->GetTransform().p.x;
+	airenemyPos.append_attribute("y") = app->scene->airenemy->pbody->body->GetTransform().p.y;
 
 
 	// Save current groundenemy position

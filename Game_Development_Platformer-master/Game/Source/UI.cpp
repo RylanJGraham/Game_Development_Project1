@@ -95,28 +95,28 @@ void UI::BlitItems()
 void UI::BlitPlayerXPos()
 {
 	char playerXPos[25];
-	sprintf_s(playerXPos, 25, "position x: %d", app->scene->player->position.x);
+	sprintf_s(playerXPos, 25, "position x; %d", app->scene->player->position.x);
 	app->fonts->BlitText(20, 55, font1_id, playerXPos);
 }
 
 void UI::BlitPlayerYPos()
 {
 	char playerYPos[25];
-	sprintf_s(playerYPos, 25, "position y: %d", app->scene->player->position.y);
+	sprintf_s(playerYPos, 25, "position y; %d", app->scene->player->position.y);
 	app->fonts->BlitText(20, 75, font1_id, playerYPos);
 }
 
 void UI::BlitBatLives()
 {
 	char BatLives[25];
-	sprintf_s(BatLives, 20, "Bat lives: %d", app->scene->airenemy->health);
+	sprintf_s(BatLives, 20, "Bat lives; %d", app->scene->airenemy->health);
 	app->fonts->BlitText(20, 95, font1_id, BatLives);
 }
 
 void UI::BlitPigLives()
 {
 	char PigLives[25];
-	sprintf_s(PigLives, 20, "Pig lives: %d", app->scene->groundenemy->hp);
+	sprintf_s(PigLives, 20, "Pig lives; %d", app->scene->groundenemy->hp);
 	app->fonts->BlitText(20, 95, font1_id, PigLives);
 }
 

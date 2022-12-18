@@ -29,19 +29,24 @@ bool GroundEnemy::Awake() {
 	//texturePath = "Assets/Textures/player/idle1.png";
 
 	//L02: DONE 5: Get Player parameters from XML
-	position.x = parameters.attribute("x").as_int();
-	position.y = parameters.attribute("y").as_int();
-
-	origin.x = position.x;
-	origin.y = position.y;
-
-	texturePath = parameters.attribute("texturepath").as_string();
-
 	return true;
 }
 
 bool GroundEnemy::Start()
 {
+	startPos.x = parameters.attribute("x").as_int();
+	startPos.y = parameters.attribute("y").as_int();
+
+	origin.x = startPos.x;
+	origin.y = startPos.y;
+
+	width = 32;
+	height = 32;
+
+	texturePath = parameters.attribute("texturepath").as_string();
+
+	LoadAnimations();
+
 	texture = app->tex->Load(texturePath);
 
 	currentAnim = &AttackL;
@@ -51,12 +56,10 @@ bool GroundEnemy::Start()
 
 	//initilize textures
 
-	remainingJumpSteps = 0;
-
 	//id = app->tex->LoadSprite(texturePath, 15, 8);
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
-	pbody = app->physics->CreateCircle(position.x - 5, position.y + 10, 15, bodyType::DYNAMIC, ColliderType::ENEMY);
+	pbody = app->physics->CreateCircle(startPos.x, startPos.y, 15, bodyType::DYNAMIC, ColliderType::ENEMY);
 
 	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
 	pbody->listener = this;
@@ -68,9 +71,8 @@ bool GroundEnemy::Start()
 
 	refreshPathTime = 0;
 
-
-	LoadAnimations();
-
+	jump = false;
+	ableAttack = true;
 
 	return true;
 }
@@ -80,29 +82,31 @@ bool GroundEnemy::PreUpdate() {
 	return true;
 }
 
-void GroundEnemy::SetPos(int x, int y) {
-	b2Vec2 pos = { PIXEL_TO_METERS(x), PIXEL_TO_METERS(y) };
-	pbody->body->SetTransform(pos, 0);
-}
+//void GroundEnemy::SetPos(int x, int y) {
+//	b2Vec2 pos = { PIXEL_TO_METERS(x), PIXEL_TO_METERS(y) };
+//	pbody->body->SetTransform(pos, 0);
+//}
 
 bool GroundEnemy::Update()
 {
-	b2Vec2 vel;
-	int speed = 5;
-
 	currentAnim = &AttackL;
-	velocity = { 0, -GRAVITY_Y };
+	velocity.y = -GRAVITY_Y;
 
 	iPoint playerTile = app->map->WorldToMap(app->scene->player->position.x + 32, app->scene->player->position.y);
 
 	if (pbody->body->GetPosition().x > app->render->camera.x - app->render->camera.w / 2 && pbody->body->GetPosition().x < app->render->camera.x + app->render->camera.w / 2)
 	{
+		float distance = playerTile.x - origin.x;
+
 		//Test compute path function
-		if (originSelected == true)
+		if (originSelected == true && distance <= 10 && distance >= -10)
 		{
 			app->pathfinding->CreatePath(origin, playerTile);
 			refreshPathTime++;
 			originSelected = false;
+			MovementDirection(origin, playerTile);
+			Attack(origin, playerTile);
+			/*Attack(origin, playerTile);*/
 			/*if (refreshPathTime >= 150)
 				originSelected = false;*/
 		}
@@ -115,7 +119,7 @@ bool GroundEnemy::Update()
 			refreshPathTime = 0;
 		}
 
-		MovementDirection(origin, playerTile);
+		/*MovementDirection(origin, playerTile);*/
 	}
 	else
 	{
@@ -123,7 +127,15 @@ bool GroundEnemy::Update()
 		refreshPathTime = 0;
 	}
 
-	pbody->body->SetLinearVelocity(velocity);
+	if (jump == false)
+		pbody->body->SetLinearVelocity(velocity);
+	else if (jump == true)
+		currentAnim = leftID ? &JumpR : &JumpL;
+	if (ableAttack == false) {
+		attackCooldown++;
+		if (attackCooldown >= 50)
+			ableAttack = true;
+	}
 
 	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x - (width / 4));
 	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y - (height / 3));
@@ -133,58 +145,23 @@ bool GroundEnemy::Update()
 	hitboxPos.y = pbody->body->GetTransform().p.y - PIXEL_TO_METERS(10);
 	hitbox->body->SetTransform({ hitboxPos.x, hitboxPos.y }, 0);
 
-	DebugKeys();
 
+	if (alive == false)
+	{
+		currentAnim = leftID ? &DeathR : &DeathL;
 
-		/*if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-			vel.x = -speed;
-		}
-		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-			vel.x = speed;
-		}
-		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
-			vel.y = -speed;
-		}
-		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
-			vel.y = speed;
-		}*/
-	
-
-
-
-	if (hp <= 0) {
-		alive = false;
+		//Destroy entity
+		app->entityManager->DestroyEntity(app->scene->groundenemy);
+		app->physics->world->DestroyBody(pbody->body);
+		app->physics->world->DestroyBody(hitbox->body);
+	/*	app->audio->PlayFx(powerUpSFX);*/
+		alive = true;
 	}
 
-
-
-		//Left
-		//if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-		//	currentAnim = &RunR;
-		//	vel.x = -speed;
-		//	leftID = true;
-		//	app->render->camera.x += 5;
-		//}
-		//Right
-		//else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-		//	currentAnim = &RunL;
-		//	vel.x = speed;
-		//	leftID = false;
-		//	app->render->camera.x -= 5;
-		//}
-		//else
-		//	vel.x = 0;
-
-		//if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isGrounded && remainingJumpSteps == 0) {
-		//	currentAnim = leftID ? &JumpL : &JumpR;
-		//	remainingJumpSteps = 6;
-		//	isGrounded = false;
-		//	//app->audio->PlayFx(jumpSFX);
-
-		//}
+	DebugKeys();
 
 	if (isHurt) {
-			currentAnim = &HitL;
+			currentAnim = leftID ? &HitR : &HitL;
 	}
 
 	if (HitL.GetCurrentFrameint() == 1 || HitR.GetCurrentFrameint() == 1) {
@@ -193,43 +170,6 @@ bool GroundEnemy::Update()
 			isHurt = false;
 	}
 
-		
-
-
-	//Set the velocity of the pbody of the player
-
-
-	//Apply Jump Force
-	//if (remainingJumpSteps > 0)
-	//{
-	//	float force = gebody->body->GetMass() * 10 / 0.01666; //F = mv/t (t = 1/60fps)
-	//	force /= 6.0;
-	//	gebody->body->ApplyForce(b2Vec2(0, -force), gebody->body->GetWorldCenter(), true);
-	//	remainingJumpSteps--;
-	//}
-
-	//Update player position in pixels
-
-
-	//Animations
-	//if (!isGrounded) { currentAnim = leftID ? &JumpR : &JumpL; }
-
-
-	if (!alive)
-	{
-		currentAnim = leftID ? &DeathR : &DeathL;
-		if (pbody != nullptr){
-			app->physics->world->DestroyBody(pbody->body);
-		}
-		app->entityManager->DestroyEntity(app->scene->groundenemy);
-		app->physics->world->DestroyBody(pbody->body);
-		app->physics->world->DestroyBody(hitbox->body);
-		//app->audio->PlayFx(powerUpSFX);
-		alive = true;
-		//if (DeathL.GetCurrentFrameint() == 4 || DeathR.GetCurrentFrameint() == 4) {
-		//	CleanUp();
-		//}
-	}
 
 	if (app->physics->debug)
 	{
@@ -261,31 +201,61 @@ bool GroundEnemy::PostUpdate()
 
 bool GroundEnemy::CleanUp()
 {
-	app->entityManager->DestroyEntity(app->scene->groundenemy);
 	return true;
 }
 
 void GroundEnemy::MovementDirection(const iPoint& origin, const iPoint& destination) {
 
-	float res = destination.x - origin.x;
-	iPoint playerTile = app->map->WorldToMap(app->scene->player->position.x, app->scene->player->position.y);
-	if (app->pathfinding->IsWalkable(playerTile) != 0) {
+	float resX = destination.x - origin.x;
+	float resY = destination.y - origin.y;
+
+	if (app->pathfinding->IsWalkable(destination) != 0) {
 		//Check if player is to the right or the left of the origin
-		if (res < 0) {
-			velocity.x = -2;
+		if (resX < 0) {
+			velocity.x = -1;
 			/*fliped = SDL_FLIP_NONE;*/
 		}
-		if (res > 0) {
-			velocity.x = +2;
+		if (resX > 0) {
+			velocity.x = +1;
 			//fliped = SDL_FLIP_HORIZONTAL;
+		}
+		if (resY < 0 && jump == false && app->pathfinding->GetNextTileY(2) < 15 && app->pathfinding->GetNextTileY(2) > 13) {
+			leftID ? JumpR.Reset() : JumpL.Reset();
+			jump = true;
+			pbody->body->ApplyLinearImpulse({ 0, -1.2 }, pbody->body->GetWorldCenter(), true);
+		}
+		/*ENEMY JUMP FOR 4 TILES HEIGHT, 15 iS The Lowest Platform Tile Height*/
+		if (resY < 0 && jump == false && app->pathfinding->GetNextTileY(2) < 14 && app->pathfinding->GetNextTileY(2) > 12) {
+			leftID ? JumpR.Reset() : JumpL.Reset();
+			jump = true;
+			pbody->body->ApplyLinearImpulse({ 0, -1.5 }, pbody->body->GetWorldCenter(), true);
 		}
 	}
 	else {
 		velocity.x = 0;
 	}
-
-
 }
+
+void GroundEnemy::Attack(const iPoint& origin, const iPoint& destination) {
+
+	float resX = destination.x - origin.x;
+
+	/*Attack Left*/
+	if (resX < -2 && resX > -7 && jump == false && ableAttack == true) {
+		ableAttack = false;
+		attackCooldown = 0;
+		pbody->body->ApplyLinearImpulse({ -25, 0 }, pbody->body->GetLocalCenter(), true); //Dash to Player
+	}
+
+	/*Attack Right*/
+	if (resX > 2 && resX < 7 && jump == false && ableAttack == true) {
+		ableAttack = false;
+		attackCooldown = 0;
+		pbody->body->ApplyLinearImpulse({ 25, 0 }, pbody->body->GetLocalCenter(), true); //Dash to Player
+	}
+}
+
+
 
 void GroundEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 {
@@ -296,11 +266,12 @@ void GroundEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 		break;
 	case ColliderType::GROUND:
 		LOG("Collision GROUND");
-		isGrounded = true;
+		onGround = true;
 		break;
 	case ColliderType::PLATFORM:
 		LOG("Collision PLATFORM");
-		isGrounded = true;
+		if (jump == true)
+			jump = false;
 		break;
 	case ColliderType::DEATH:
 		LOG("Collision DEATH");
@@ -331,6 +302,13 @@ void GroundEnemy::DebugKeys()
 	// F10: God Mode (fly around, cannot be killed, etc)
 	if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) {
 	}
+}
+
+void GroundEnemy::ResetGroundEnemy() {
+
+	pbody->body->SetSleepingAllowed(false);
+
+
 }
 
 void GroundEnemy::LoadAnimations()
@@ -396,10 +374,4 @@ void GroundEnemy::LoadAnimations()
 	JumpR.PushBack({ 245, 430, 80, 86 });
 	JumpR.speed = 0.5f;
 	JumpR.loop = false;
-}
-
-void GroundEnemy::ResetGroundEnemy() {
-
-	pbody->body->SetSleepingAllowed(false);
-
 }
