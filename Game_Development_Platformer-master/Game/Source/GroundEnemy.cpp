@@ -253,7 +253,6 @@ void GroundEnemy::Attack(const iPoint& origin, const iPoint& destination) {
 }
 
 
-
 void GroundEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 {
 	switch (physB->cType)
