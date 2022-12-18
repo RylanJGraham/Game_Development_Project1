@@ -123,6 +123,8 @@ public:
 	pugi::xml_document configFile;
 	pugi::xml_node configNode;
 
+	int fps = 60;
+
 private:
 
 	int argc;

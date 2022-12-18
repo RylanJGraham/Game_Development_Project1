@@ -7,12 +7,21 @@
 	<:anonymous />
 	<scene />
 	<TitleScreen />
-	<scene />
+	<scene>
+		<playerPosition x="9.50035763" y="17.4325008" />
+		<playerLives playerLives="3" />
+		<airenemyPosition x="14.6354055" y="13.2403202" />
+		<groundenemyPosition x="11.5229568" y="18.5262184" />
+		<airenemyLives airenemyLives="2" />
+		<groundenemyLives airenemyLives="3" />
+	</scene>
+	<Fonts_Module />
+	<UI_Module />
 	<scene />
 	<entitymanager />
 	<map />
 	<:anonymous />
 	<renderer>
-		<camera x="-102" y="-498" />
+		<camera x="-387" y="-498" />
 	</renderer>
 </save_state>

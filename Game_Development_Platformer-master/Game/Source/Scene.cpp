@@ -127,7 +127,7 @@ bool Scene::Update(float dt)
 #pragma region DEBUG_KEYS
 
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
-		player->SetPos(200, 511);
+		app->fade->FadeBlack((Module*)app->scene, (Module*)app->scene, 60);
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
@@ -135,7 +135,7 @@ bool Scene::Update(float dt)
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) {
-		player->SetPos(112, 511);
+		app->fade->FadeBlack((Module*)app->scene, (Module*)app->scene, 60);
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) {
@@ -165,9 +165,14 @@ bool Scene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN) {
 		app->physics->debug = !app->physics->debug;
 	}
-
-	if (!groundenemy->alive) {
-
+	if (app->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_I) == KEY_DOWN) {
+		//FPS control
+		if (app->fps == 60) {
+			app->fps = 30;
+		}
+		else if (app->fps == 30) {
+			app->fps = 60;
+		}
 	}
 
 #pragma endregion DEBUG_KEYS
@@ -225,6 +230,7 @@ bool Scene::CleanUp()
 
 	app->entityManager->Disable();
 	app->physics->Disable();
+	app->map->Disable();
 
 	return true;
 }
@@ -245,13 +251,8 @@ bool Scene::LoadState(pugi::xml_node& data)
 	b2Vec2 playerPos = { data.child("playerPosition").attribute("x").as_float(), data.child("playerPosition").attribute("y").as_float() };
 	app->scene->player->pbody->body->SetTransform(playerPos, 0);
 
-	// Load previous saved cameraFix & cameraFix2 parameters
-	//app->scene->cameraFix = data.child("cameraIsFix").attribute("value").as_bool();
-	//app->scene->cameraFix2 = data.child("cameraIsFix2").attribute("value").as_bool();
-
 	//Load previous saved player number of lives
 	app->scene->player->lives = data.child("playerLives").attribute("playerLives").as_int();
-
 
 	// Load previous saved slime position
 	b2Vec2 groundenemyPos = { data.child("groundenemyPosition").attribute("x").as_float(), data.child("groundenemyPosition").attribute("y").as_float() };
@@ -275,14 +276,6 @@ bool Scene::SaveState(pugi::xml_node& data)
 	pugi::xml_node playerPos = data.append_child("playerPosition");
 	playerPos.append_attribute("x") = app->scene->player->pbody->body->GetTransform().p.x;
 	playerPos.append_attribute("y") = app->scene->player->pbody->body->GetTransform().p.y;
-
-	// Save cameraFix parameter
-	//pugi::xml_node cameraIsFix = data.append_child("cameraIsFix");
-	//cameraIsFix.append_attribute("value") = app->scene->cameraFix;
-
-	//// Save cameraFix2 parameter
-	//pugi::xml_node cameraIsFix2 = data.append_child("cameraIsFix2");
-	//cameraIsFix2.append_attribute("value") = app->scene->cameraFix2;
 
 	// Save current player number of lives
 	pugi::xml_node playerLives = data.append_child("playerLives");
