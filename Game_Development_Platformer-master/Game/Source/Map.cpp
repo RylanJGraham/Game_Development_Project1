@@ -59,12 +59,12 @@ bool Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
                 int tileId = layer->Get(x, y);
                 TileSet* tileset = (tileId > 0) ? GetTilesetFromTileId(tileId) : NULL;
 
-                LOG("Tilset gid: %d", tileset->firstgid);
+             /*   LOG("Tilset gid: %d", tileset->firstgid);*/
 
                 if (tileset != NULL)
                 {
                     //According to the mapType use the ID of the tile to set the walkability value
-                    if (mapData.type == MapTypes::MAPTYPE_ORTHOGONAL && tileId == 696) map[i] = 1;
+                    if (mapData.type == MapTypes::MAPTYPE_ORTHOGONAL && tileId == 6746) map[i] = 1;
                     else map[i] = 0;
 
                     //map[i] = (tileId - tileset->firstgid) > 0 ? 0 : 1;
@@ -631,40 +631,6 @@ bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
     return ret;
 }
 
-// L06: DONE 6: Load a group of properties from a node and fill a list with it
-bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
-{
-    bool ret = false;
-
-    for (pugi::xml_node propertieNode = node.child("properties").child("property"); propertieNode; propertieNode = propertieNode.next_sibling("property"))
-    {
-        Properties::Property* p = new Properties::Property();
-        p->name = propertieNode.attribute("name").as_string();
-        p->value = propertieNode.attribute("value").as_bool(); // (!!) I'm assuming that all values are bool !!
-
-        properties.list.Add(p);
-    }
-
-    return ret;
-}
-
-Properties::Property* Properties::GetProperty(const char* name)
-{
-    ListItem<Property*>* item = list.start;
-    Property* p = NULL;
-
-    while (item)
-    {
-        if (item->data->name == name) {
-            p = item->data;
-            break;
-        }
-        item = item->next;
-    }
-
-    return p;
-}
-
 bool Map::CreateColliders()
 {
     bool ret = true;
@@ -686,13 +652,13 @@ bool Map::CreateColliders()
                     if (mapLayerItem->data->Get(x, y) != 0)
                     {
                         iPoint pos = MapToWorld(x, y);
-                        PhysBody* c1 = app->physics->CreateRectangle(pos.x + halfTileHeight, pos.y + halfTileWidth, mapData.tileWidth, mapData.tileHeight, STATIC);
+                        PhysBody* c1 = app->physics->CreateRectangle(pos.x + halfTileHeight, pos.y + halfTileWidth, mapData.tileWidth, mapData.tileHeight, STATIC,ColliderType::UNKNOWN);
 
                         switch (mapLayerItem->data->Get(x, y))
                         { 
-                        case 6739:c1->ctype = ColliderType::GROUND; break;
-                        case 6741: c1->ctype = ColliderType::WALL; break;
-                        case 6744: c1->ctype = ColliderType::DEATH; break;
+                        case 6739:c1->cType = ColliderType::GROUND; break;
+                        case 6741: c1->cType = ColliderType::WALL; break;
+                        case 6744: c1->cType = ColliderType::DEATH; break;
                         default: break;
                         }
                     }                  
@@ -718,10 +684,10 @@ bool Map::CreateColliders()
 
                         }
 
-                        PhysBody* c1 = app->physics->CreateChain(0, 0, points, 6, STATIC);
+                        PhysBody* c1 = app->physics->CreateChain(0, 0, points, 6, STATIC,ColliderType::UNKNOWN);
 
                         if (mapLayerItem->data->Get(x, y) == 3 || mapLayerItem->data->Get(x, y) == 4 || mapLayerItem->data->Get(x, y) == 5) {
-                            c1->ctype = ColliderType::PLATFORM;
+                            c1->cType = ColliderType::PLATFORM;
                         }
 
                     }

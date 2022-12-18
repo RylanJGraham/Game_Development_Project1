@@ -364,10 +364,3 @@ void AirEnemy::LoadAnimations()
 	Movement.speed = 0.5f;
 	Movement.loop = true;
 }
-
-void AirEnemy::ResetBat() {
-
-	pbody->body->SetSleepingAllowed(false);
-
-
-}

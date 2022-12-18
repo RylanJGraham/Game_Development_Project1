@@ -136,12 +136,12 @@ private:
 
 	// L13: TODO 4: Calculate some timing measures
 	// required variables are provided:
-	Timer timer;
-	PerfTimer ptimer;
+	//Timer timer;
+	//PerfTimer ptimer;
 
-	Timer startupTime;
-	Timer frameTime;
-	Timer lastSecFrameTime;
+	//Timer startupTime;
+	//Timer frameTime;
+	//Timer lastSecFrameTime;
 
 	uint64 frameCount = 0;
 	uint32 framesPerSecond = 0;

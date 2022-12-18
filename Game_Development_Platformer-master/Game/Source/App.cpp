@@ -31,13 +31,13 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	tex = new Textures(true);
 	audio = new Audio(true);
 	//L07 DONE 2: Add Physics module
-	physics = new Physics(true);
+	physics = new Physics();
 	entityManager = new EntityManager(false);
 	map = new Map(true);
 	fade = new FadeToBlack(true);
 	logo = new Logo(true);
 	titleScreen = new Title(false);
-	scene = new Scene(false);
+	scene = new Scene();
 	endScreen = new Ending(false);
 	pathfinding = new PathFinding(true);
 
@@ -115,9 +115,9 @@ bool App::Awake()
 bool App::Start()
 {
 
-	timer.Start();
-	startupTime.Start();
-	lastSecFrameTime.Start();
+	//timer.Start();
+	//startupTime.Start();
+	//lastSecFrameTime.Start();
 
 	bool ret = true;
 	ListItem<Module*>* item;

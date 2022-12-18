@@ -15,7 +15,7 @@
 #include "Defs.h"
 #include "Log.h"
 
-Scene::Scene(bool startEnabled) : Module(startEnabled)
+Scene::Scene() : Module()
 {
 	name.Create("scene");
 }
