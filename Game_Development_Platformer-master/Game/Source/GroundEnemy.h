@@ -49,6 +49,7 @@ public:
 	uint SFX = 0;
 	uint attackSFX = 0;
 	uint deathSFX = 0;
+	uint damagedSFX = 0;
 
 	bool onGround = false;
 	bool alive = true;

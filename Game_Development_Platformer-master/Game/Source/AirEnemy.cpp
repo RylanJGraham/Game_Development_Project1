@@ -39,11 +39,11 @@ bool AirEnemy::Start()
 
 	texture = app->tex->Load(texturePath);
 
-	position.x = parameters.attribute("x").as_int();
-	position.y = parameters.attribute("y").as_int();
+	startPos.x = parameters.attribute("x").as_int();
+	startPos.y = parameters.attribute("y").as_int();
 
-	origin.x = position.x;
-	origin.y = position.y;
+	origin.x = startPos.x;
+	origin.y = startPos.y;
 
 	currentAnim = &Idle;
 
@@ -57,7 +57,7 @@ bool AirEnemy::Start()
 	//id = app->tex->LoadSprite(texturePath, 15, 8);
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
-	pbody = app->physics->CreateCircle(position.x - 5, position.y + 10, 15, bodyType::DYNAMIC,ColliderType::ENEMY);
+	pbody = app->physics->CreateCircle(startPos.x - 5, startPos.y + 10, 15, bodyType::DYNAMIC,ColliderType::ENEMY);
 	//hitbox = app->physics->CreateRectangleSensor(METERS_TO_PIXELS(pbody->body->GetTransform().p.x), METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 15, 5, 2, bodyType::STATIC, ColliderType::SLIME_HITBOX);
 
 	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
@@ -295,8 +295,6 @@ void AirEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 		break;
 	case ColliderType::PLAYER:
 		LOG("Collision PLAYER");
-		app->audio->PlayFx(damagedSFX);
-		health--;
 	case ColliderType::DEATH:
 		LOG("Collision DEATH");
 		alive = false;
@@ -306,6 +304,7 @@ void AirEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 		break;
 	case ColliderType::PLAYERATTACK:
 		LOG("Collision ATTACK");
+		app->audio->PlayFx(damagedSFX);
 		ishurt = true;
 		health--;
 		if (health <= 0) {

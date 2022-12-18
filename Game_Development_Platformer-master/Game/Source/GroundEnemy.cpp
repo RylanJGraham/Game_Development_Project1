@@ -68,7 +68,7 @@ bool GroundEnemy::Start()
 
 	//initialize audio effect - !! Path is hardcoded, should be loaded from config.xml
 	//jumpSFX = app->audio->LoadFx("Assets/Audio/Fx/JumpKnight.wav");
-
+	damagedSFX = app->audio->LoadFx("Assets/Audio/Fx/AirEnemyDamage.wav");
 	refreshPathTime = 0;
 
 	jump = false;
@@ -283,6 +283,7 @@ void GroundEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 	case ColliderType::PLAYERATTACK:
 		LOG("Collision ATTACK");
 		isHurt = true;
+		app->audio->PlayFx(damagedSFX);
 		hp--;
 		if (hp <= 0) {
 			alive = false;
