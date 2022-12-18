@@ -57,7 +57,7 @@ bool AirEnemy::Start()
 	//id = app->tex->LoadSprite(texturePath, 15, 8);
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
-	pbody = app->physics->CreateCircle(startPos.x - 5, startPos.y + 10, 15, bodyType::DYNAMIC,ColliderType::ENEMY);
+	pbody = app->physics->CreateCircle(startPos.x - 5, startPos.y + 10, 5, bodyType::DYNAMIC,ColliderType::ENEMY);
 	//hitbox = app->physics->CreateRectangleSensor(METERS_TO_PIXELS(pbody->body->GetTransform().p.x), METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 15, 5, 2, bodyType::STATIC, ColliderType::SLIME_HITBOX);
 
 	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
@@ -150,7 +150,7 @@ bool AirEnemy::Update()
 
 		// L12: Debug pathfinding
 		iPoint originScreen = app->map->MapToWorld(origin.x, origin.y);
-		app->render->DrawTexture(app->scene->originTex, originScreen.x - 16, originScreen.y - 19);
+		app->render->DrawTexture(app->scene->originTex, originScreen.x + 4, originScreen.y + 5);
 	}
 
 	////movement test keys

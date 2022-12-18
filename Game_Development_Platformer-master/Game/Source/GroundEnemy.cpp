@@ -59,7 +59,7 @@ bool GroundEnemy::Start()
 	//id = app->tex->LoadSprite(texturePath, 15, 8);
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
-	pbody = app->physics->CreateCircle(startPos.x, startPos.y, 15, bodyType::DYNAMIC, ColliderType::ENEMY);
+	pbody = app->physics->CreateCircle(startPos.x, startPos.y, 6, bodyType::DYNAMIC, ColliderType::ENEMY);
 
 	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
 	pbody->listener = this;
@@ -184,7 +184,7 @@ bool GroundEnemy::Update()
 
 		// L12: Debug pathfinding
 		iPoint originScreen = app->map->MapToWorld(origin.x, origin.y);
-		app->render->DrawTexture(app->scene->originTex, originScreen.x - 16, originScreen.y - 19);
+		app->render->DrawTexture(app->scene->originTex, originScreen.x + 8, originScreen.y + 5);
 	}
 
 	SDL_Rect rect2 = currentAnim->GetCurrentFrame();
