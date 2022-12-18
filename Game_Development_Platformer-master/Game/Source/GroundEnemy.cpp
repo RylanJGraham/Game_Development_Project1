@@ -59,7 +59,7 @@ bool GroundEnemy::Start()
 	//id = app->tex->LoadSprite(texturePath, 15, 8);
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
-	pbody = app->physics->CreateCircle(startPos.x, startPos.y, 6, bodyType::DYNAMIC, ColliderType::ENEMY);
+	pbody = app->physics->CreateCircle(startPos.x, startPos.y, 10, bodyType::DYNAMIC, ColliderType::ENEMY);
 
 	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
 	pbody->listener = this;
@@ -106,9 +106,6 @@ bool GroundEnemy::Update()
 			originSelected = false;
 			MovementDirection(origin, playerTile);
 			Attack(origin, playerTile);
-			/*Attack(origin, playerTile);*/
-			/*if (refreshPathTime >= 150)
-				originSelected = false;*/
 		}
 		else
 		{
@@ -283,7 +280,6 @@ void GroundEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 	case ColliderType::PLAYERATTACK:
 		LOG("Collision ATTACK");
 		isHurt = true;
-		app->audio->PlayFx(damagedSFX);
 		hp--;
 		if (hp <= 0) {
 			alive = false;

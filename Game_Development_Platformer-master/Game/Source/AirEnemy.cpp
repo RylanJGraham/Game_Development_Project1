@@ -230,10 +230,6 @@ bool AirEnemy::Update()
 	//	aebody->body->ApplyForce(b2Vec2(0, -force), aebody->body->GetWorldCenter(), true);
 	//}
 
-	//Update player position in pixels
-	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x);
-	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y);
-
 	//Animations
 	/*if (idle) { currentAnim = &Idle; }*/
 	/*if (!isGrounded) { currentAnim = leftID ? &JumpR : &JumpL; }*/
@@ -265,11 +261,9 @@ void AirEnemy::MovementDirection(const iPoint& origin, const iPoint& destination
 		//Check if player is to the right or the left of the origin
 		if (res < 0) {
 			velocity.x = -2;
-			flipped = SDL_FLIP_NONE;
 		}
 		if (res > 0) {
 			velocity.x = +2;
-			flipped = SDL_FLIP_HORIZONTAL;
 		}
 	}
 	else {

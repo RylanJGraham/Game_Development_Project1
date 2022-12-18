@@ -186,12 +186,12 @@ bool Scene::Update(float dt)
 	if (app->physics->debug) {
 		app->ui->BlitPlayerXPos();
 		app->ui->BlitPlayerYPos();
-		app->ui->BlitBatLives();
+	/*	app->ui->BlitBatLives();
 		app->ui->BlitPigLives();
 		app->ui->BlitAverageFPS();
 		app->ui->BlitDT();
 		app->ui->BlitTimeSinceStart();
-		app->ui->BlitFrameCount();
+		app->ui->BlitFrameCount();*/
 	}
 
 
