@@ -127,7 +127,7 @@ bool Scene::Update(float dt)
 #pragma region DEBUG_KEYS
 
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
-		player->SetPos(112, 511);
+		player->SetPos(200, 511);
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
