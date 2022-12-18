@@ -58,10 +58,10 @@ bool Scene::Start()
 	player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
 	player->parameters = app->configNode.child("scene").child("player");
 
-	groundenemy = (GroundEnemy*)app->entityManager->CreateEntity(EntityType::ENEMY);
+	groundenemy = (GroundEnemy*)app->entityManager->CreateEntity(EntityType::GROUNDENEMY);
 	groundenemy->parameters = app->configNode.child("scene").child("groundEnemy");
 
-	airenemy = (AirEnemy*)app->entityManager->CreateEntity(EntityType::ENEMY);
+	airenemy = (AirEnemy*)app->entityManager->CreateEntity(EntityType::AIRENEMY);
 	airenemy->parameters = app->configNode.child("scene").child("airEnemy");
 
 	app->physics->Enable();

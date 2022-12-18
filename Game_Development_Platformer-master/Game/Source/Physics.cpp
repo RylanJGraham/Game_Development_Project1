@@ -472,4 +472,4 @@ b2WeldJoint* Physics::CreateWeldJoint(PhysBody* A, b2Vec2 anchorA, PhysBody* B, 
 	weldJointDef.referenceAngle = 0;
 
 	return (b2WeldJoint*)world->CreateJoint(&weldJointDef);
-}
+} 
