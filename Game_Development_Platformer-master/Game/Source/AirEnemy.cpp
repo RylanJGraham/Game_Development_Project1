@@ -1,17 +1,20 @@
 #include "AirEnemy.h"
 #include "App.h"
+#include "FadeToBlack.h"
 #include "Textures.h"
 #include "Audio.h"
 #include "Input.h"
 #include "Render.h"
-#include "Window.h"
 #include "Scene.h"
 #include "Log.h"
 #include "Point.h"
-#include "Map.h"
-#include "PathFinding.h"
-#include "FadeToBlack.h"
+#include "Physics.h"
+#include "Ending.h"
+#include "Title.h"
+#include "Player.h"
 #include "EntityManager.h"
+#include "Map.h"
+#include "Pathfinding.h"
 
 AirEnemy::AirEnemy() : Entity(EntityType::AIRENEMY)
 {
@@ -29,18 +32,10 @@ bool AirEnemy::Awake() {
 	//texturePath = "Assets/Textures/player/idle1.png";
 
 	//L02: DONE 5: Get Player parameters from XML
-	startPos.x = parameters.attribute("x").as_int();
-	startPos.y = parameters.attribute("y").as_int();
-
-	origin.x = startPos.x;
-	origin.y = startPos.y;
+	position.x = parameters.attribute("x").as_int();
+	position.y = parameters.attribute("y").as_int();
 
 	texturePath = parameters.attribute("texturepath").as_string();
-
-	width = 32;
-	height = 32;
-
-	LoadAnimations();
 
 	return true;
 }
@@ -49,7 +44,6 @@ bool AirEnemy::Start()
 {
 	texture = app->tex->Load(texturePath);
 
-	currentAnim = &Idle;
 	alive = true;
 	health = 2;
 	ishurt = false;
@@ -65,6 +59,8 @@ bool AirEnemy::Start()
 
 	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
 	pbody->listener = this;
+	pbody->cType = ColliderType::ENEMY;
+
 
 	//initialize audio effect - !! Path is hardcoded, should be loaded from config.xml
 	//jumpSFX = app->audio->LoadFx("Assets/Audio/Fx/JumpKnight.wav");
@@ -72,6 +68,7 @@ bool AirEnemy::Start()
 
 	refreshPathTime = 0;
 
+	LoadAnimations();
 
 	return true;
 }
@@ -88,10 +85,15 @@ void AirEnemy::SetPos(int x, int y) {
 
 bool AirEnemy::Update()
 {
+	b2Vec2 vel;
+	int speed = 5;
+
+	DebugKeys();
 
 	currentAnim = &Idle;
 
 	velocity = { 0, 0};
+	
 
 	iPoint playerTile = app->map->WorldToMap(app->scene->player->position.x + 32, app->scene->player->position.y);
 

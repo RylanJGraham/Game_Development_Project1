@@ -3,8 +3,9 @@
 
 #include "Entity.h"
 #include "Point.h"
-#include "SDL/include/SDL.h"
 #include "Animation.h"
+#include "Physics.h"
+#include "SDL/include/SDL.h"
 
 struct SDL_Texture;
 
@@ -17,38 +18,20 @@ public:
 
 	bool Awake();
 	bool Start();
+	bool PreUpdate();
 	bool Update();
 	bool PostUpdate();
 	bool CleanUp();
 
+	void MovementDirection(const iPoint& origin, const iPoint& destination);
+
 	void OnCollision(PhysBody* physA, PhysBody* physB);
 	void GroundEnemy::DebugKeys();
 	void LoadAnimations();
-	void SetPos(int x, int y);
+
+	void ResetGroundEnemy();
 
 public:
-
-private:
-
-	bool alive;
-	bool leftID;
-	bool isGrounded;
-	bool stairs;
-	bool isHurt;
-	int remainingJumpSteps;
-	uint hp;
-
-	//SFX
-	uint SFX = 0;
-	uint attackSFX = 0;
-	uint deathSFX = 0;
-
-	//Physics
-	PhysBody* gebody;
-
-	//Texture
-	SDL_Texture* texture;
-	const char* texturePath;
 
 	//Animation
 	Animation AttackL, AttackR;	// jump?
@@ -57,7 +40,43 @@ private:
 	Animation DeathL, DeathR;
 	Animation* currentAnim = nullptr;
 
-	friend class Scene;
+	//SFX
+	uint SFX = 0;
+	uint attackSFX = 0;
+	uint deathSFX = 0;
+
+	//Physics
+	PhysBody* pbody;
+
+	int hp = 3;
+
+	PhysBody* hitbox;
+	b2Vec2 hitboxPos;
+	bool isGrounded;
+	bool alive;
+
+private:
+
+	bool leftID;
+
+	bool stairs;
+	bool isHurt;
+	int remainingJumpSteps;
+
+	b2Vec2 velocity;
+	b2Vec2 startPos;
+
+
+	int width;
+	int height;
+
+	//Texture
+	SDL_Texture* texture;
+	const char* texturePath;
+
+	iPoint origin;
+	bool originSelected = false;
+	uint refreshPathTime;
 
 
 };

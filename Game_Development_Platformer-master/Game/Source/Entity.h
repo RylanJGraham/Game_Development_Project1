@@ -14,6 +14,7 @@ enum class EntityType
 	ITEM,
 	GROUNDENEMY,
 	AIRENEMY,
+	ENEMY,
 	UNKNOWN
 };
 
