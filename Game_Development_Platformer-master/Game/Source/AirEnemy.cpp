@@ -24,12 +24,6 @@ AirEnemy::~AirEnemy() {
 
 bool AirEnemy::Awake() {
 
-	//L02: DONE 1: Initialize Player parameters
-	//pos = position;
-	//texturePath = "Assets/Textures/player/idle1.png";
-
-	//L02: DONE 5: Get Player parameters from XML
-
 	return true;
 }
 
@@ -153,20 +147,6 @@ bool AirEnemy::Update()
 		app->render->DrawTexture(app->scene->originTex, originScreen.x + 4, originScreen.y + 5);
 	}
 
-	////movement test keys
-	//if (app->input->GetKey(SDL_SCANCODE_J) == KEY_REPEAT) {
-	//	vel.x = -speed;
-	//}
-	//if (app->input->GetKey(SDL_SCANCODE_L) == KEY_REPEAT) {
-	//	vel.x = speed;
-	//}
-	//if (app->input->GetKey(SDL_SCANCODE_I) == KEY_REPEAT) {
-	//	vel.y = -speed;
-	//}
-	//if (app->input->GetKey(SDL_SCANCODE_K) == KEY_REPEAT) {
-	//	vel.y = speed;
-	//}
-
 	if (alive != true)
 	{
 		currentAnim = &Death;
@@ -174,53 +154,23 @@ bool AirEnemy::Update()
 		//Destroy entity
 		app->entityManager->DestroyEntity(app->scene->airenemy);
 		app->physics->world->DestroyBody(pbody->body);
-		//app->physics->world->DestroyBody(hitbox->body);
-		//app->audio->PlayFx(powerUpSFX);
 		alive = true;
 	}
 
-	else
-	{
-		/*idle = true;*/
 
-		//Left
-		//if (app->input->GetKey(SDL_SCANCODE_L) == KEY_REPEAT) {
-		//	currentAnim = &Movement;
-		//	vel.x = -speed;
-		//	idle = false;
-		//	app->render->camera.x += 5;
-		//}
-		////Right
-		//else if (app->input->GetKey(SDL_SCANCODE_J) == KEY_REPEAT) {
-		//	currentAnim = &Movement;
-		//	vel.x = speed;
-		//	idle = false;
-		//	app->render->camera.x -= 5;
-		//}
-		//else
-		//	vel.x = 0;
-
-		//if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isGrounded && remainingJumpSteps == 0) {
-		//	currentAnim = leftID ? &JumpL : &JumpR;
-		//	remainingJumpSteps = 6;
-		//	idle = false;
-		//	isGrounded = false;
-		//	//app->audio->PlayFx(jumpSFX);
-
-		//}
-		if (ishurt) {
+	if (ishurt) {
 			currentAnim = &Damaged;
 			/*app->audio->PlayFx("")*/
-		}
-		else{
+	}
+	else{
 			currentAnim = &Attack;
-		}
-		if (Damaged.GetCurrentFrameint() == 1) {
+	}
+	if (Damaged.GetCurrentFrameint() == 1) {
 			Damaged.Reset();
 			ishurt = false;
-		}
-
 	}
+
+
 
 	////Apply Jump Force
 	//if (remainingJumpSteps > 0)

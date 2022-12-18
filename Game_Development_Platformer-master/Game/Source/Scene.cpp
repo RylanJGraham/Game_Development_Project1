@@ -58,10 +58,10 @@ bool Scene::Start()
 	player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
 	player->parameters = app->configNode.child("scene").child("player");
 
-	groundenemy = (GroundEnemy*)app->entityManager->CreateEntity(EntityType::GROUNDENEMY);
+	groundenemy = (GroundEnemy*)app->entityManager->CreateEntity(EntityType::ENEMY);
 	groundenemy->parameters = app->configNode.child("scene").child("groundEnemy");
 
-	airenemy = (AirEnemy*)app->entityManager->CreateEntity(EntityType::AIRENEMY);
+	airenemy = (AirEnemy*)app->entityManager->CreateEntity(EntityType::ENEMY);
 	airenemy->parameters = app->configNode.child("scene").child("airEnemy");
 
 	app->physics->Enable();
@@ -95,14 +95,6 @@ bool Scene::Start()
 	}
 
 	SString title("Game Name");
-
-	// L04: DONE 7: Set the window title with map/tileset info
-	/*SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
-		app->map->mapData.width,
-		app->map->mapData.height,
-		app->map->mapData.tileWidth,
-		app->map->mapData.tileHeight,
-		app->map->mapData.tilesets.Count());*/
 
 	app->win->SetTitle(title.GetString());
 
@@ -186,12 +178,6 @@ bool Scene::Update(float dt)
 	if (app->physics->debug) {
 		app->ui->BlitPlayerXPos();
 		app->ui->BlitPlayerYPos();
-	/*	app->ui->BlitBatLives();
-		app->ui->BlitPigLives();
-		app->ui->BlitAverageFPS();
-		app->ui->BlitDT();
-		app->ui->BlitTimeSinceStart();
-		app->ui->BlitFrameCount();*/
 	}
 
 
@@ -245,25 +231,17 @@ bool Scene::LoadState(pugi::xml_node& data)
 	b2Vec2 playerPos = { data.child("playerPosition").attribute("x").as_float(), data.child("playerPosition").attribute("y").as_float() };
 	app->scene->player->pbody->body->SetTransform(playerPos, 0);
 
-	// Load previous saved cameraFix & cameraFix2 parameters
-	//app->scene->cameraFix = data.child("cameraIsFix").attribute("value").as_bool();
-	//app->scene->cameraFix2 = data.child("cameraIsFix2").attribute("value").as_bool();
-
 	//Load previous saved player number of lives
 	app->scene->player->lives = data.child("playerLives").attribute("playerLives").as_int();
 
-
-	// Load previous saved slime position
 	b2Vec2 groundenemyPos = { data.child("groundenemyPosition").attribute("x").as_float(), data.child("groundenemyPosition").attribute("y").as_float() };
 	app->scene->groundenemy->pbody->body->SetTransform(groundenemyPos, 0);
 
-	//Load previous saved slime number of lives
 	app->scene->groundenemy->hp = data.child("groundenemyLives").attribute("groundenemyLives").as_int();
 
 	b2Vec2 airenemyPos = { data.child("airenemyPosition").attribute("x").as_float(), data.child("airenemyPosition").attribute("y").as_float() };
 	app->scene->airenemy->pbody->body->SetTransform(groundenemyPos, 0);
 
-	//Load previous saved slime number of lives
 	app->scene->airenemy->health = data.child("airenemyLives").attribute("airenemyLives").as_int();
 
 	return true;
@@ -276,30 +254,19 @@ bool Scene::SaveState(pugi::xml_node& data)
 	playerPos.append_attribute("x") = app->scene->player->pbody->body->GetTransform().p.x;
 	playerPos.append_attribute("y") = app->scene->player->pbody->body->GetTransform().p.y;
 
-	// Save cameraFix parameter
-	//pugi::xml_node cameraIsFix = data.append_child("cameraIsFix");
-	//cameraIsFix.append_attribute("value") = app->scene->cameraFix;
-
-	//// Save cameraFix2 parameter
-	//pugi::xml_node cameraIsFix2 = data.append_child("cameraIsFix2");
-	//cameraIsFix2.append_attribute("value") = app->scene->cameraFix2;
-
 	// Save current player number of lives
 	pugi::xml_node playerLives = data.append_child("playerLives");
 	playerLives.append_attribute("playerLives") = app->scene->player->lives;
-
 
 	// Save current airenemy position
 	pugi::xml_node airenemyPos = data.append_child("airenemyPosition");
 	airenemyPos.append_attribute("x") = app->scene->airenemy->pbody->body->GetTransform().p.x;
 	airenemyPos.append_attribute("y") = app->scene->airenemy->pbody->body->GetTransform().p.y;
 
-
 	// Save current groundenemy position
 	pugi::xml_node groundenemyPos = data.append_child("groundenemyPosition");
 	groundenemyPos.append_attribute("x") = app->scene->groundenemy->pbody->body->GetTransform().p.x;
 	groundenemyPos.append_attribute("y") = app->scene->groundenemy->pbody->body->GetTransform().p.y;
-
 
 	// Save current air number of lives
 	pugi::xml_node airenemyLives = data.append_child("airenemyLives");
