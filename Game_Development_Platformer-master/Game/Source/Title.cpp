@@ -51,6 +51,10 @@ bool Title::Start()
 	// Music
 	app->audio->PlayMusic("Assets/Audio/Music/title_screen.ogg");
 
+	if (app->map) {
+		app->map->Disable();
+	}
+
 	// Load SFXs
 	/*startSFX = app->audio->LoadFx("Assets/Audio/Fx/start_game.wav");*/
 
