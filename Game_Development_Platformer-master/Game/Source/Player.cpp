@@ -83,9 +83,7 @@ void Player::SetPos(int x, int y) {
 
 bool Player::Update()
 {
-	currentAnim = &IdleR;
 
-	b2Vec2 vel;
 	int speed = 5;
 
 	DebugKeys();
@@ -111,7 +109,7 @@ bool Player::Update()
 	{
 		velocity = { 0, -GRAVITY_Y };
 		pbody->body->SetGravityScale(1);
-		vel = pbody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.0166);
+		velocity = pbody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.0166);
 	}
 
 	if (!alive)
@@ -153,7 +151,7 @@ bool Player::Update()
 		}
 
 		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isGrounded && attackCooldown == attackCooldownMax) {
-			vel.x = 0;
+			velocity.x = 0;
 			isAttacking = true;
 			currentAnim = leftID ? &AttackR : &AttackL;
 			attackCooldown = 0;
