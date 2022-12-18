@@ -24,12 +24,6 @@ AirEnemy::~AirEnemy() {
 
 bool AirEnemy::Awake() {
 
-	//L02: DONE 1: Initialize Player parameters
-	//pos = position;
-	//texturePath = "Assets/Textures/player/idle1.png";
-
-	//L02: DONE 5: Get Player parameters from XML
-
 	return true;
 }
 
@@ -39,11 +33,11 @@ bool AirEnemy::Start()
 
 	texture = app->tex->Load(texturePath);
 
-	position.x = parameters.attribute("x").as_int();
-	position.y = parameters.attribute("y").as_int();
+	startPos.x = parameters.attribute("x").as_int();
+	startPos.y = parameters.attribute("y").as_int();
 
-	origin.x = position.x;
-	origin.y = position.y;
+	origin.x = startPos.x;
+	origin.y = startPos.y;
 
 	currentAnim = &Idle;
 
@@ -57,7 +51,7 @@ bool AirEnemy::Start()
 	//id = app->tex->LoadSprite(texturePath, 15, 8);
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
-	pbody = app->physics->CreateCircle(position.x - 5, position.y + 10, 15, bodyType::DYNAMIC,ColliderType::ENEMY);
+	pbody = app->physics->CreateCircle(startPos.x - 5, startPos.y + 10, 5, bodyType::DYNAMIC,ColliderType::ENEMY);
 	//hitbox = app->physics->CreateRectangleSensor(METERS_TO_PIXELS(pbody->body->GetTransform().p.x), METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 15, 5, 2, bodyType::STATIC, ColliderType::SLIME_HITBOX);
 
 	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
@@ -150,22 +144,8 @@ bool AirEnemy::Update()
 
 		// L12: Debug pathfinding
 		iPoint originScreen = app->map->MapToWorld(origin.x, origin.y);
-		app->render->DrawTexture(app->scene->originTex, originScreen.x - 16, originScreen.y - 19);
+		app->render->DrawTexture(app->scene->originTex, originScreen.x + 4, originScreen.y + 5);
 	}
-
-	////movement test keys
-	//if (app->input->GetKey(SDL_SCANCODE_J) == KEY_REPEAT) {
-	//	vel.x = -speed;
-	//}
-	//if (app->input->GetKey(SDL_SCANCODE_L) == KEY_REPEAT) {
-	//	vel.x = speed;
-	//}
-	//if (app->input->GetKey(SDL_SCANCODE_I) == KEY_REPEAT) {
-	//	vel.y = -speed;
-	//}
-	//if (app->input->GetKey(SDL_SCANCODE_K) == KEY_REPEAT) {
-	//	vel.y = speed;
-	//}
 
 	if (alive != true)
 	{
@@ -174,53 +154,23 @@ bool AirEnemy::Update()
 		//Destroy entity
 		app->entityManager->DestroyEntity(app->scene->airenemy);
 		app->physics->world->DestroyBody(pbody->body);
-		//app->physics->world->DestroyBody(hitbox->body);
-		//app->audio->PlayFx(powerUpSFX);
 		alive = true;
 	}
 
-	else
-	{
-		/*idle = true;*/
 
-		//Left
-		//if (app->input->GetKey(SDL_SCANCODE_L) == KEY_REPEAT) {
-		//	currentAnim = &Movement;
-		//	vel.x = -speed;
-		//	idle = false;
-		//	app->render->camera.x += 5;
-		//}
-		////Right
-		//else if (app->input->GetKey(SDL_SCANCODE_J) == KEY_REPEAT) {
-		//	currentAnim = &Movement;
-		//	vel.x = speed;
-		//	idle = false;
-		//	app->render->camera.x -= 5;
-		//}
-		//else
-		//	vel.x = 0;
-
-		//if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isGrounded && remainingJumpSteps == 0) {
-		//	currentAnim = leftID ? &JumpL : &JumpR;
-		//	remainingJumpSteps = 6;
-		//	idle = false;
-		//	isGrounded = false;
-		//	//app->audio->PlayFx(jumpSFX);
-
-		//}
-		if (ishurt) {
+	if (ishurt) {
 			currentAnim = &Damaged;
 			/*app->audio->PlayFx("")*/
-		}
-		else{
+	}
+	else{
 			currentAnim = &Attack;
-		}
-		if (Damaged.GetCurrentFrameint() == 1) {
+	}
+	if (Damaged.GetCurrentFrameint() == 1) {
 			Damaged.Reset();
 			ishurt = false;
-		}
-
 	}
+
+
 
 	////Apply Jump Force
 	//if (remainingJumpSteps > 0)
@@ -229,10 +179,6 @@ bool AirEnemy::Update()
 	//	force /= 6.0;
 	//	aebody->body->ApplyForce(b2Vec2(0, -force), aebody->body->GetWorldCenter(), true);
 	//}
-
-	//Update player position in pixels
-	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x);
-	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y);
 
 	//Animations
 	/*if (idle) { currentAnim = &Idle; }*/
@@ -265,11 +211,9 @@ void AirEnemy::MovementDirection(const iPoint& origin, const iPoint& destination
 		//Check if player is to the right or the left of the origin
 		if (res < 0) {
 			velocity.x = -2;
-			flipped = SDL_FLIP_NONE;
 		}
 		if (res > 0) {
 			velocity.x = +2;
-			flipped = SDL_FLIP_HORIZONTAL;
 		}
 	}
 	else {
@@ -295,8 +239,6 @@ void AirEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 		break;
 	case ColliderType::PLAYER:
 		LOG("Collision PLAYER");
-		app->audio->PlayFx(damagedSFX);
-		health--;
 	case ColliderType::DEATH:
 		LOG("Collision DEATH");
 		alive = false;
@@ -306,6 +248,7 @@ void AirEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 		break;
 	case ColliderType::PLAYERATTACK:
 		LOG("Collision ATTACK");
+		app->audio->PlayFx(damagedSFX);
 		ishurt = true;
 		health--;
 		if (health <= 0) {

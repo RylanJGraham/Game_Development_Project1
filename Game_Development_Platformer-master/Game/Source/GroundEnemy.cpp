@@ -59,7 +59,7 @@ bool GroundEnemy::Start()
 	//id = app->tex->LoadSprite(texturePath, 15, 8);
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
-	pbody = app->physics->CreateCircle(startPos.x, startPos.y, 15, bodyType::DYNAMIC, ColliderType::ENEMY);
+	pbody = app->physics->CreateCircle(startPos.x, startPos.y, 10, bodyType::DYNAMIC, ColliderType::ENEMY);
 
 	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
 	pbody->listener = this;
@@ -68,7 +68,7 @@ bool GroundEnemy::Start()
 
 	//initialize audio effect - !! Path is hardcoded, should be loaded from config.xml
 	//jumpSFX = app->audio->LoadFx("Assets/Audio/Fx/JumpKnight.wav");
-
+	damagedSFX = app->audio->LoadFx("Assets/Audio/Fx/AirEnemyDamage.wav");
 	refreshPathTime = 0;
 
 	jump = false;
@@ -106,9 +106,6 @@ bool GroundEnemy::Update()
 			originSelected = false;
 			MovementDirection(origin, playerTile);
 			Attack(origin, playerTile);
-			/*Attack(origin, playerTile);*/
-			/*if (refreshPathTime >= 150)
-				originSelected = false;*/
 		}
 		else
 		{
@@ -184,7 +181,7 @@ bool GroundEnemy::Update()
 
 		// L12: Debug pathfinding
 		iPoint originScreen = app->map->MapToWorld(origin.x, origin.y);
-		app->render->DrawTexture(app->scene->originTex, originScreen.x - 16, originScreen.y - 19);
+		app->render->DrawTexture(app->scene->originTex, originScreen.x + 8, originScreen.y + 5);
 	}
 
 	SDL_Rect rect2 = currentAnim->GetCurrentFrame();
@@ -254,7 +251,6 @@ void GroundEnemy::Attack(const iPoint& origin, const iPoint& destination) {
 		pbody->body->ApplyLinearImpulse({ 25, 0 }, pbody->body->GetLocalCenter(), true); //Dash to Player
 	}
 }
-
 
 
 void GroundEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
