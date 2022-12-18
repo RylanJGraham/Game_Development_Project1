@@ -95,6 +95,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Fonts.cpp" />
     <ClCompile Include="Source\AirEnemy.cpp" />
     <ClCompile Include="Source\Ending.cpp" />
     <ClCompile Include="Source\GroundEnemy.cpp" />
@@ -115,7 +116,9 @@
     <ClCompile Include="Source\Textures.cpp" />
     <ClCompile Include="Source\Title.cpp" />
     <ClCompile Include="Source\Window.cpp" />
+    <ClCompile Include="UI.cpp" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Fonts.h" />
     <ClInclude Include="PQueue.h" />
     <ClInclude Include="Queue.h" />
     <ClInclude Include="Source\AirEnemy.h" />
@@ -150,6 +153,7 @@
     <ClInclude Include="Source\External\PugiXml\src\pugiconfig.hpp" />
     <ClInclude Include="Source\External\PugiXml\src\pugixml.hpp" />
     <ClCompile Include="Source\External\PugiXml\src\pugixml.cpp" />
+    <ClInclude Include="UI.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Output\config.xml" />

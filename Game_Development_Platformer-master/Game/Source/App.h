@@ -102,6 +102,8 @@ public:
 	Textures* tex;
 	Audio* audio;
 	Scene* scene;
+	Fonts* fonts;
+	UI* ui;
 	EntityManager* entityManager;
 	Map* map;
 	//L07 DONE 2: Add Physics module

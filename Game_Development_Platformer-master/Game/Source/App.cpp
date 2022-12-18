@@ -13,6 +13,8 @@
 #include "Title.h"
 #include "Ending.h"
 #include "Pathfinding.h"
+#include "UI.h"
+#include "Fonts.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -38,6 +40,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	logo = new Logo(true);
 	titleScreen = new Title(false);
 	scene = new Scene();
+	fonts = new Fonts();
+	ui = new UI();
 	endScreen = new Ending(false);
 	pathfinding = new PathFinding(true);
 
@@ -52,6 +56,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(logo);
 	AddModule(titleScreen);
 	AddModule(scene);
+	AddModule(fonts);
+	AddModule(ui);
 	AddModule(endScreen);
 	AddModule(entityManager);
 	AddModule(map);

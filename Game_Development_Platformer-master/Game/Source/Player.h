@@ -36,6 +36,7 @@ public:
 
 	bool isGrounded;
 
+	int Items = 0;
 
 	//Physics
 	PhysBody* pbody;

@@ -67,6 +67,12 @@
     <ClCompile Include="Source\AirEnemy.cpp">
       <Filter>Modules\Gameplay</Filter>
     </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Fonts.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -164,6 +170,12 @@
       <Filter>Modules\Core</Filter>
     </ClInclude>
     <ClInclude Include="Entity.h">
+      <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Fonts.h">
       <Filter>Modules\Core</Filter>
     </ClInclude>
   </ItemGroup>

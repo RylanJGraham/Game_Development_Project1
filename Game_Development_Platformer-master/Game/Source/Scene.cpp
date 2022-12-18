@@ -11,6 +11,7 @@
 #include "PathFinding.h"
 #include "FadeToBlack.h"
 #include "Ending.h"
+#include "UI.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -174,6 +175,22 @@ bool Scene::Update(float dt)
 
 	// Draw map
 	app->map->Draw();
+
+	//Blit UI
+	app->ui->BlitItems();
+	app->ui->BlitLives();
+	app->ui->BlitFPS();
+
+	if (app->physics->debug) {
+		app->ui->BlitPlayerXPos();
+		app->ui->BlitPlayerYPos();
+		app->ui->BlitBatLives();
+		app->ui->BlitPigLives();
+		app->ui->BlitAverageFPS();
+		app->ui->BlitDT();
+		app->ui->BlitTimeSinceStart();
+		app->ui->BlitFrameCount();
+	}
 
 
 	return true;

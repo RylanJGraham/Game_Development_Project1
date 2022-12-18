@@ -223,6 +223,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 	{
 	case ColliderType::ITEM:
 		LOG("Collision ITEM");
+		LOG("Collision COIN");
+		Items++;
+		//app->audio->PlayFx(pickCoinSFX);
+		LOG("Items: %d", Items);
 		app->audio->PlayFx(chestopenSFX);
 		app->fade->FadeBlack((Module*)app->scene, (Module*)app->titleScreen, 60);
 		/*app->physics->Disable();
