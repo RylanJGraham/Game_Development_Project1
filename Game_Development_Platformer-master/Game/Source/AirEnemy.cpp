@@ -323,7 +323,7 @@ void AirEnemy::DebugKeys()
 {
 
 	// F9: View colliders / logic
-	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {
+	if (app->input->GetKey(SDL_SCANCODE_F9 || SDL_SCANCODE_N) == KEY_DOWN) {
 		app->physics->debug = !app->physics->debug;
 	}
 
