@@ -31,6 +31,8 @@ public:
 
 	void ResetGroundEnemy();
 
+	void SetPos(int x, int y);
+
 public:
 
 	//Animation
@@ -54,13 +56,14 @@ public:
 	b2Vec2 hitboxPos;
 	bool isGrounded;
 	bool alive;
+	bool isHurt;
 
 private:
 
 	bool leftID;
 
 	bool stairs;
-	bool isHurt;
+
 	int remainingJumpSteps;
 
 	b2Vec2 velocity;

@@ -29,6 +29,13 @@ bool GroundEnemy::Awake() {
 	//texturePath = "Assets/Textures/player/idle1.png";
 
 	//L02: DONE 5: Get Player parameters from XML
+	position.x = parameters.attribute("x").as_int();
+	position.y = parameters.attribute("y").as_int();
+
+	origin.x = position.x;
+	origin.y = position.y;
+
+	texturePath = parameters.attribute("texturepath").as_string();
 
 	return true;
 }
@@ -36,25 +43,14 @@ bool GroundEnemy::Awake() {
 bool GroundEnemy::Start()
 {
 
-	startPos.x = parameters.attribute("x").as_int();
-	startPos.y = parameters.attribute("y").as_int();
-
-	origin.x = startPos.x;
-	origin.y = startPos.y;
-
-	texturePath = parameters.attribute("texturepath").as_string();
-	
-	width = 32;
-	height = 32;
-
-	LoadAnimations();
+	texture = app->tex->Load(texturePath);
 
 	currentAnim = &RunL;
 	alive = true;
 	isHurt = false;
 	hp = 3;
 
-	texture = app->tex->Load(texturePath);
+
 
 	//initilize textures
 
@@ -75,6 +71,10 @@ bool GroundEnemy::Start()
 
 	refreshPathTime = 0;
 
+
+	LoadAnimations();
+
+
 	return true;
 }
 
@@ -83,10 +83,17 @@ bool GroundEnemy::PreUpdate() {
 	return true;
 }
 
+void GroundEnemy::SetPos(int x, int y) {
+	b2Vec2 pos = { PIXEL_TO_METERS(x), PIXEL_TO_METERS(y) };
+	pbody->body->SetTransform(pos, 0);
+}
+
 bool GroundEnemy::Update()
 {
+	b2Vec2 vel;
+	int speed = 5;
 
-	currentAnim = &RunL;
+	currentAnim = &AttackL;
 	velocity = { 0, -GRAVITY_Y };
 
 	iPoint playerTile = app->map->WorldToMap(app->scene->player->position.x + 32, app->scene->player->position.y);

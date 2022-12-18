@@ -47,6 +47,10 @@ public:
 	//Physics
 	PhysBody* pbody;
 
+
+	PhysBody* hitbox;
+	b2Vec2 hitboxPos;
+
 	bool alive;
 	bool idle;
 	bool ishurt;

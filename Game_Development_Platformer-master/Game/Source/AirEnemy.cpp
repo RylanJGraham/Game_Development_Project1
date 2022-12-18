@@ -35,6 +35,9 @@ bool AirEnemy::Awake() {
 	position.x = parameters.attribute("x").as_int();
 	position.y = parameters.attribute("y").as_int();
 
+	origin.x = position.x;
+	origin.y = position.y;
+
 	texturePath = parameters.attribute("texturepath").as_string();
 
 	return true;
@@ -61,7 +64,7 @@ bool AirEnemy::Start()
 	pbody->listener = this;
 	pbody->cType = ColliderType::ENEMY;
 
-
+	hitbox = app->physics->CreateRectangleSensor(METERS_TO_PIXELS(pbody->body->GetTransform().p.x), METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 15, 5, 2, bodyType::STATIC, ColliderType::AIRENEMYHITBOX);
 	//initialize audio effect - !! Path is hardcoded, should be loaded from config.xml
 	//jumpSFX = app->audio->LoadFx("Assets/Audio/Fx/JumpKnight.wav");
 	damagedSFX = app->audio->LoadFx("Assets/Audio/Fx/AirEnemyDamage.wav");
