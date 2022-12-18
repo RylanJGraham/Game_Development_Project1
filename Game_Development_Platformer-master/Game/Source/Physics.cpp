@@ -11,6 +11,7 @@
 #include "Window.h"
 #include "Scene.h"
 #include "Box2D/Box2D/Box2D.h"
+#include "Map.h"
 
 #ifdef _DEBUG
 #pragma comment( lib, "../Game/Source/External/Box2D/libx86/DebugLib/Box2D.lib" )
@@ -338,6 +339,16 @@ bool Physics::CleanUp()
 	LOG("Destroying physics world");
 
 	// Delete the whole physics world!
+	ListItem<PhysBody*>* collisionsItem;
+	collisionsItem = app->map->mapColliders.start;
+
+	while (collisionsItem != NULL)
+	{
+		collisionsItem->data->body->DestroyFixture(collisionsItem->data->body->GetFixtureList());
+		RELEASE(collisionsItem->data);
+		collisionsItem = collisionsItem->next;
+	}
+	app->map->mapColliders.Clear();
 	delete world;
 	world = nullptr;
 

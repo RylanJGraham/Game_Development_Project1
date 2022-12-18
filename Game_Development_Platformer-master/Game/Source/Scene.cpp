@@ -31,11 +31,24 @@ bool Scene::Awake(pugi::xml_node& config)
 	LOG("Loading Scene");
 	bool ret = true;
 
-	batTilePath = config.child("pathfinding").attribute("batPathTile").as_string();
+	return ret;
+}
+
+// Called before the first frame
+bool Scene::Start()
+{
+	LOG("STARTING SCENE");
+
+	batTilePath = app->configNode.child("scene").child("pathfinding").attribute("batPathTile").as_string();
+	origintexturePath = app->configNode.child("scene").child("originTexture").attribute("origintexturePath").as_string();
+	// Texture to highligh mouse position 
+	batTilePathTex = app->tex->Load(batTilePath);
+	// Texture to show path origin 
+	originTex = app->tex->Load(origintexturePath);
 
 	// iterate all objects in the scene
 	// Check https://pugixml.org/docs/quickstart.html#access
-	for (pugi::xml_node itemNode = config.child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
+	for (pugi::xml_node itemNode = app->configNode.child("scene").child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
 	{
 		item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
 		item->parameters = itemNode;
@@ -43,20 +56,14 @@ bool Scene::Awake(pugi::xml_node& config)
 
 	//L02: DONE 3: Instantiate the player using the entity manager
 	player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
-	player->parameters = config.child("player");
+	player->parameters = app->configNode.child("scene").child("player");
 
 	groundenemy = (GroundEnemy*)app->entityManager->CreateEntity(EntityType::GROUNDENEMY);
-	groundenemy->parameters = config.child("groundEnemy");
+	groundenemy->parameters = app->configNode.child("scene").child("groundEnemy");
 
 	airenemy = (AirEnemy*)app->entityManager->CreateEntity(EntityType::AIRENEMY);
-	airenemy->parameters = config.child("airEnemy");
+	airenemy->parameters = app->configNode.child("scene").child("airEnemy");
 
-	return ret;
-}
-
-// Called before the first frame
-bool Scene::Start()
-{
 	app->physics->Enable();
 	app->pathfinding->Enable();
 	app->entityManager->Enable();
@@ -86,13 +93,6 @@ bool Scene::Start()
 
 		RELEASE_ARRAY(data);
 	}
-
-	origintexturePath = app->configNode.child("scene").child("originTexture").attribute("origintexturePath").as_string();
-
-	// Texture to highligh mouse position 
-	batTilePathTex = app->tex->Load(batTilePath);
-	// Texture to show path origin 
-	originTex = app->tex->Load(origintexturePath);
 
 	SString title("Game Name");
 
@@ -223,9 +223,8 @@ bool Scene::CleanUp()
 		if (item) { app->entityManager->DestroyEntity(item); }
 	}
 
-	/*app->map->Disable();
 	app->entityManager->Disable();
-	app->physics->Disable();*/
+	app->physics->Disable();
 
 	return true;
 }

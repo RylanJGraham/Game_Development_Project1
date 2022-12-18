@@ -29,20 +29,21 @@ bool AirEnemy::Awake() {
 	//texturePath = "Assets/Textures/player/idle1.png";
 
 	//L02: DONE 5: Get Player parameters from XML
-	position.x = parameters.attribute("x").as_int();
-	position.y = parameters.attribute("y").as_int();
-
-	origin.x = position.x;
-	origin.y = position.y;
-
-	texturePath = parameters.attribute("texturepath").as_string();
 
 	return true;
 }
 
 bool AirEnemy::Start()
 {
+	texturePath = parameters.attribute("texturepath").as_string();
+
 	texture = app->tex->Load(texturePath);
+
+	position.x = parameters.attribute("x").as_int();
+	position.y = parameters.attribute("y").as_int();
+
+	origin.x = position.x;
+	origin.y = position.y;
 
 	currentAnim = &Idle;
 

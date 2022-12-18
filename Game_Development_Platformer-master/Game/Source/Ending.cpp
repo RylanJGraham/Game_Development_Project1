@@ -53,6 +53,7 @@ bool Ending::Start()
 	/*app->scene->player->active = true;
 	app->scene->player.rese*/
 	selectSFX = app->audio->LoadFx("Assets/Audio/Fx/swordswing.wav");
+	app->map->Disable();
 
 	//app->scene->player->godMode = true;
 

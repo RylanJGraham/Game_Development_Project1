@@ -19,9 +19,7 @@ Item::~Item() {}
 
 bool Item::Awake() {
 
-	position.x = parameters.attribute("x").as_int();
-	position.y = parameters.attribute("y").as_int();
-	texturePath = parameters.attribute("texturepath").as_string();
+
 
 	return true;
 }
@@ -29,6 +27,11 @@ bool Item::Awake() {
 bool Item::Start() {
 
 	//initilize textures
+
+	position.x = parameters.attribute("x").as_int();
+	position.y = parameters.attribute("y").as_int();
+	texturePath = parameters.attribute("texturepath").as_string();
+
 	texture = app->tex->Load(texturePath);
 	
 	// L07 DONE 4: Add a physics to an item - initialize the physics body

@@ -27,21 +27,22 @@ bool Player::Awake() {
 	//texturePath = "Assets/Textures/player/idle1.png";
 
 	//L02: DONE 5: Get Player parameters from XML
-	startPos.x = parameters.attribute("x").as_int();
-	startPos.y = parameters.attribute("y").as_int();
-	texturePath = parameters.attribute("texturepath").as_string();
-
-
-
-	attackCooldownMax = (parameters.attribute("attcooldown").as_float()) * 0.06; //*0.06 because the cooldown is in milliseconds and the game runs at 60 fps
-
 	return true;
 }
 
 bool Player::Start()
 {
 	//initilize textures
+	
+
+	startPos.x = parameters.attribute("x").as_int();
+	startPos.y = parameters.attribute("y").as_int();
+	texturePath = parameters.attribute("texturepath").as_string();
+
 	texture = app->tex->Load(texturePath);
+
+	attackCooldownMax = (parameters.attribute("attcooldown").as_float()) * 0.06; //*0.06 because the cooldown is in milliseconds and the game runs at 60 fps
+
 
 	remainingJumpSteps = 0;
 	idle = true;
@@ -402,7 +403,7 @@ void Player::LoadAnimations()
 
 void Player::ResetPlayerPos() {
 
-	pbody->body->SetSleepingAllowed(false);
+	pbody->body->SetAwake(true);
 	velocity = { 0, 0 };
 	pbody->body->SetTransform(PIXEL_TO_METERS(startPos), 0.0f);
 	//app->scene->cameraFix2 = false;
