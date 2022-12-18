@@ -115,6 +115,9 @@ bool Player::Update()
 
 	if (!alive)
 	{
+		if (godMode) {
+			alive = true;
+		}
 		idle = false;
 		currentAnim = leftID ? &DeathL : &DeathR;
 		pbody->body->SetAwake(false);
@@ -243,15 +246,21 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 		break;
 	case ColliderType::DEATH:
 		LOG("Collision DEATH");
-		alive = false;
-		lives--;
+		if (!godMode) {
+			alive = false;
+			lives--;
+		}
 		if (lives == 0) {
 			app->fade->FadeBlack((Module*)app->scene, (Module*)app->endScreen, 60);
 		}
 		break;
 	case ColliderType::ENEMY:
 		LOG("Collision ENEMY SLIME");
-		lives--;
+		if (!godMode) {
+			lives--;
+		}
+
+
 		if (lives <= 0) {
 			alive = false;
 		/*	app->audio->PlayFx(dieSFX);*/
