@@ -59,6 +59,8 @@ bool Player::Start()
 
 	//initialize audio effect - !! Path is hardcoded, should be loaded from config.xml
 	chestopenSFX = app->audio->LoadFx("Assets/Audio/Fx/chestopen.wav");
+	attackSFX = app->audio->LoadFx("Assets/Audio/Fx/swordAttack.wav");
+	pHurtSFX = app->audio->LoadFx("Assets/Audio/Fx/pHurt.wav");
 	//jumpSFX = app->audio->LoadFx("Assets/Audio/Fx/JumpKnight.wav");
 	
 	LoadAnimations();
@@ -118,6 +120,7 @@ bool Player::Update()
 		if (godMode) {
 			alive = true;
 		}
+		app->audio->PlayFx(pHurtSFX);
 		idle = false;
 		currentAnim = leftID ? &DeathL : &DeathR;
 		pbody->body->SetAwake(false);
@@ -159,6 +162,7 @@ bool Player::Update()
 			isAttacking = true;
 			currentAnim = leftID ? &AttackR : &AttackL;
 			attackCooldown = 0;
+			app->audio->PlayFx(attackSFX);
 			if (!leftID) {
 				hitbox = app->physics->CreateRectangleSensor(position.x + 82, position.y + 60, 30, 40, bodyType::STATIC, ColliderType::PLAYERATTACK);
 			}

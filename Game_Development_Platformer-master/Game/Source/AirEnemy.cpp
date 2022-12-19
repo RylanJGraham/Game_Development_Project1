@@ -60,7 +60,7 @@ bool AirEnemy::Start()
 	hitbox = app->physics->CreateRectangleSensor(METERS_TO_PIXELS(pbody->body->GetTransform().p.x), METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 15, 5, 2, bodyType::STATIC, ColliderType::AIRENEMYHITBOX);
 	//initialize audio effect - !! Path is hardcoded, should be loaded from config.xml
 	//jumpSFX = app->audio->LoadFx("Assets/Audio/Fx/JumpKnight.wav");
-	damagedSFX = app->audio->LoadFx("Assets/Audio/Fx/AirEnemyDamage.wav");
+	damagedSFX = app->audio->LoadFx("Assets/Audio/Fx/batHurt.wav");
 
 	refreshPathTime = 0;
 
@@ -158,7 +158,7 @@ bool AirEnemy::Update()
 
 	if (ishurt) {
 			currentAnim = &Damaged;
-			/*app->audio->PlayFx("")*/
+			app->audio->PlayFx(damagedSFX);
 	}
 	else{
 			currentAnim = &Attack;

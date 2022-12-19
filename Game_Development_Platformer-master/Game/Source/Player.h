@@ -49,6 +49,8 @@ private:
 
 	uint jumpSFX = 0;
 	uint chestopenSFX = 0;
+	uint attackSFX = 0;
+	uint pHurtSFX = 0;
 	uint attackCooldownMax;
 	uint attackCooldown;
 	bool alive;

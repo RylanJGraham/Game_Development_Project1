@@ -37,6 +37,8 @@ bool GroundEnemy::Start()
 	startPos.x = parameters.attribute("x").as_int();
 	startPos.y = parameters.attribute("y").as_int();
 
+	damagedSFX = app->audio->LoadFx("Assets/Audio/Fx/pigHurt.wav");
+
 	origin.x = startPos.x;
 	origin.y = startPos.y;
 
@@ -159,6 +161,7 @@ bool GroundEnemy::Update()
 
 	if (isHurt) {
 			currentAnim = leftID ? &HitR : &HitL;
+			app->audio->PlayFx(damagedSFX);
 	}
 
 	if (HitL.GetCurrentFrameint() == 1 || HitR.GetCurrentFrameint() == 1) {
