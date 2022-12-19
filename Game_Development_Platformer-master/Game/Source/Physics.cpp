@@ -262,9 +262,9 @@ bool Physics::PostUpdate()
 					app->win->GetWindowSize(width, height);
 					b2Vec2 pos = f->GetBody()->GetPosition();
 					if (app->scene->active == false)
-						app->render->DrawCircle(METERS_TO_PIXELS(pos.x), METERS_TO_PIXELS(pos.y), METERS_TO_PIXELS(shape->m_radius) * app->win->GetScale(), 255, 255, 255);
+						app->render->DrawCircle(METERS_TO_PIXELS(pos.x) * app->win->GetScale(), METERS_TO_PIXELS(pos.y) * app->win->GetScale(), METERS_TO_PIXELS(shape->m_radius) * app->win->GetScale(), 255, 255, 255);
 					else
-						app->render->DrawCircle(METERS_TO_PIXELS(pos.x), METERS_TO_PIXELS(pos.y), METERS_TO_PIXELS(shape->m_radius) * app->win->GetScale(), 255, 255, 255);
+						app->render->DrawCircle(METERS_TO_PIXELS(pos.x) * app->win->GetScale(), METERS_TO_PIXELS(pos.y) * app->win->GetScale(), METERS_TO_PIXELS(shape->m_radius) * app->win->GetScale(), 255, 255, 255);
 				}
 				break;
 

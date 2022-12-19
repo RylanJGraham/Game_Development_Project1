@@ -99,13 +99,11 @@ bool AirEnemy::Update()
 			app->pathfinding->CreatePath(origin, playerTile);
 			refreshPathTime++;
 			originSelected = false;
-			/*if (refreshPathTime >= 150)
-				originSelected = false;*/
 		}
 		else
 		{
-			origin.x = pbody->body->GetPosition().x;
-			origin.y = pbody->body->GetPosition().y;
+			origin.x = pbody->body->GetPosition().x * app->win->GetScale();
+			origin.y = pbody->body->GetPosition().y * app->win->GetScale();
 			originSelected = true;
 			app->pathfinding->ClearLastPath();
 			refreshPathTime = 0;

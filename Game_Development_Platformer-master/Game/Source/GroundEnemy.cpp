@@ -59,7 +59,7 @@ bool GroundEnemy::Start()
 	//id = app->tex->LoadSprite(texturePath, 15, 8);
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
-	pbody = app->physics->CreateCircle(startPos.x, startPos.y, 10, bodyType::DYNAMIC, ColliderType::ENEMY);
+	pbody = app->physics->CreateCircle(startPos.x, startPos.y - 30, 10, bodyType::DYNAMIC, ColliderType::ENEMY);
 
 	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
 	pbody->listener = this;
@@ -92,7 +92,7 @@ bool GroundEnemy::Update()
 	currentAnim = &AttackL;
 	velocity.y = -GRAVITY_Y;
 
-	iPoint playerTile = app->map->WorldToMap(app->scene->player->position.x + 32, app->scene->player->position.y);
+	iPoint playerTile = app->map->WorldToMap(app->scene->player->position.x + 32 , app->scene->player->position.y);
 
 	if (pbody->body->GetPosition().x > app->render->camera.x - app->render->camera.w / 2 && pbody->body->GetPosition().x < app->render->camera.x + app->render->camera.w / 2)
 	{
@@ -109,8 +109,8 @@ bool GroundEnemy::Update()
 		}
 		else
 		{
-			origin.x = pbody->body->GetPosition().x;
-			origin.y = pbody->body->GetPosition().y;
+			origin.x = pbody->body->GetPosition().x * app->win->GetScale();
+			origin.y = pbody->body->GetPosition().y * app->win->GetScale();
 			originSelected = true;
 			app->pathfinding->ClearLastPath();
 			refreshPathTime = 0;
