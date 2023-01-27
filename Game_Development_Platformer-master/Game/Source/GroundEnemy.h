@@ -19,11 +19,11 @@ public:
 	bool Awake();
 	bool Start();
 	bool PreUpdate();
-	bool Update();
+	bool Update(float dt);
 	bool PostUpdate();
 	bool CleanUp();
 
-	void MovementDirection(const iPoint& origin, const iPoint& destination);
+	void MovementDirection(const iPoint& origin, const iPoint& destination, float dt);
 
 	void Attack(const iPoint& origin, const iPoint& destination);
 

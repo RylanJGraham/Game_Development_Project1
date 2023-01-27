@@ -89,7 +89,7 @@ bool GroundEnemy::PreUpdate() {
 //	pbody->body->SetTransform(pos, 0);
 //}
 
-bool GroundEnemy::Update()
+bool GroundEnemy::Update(float dt)
 {
 	currentAnim = &AttackL;
 	velocity.y = -GRAVITY_Y;
@@ -106,7 +106,7 @@ bool GroundEnemy::Update()
 			app->pathfinding->CreatePath(origin, playerTile);
 			refreshPathTime++;
 			originSelected = false;
-			MovementDirection(origin, playerTile);
+			MovementDirection(origin, playerTile, dt);
 			Attack(origin, playerTile);
 		}
 		else
@@ -204,7 +204,7 @@ bool GroundEnemy::CleanUp()
 	return true;
 }
 
-void GroundEnemy::MovementDirection(const iPoint& origin, const iPoint& destination) {
+void GroundEnemy::MovementDirection(const iPoint& origin, const iPoint& destination, float dt) {
 
 	float resX = destination.x - origin.x;
 	float resY = destination.y - origin.y;
@@ -212,11 +212,11 @@ void GroundEnemy::MovementDirection(const iPoint& origin, const iPoint& destinat
 	if (app->pathfinding->IsWalkable(destination) != 0) {
 		//Check if player is to the right or the left of the origin
 		if (resX < 0) {
-			velocity.x = -1;
+			velocity.x = -1*dt;
 			/*fliped = SDL_FLIP_NONE;*/
 		}
 		if (resX > 0) {
-			velocity.x = +1;
+			velocity.x = +1*dt;
 			//fliped = SDL_FLIP_HORIZONTAL;
 		}
 		if (resY < 0 && jump == false && app->pathfinding->GetNextTileY(2) < 15 && app->pathfinding->GetNextTileY(2) > 13) {

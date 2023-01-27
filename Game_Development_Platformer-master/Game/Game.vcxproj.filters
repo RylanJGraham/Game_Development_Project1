@@ -184,9 +184,6 @@
     <ClInclude Include="Queue.h">
       <Filter>Modules\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>Modules\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Fonts.h">
       <Filter>Modules\Core</Filter>
     </ClInclude>
@@ -212,6 +209,10 @@
       <Filter>Modules\Core</Filter>
     </ClInclude>
     <ClInclude Include="Source\Point.h">
+      <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Point.h" />
+    <ClInclude Include="Source\Entity.h">
       <Filter>Modules\Core</Filter>
     </ClInclude>
   </ItemGroup>

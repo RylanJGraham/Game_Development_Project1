@@ -84,10 +84,10 @@ void Player::SetPos(int x, int y) {
 	pbody->body->SetTransform(pos, 0);
 }
 
-bool Player::Update()
+bool Player::Update(float dt)
 {
 
-	int speed = 5;
+	int speed = 5*dt;
 
 	DebugKeys();
 

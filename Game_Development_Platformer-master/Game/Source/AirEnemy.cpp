@@ -79,10 +79,10 @@ void AirEnemy::SetPos(int x, int y) {
 	pbody->body->SetTransform(pos, 0);
 }
 
-bool AirEnemy::Update()
+bool AirEnemy::Update(float dt)
 {
 	b2Vec2 vel;
-	int speed = 5;
+	int speed = 5*dt;
 
 	DebugKeys();
 
