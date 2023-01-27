@@ -18,17 +18,17 @@
 #include "Defs.h"
 #include "Log.h"
 
-Title::Title(bool startEnabled) : Module(startEnabled)
+SettingsMenu::SettingsMenu(bool startEnabled) : Module(startEnabled)
 {
 	name.Create("TitleScreen");
 }
 
 // Destructor
-Title::~Title()
+SettingsMenu::~SettingsMenu()
 {}
 
 // Called before render is available
-bool Title::Awake(pugi::xml_node& config)
+bool SettingsMenu::Awake(pugi::xml_node& config)
 {
 	LOG("Loading TitleScreen");
 	bool ret = true;
@@ -37,7 +37,7 @@ bool Title::Awake(pugi::xml_node& config)
 }
 
 // Called before the first frame
-bool Title::Start()
+bool SettingsMenu::Start()
 {
 
 	app->render->camera.x = 0;
@@ -62,13 +62,13 @@ bool Title::Start()
 }
 
 // Called each loop iteration
-bool Title::PreUpdate()
+bool SettingsMenu::PreUpdate()
 {
 	return true;
 }
 
 // Called each loop iteration
-bool Title::Update(float dt)
+bool SettingsMenu::Update(float dt)
 {
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
 		LOG("PASA A GAME SCENE");
@@ -82,7 +82,7 @@ bool Title::Update(float dt)
 }
 
 // Called each loop iteration
-bool Title::PostUpdate()
+bool SettingsMenu::PostUpdate()
 {
 	bool ret = true;
 
@@ -93,7 +93,7 @@ bool Title::PostUpdate()
 }
 
 // Called before quitting
-bool Title::CleanUp()
+bool SettingsMenu::CleanUp()
 {
 	LOG("Freeing TITLE SCENE");
 

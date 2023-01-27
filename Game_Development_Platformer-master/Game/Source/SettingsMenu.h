@@ -6,14 +6,14 @@
 
 struct SDL_Texture;
 
-class Title : public Module
+class SettingsMenu : public Module
 {
 public:
 
-	Title(bool startEnabled);
+	SettingsMenu(bool startEnabled);
 
 	// Destructor
-	virtual ~Title();
+	virtual ~SettingsMenu();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node& config);
