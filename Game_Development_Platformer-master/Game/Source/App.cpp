@@ -15,7 +15,7 @@
 #include "Ending.h"
 #include "UI.h"
 #include "Fonts.h"
-#include "ModuleController.h"
+#include "Module.h"
 #include "GuiManager.h"
 #include "GuiButton.h"
 #include "GuiControl.h"
@@ -69,7 +69,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(entityManager);
 	AddModule(map);
 	AddModule(fade);
-	AddModule(guiManager, true);
+	AddModule(guiManager);
 	// Render last to swap buffer
 	AddModule(render);
 }
