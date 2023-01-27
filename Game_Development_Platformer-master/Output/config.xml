@@ -2,10 +2,11 @@
   <app>
     <title>Knights Vow - Game Development</title>
     <organization>UPC</organization>
+	<frcap value = "60"/>
   </app>
 
   <renderer>
-    <vsync value="true"/>
+    <vsync value="false"/>
   </renderer>
 
   <window>

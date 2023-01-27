@@ -114,7 +114,7 @@ bool Scene::PreUpdate()
 bool Scene::Update(float dt)
 {
 	int scale = app->win->GetScale();
-	int camSpeed = 10 / scale;
+	int camSpeed = (0 / scale)*dt;
 
 	// L03: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
 #pragma region DEBUG_KEYS

@@ -107,6 +107,8 @@ bool App::Awake()
 	{
 		title = configNode.child("app").child("title").child_value(); // L01: DONE 4: Read the title from the config file
 
+		maxFrameDuration = configNode.child("app").child("frcap").attribute("value").as_int();
+
 		ListItem<Module*>* item;
 		item = modules.start;
 
@@ -220,6 +222,18 @@ void App::FinishUpdate()
 		averageFps = (averageFps + framesPerSecond) / 2;
 	}
 
+	float delay = float(maxFrameDuration) - dt;
+
+	PerfTimer delayTimer = PerfTimer();
+	delayTimer.Start();
+	if (maxFrameDuration > 0 && delay > 0) {
+		SDL_Delay(delay);
+		//LOG("We waited for %f milliseconds and the real delay is % f", delay, delayTimer.ReadMs());
+		dt = maxFrameDuration;
+	}
+	else {
+		//LOG("No wait");
+	}
 
 	// Shows the time measurements in the window title
 	static char title[256];
