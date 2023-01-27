@@ -15,6 +15,10 @@
 #include "Ending.h"
 #include "UI.h"
 #include "Fonts.h"
+#include "ModuleController.h"
+#include "GuiManager.h"
+#include "GuiButton.h"
+#include "GuiControl.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -43,6 +47,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	fonts = new Fonts();
 	ui = new UI();
 	endScreen = new Ending(false);
+	guiManager = new GuiManager();
 	pathfinding = new PathFinding(true);
 
 
@@ -64,6 +69,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(entityManager);
 	AddModule(map);
 	AddModule(fade);
+	AddModule(guiManager, true);
 	// Render last to swap buffer
 	AddModule(render);
 }

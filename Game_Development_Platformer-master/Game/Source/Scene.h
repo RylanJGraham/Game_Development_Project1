@@ -6,6 +6,7 @@
 #include "Item.h"
 #include "GroundEnemy.h"
 #include "AirEnemy.h"
+#include "GuiButton.h"
 
 struct SDL_Texture;
 
@@ -38,6 +39,8 @@ public:
 
 	void ResetScene();
 
+	bool OnGuiMouseClickEvent(GuiControl* control);
+
 	bool LoadState(pugi::xml_node&);
 	bool SaveState(pugi::xml_node&);
 
@@ -47,6 +50,10 @@ public:
 	GroundEnemy* groundenemy;
 	AirEnemy* airenemy;
 	Item* item;
+
+	bool playing = false;
+
+	bool capTo30fps = false;
 
 	SDL_Texture* batTilePathTex = nullptr;
 	const char* batTilePath = nullptr;

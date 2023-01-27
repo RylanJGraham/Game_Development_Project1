@@ -12,6 +12,7 @@
 #include "FadeToBlack.h"
 #include "Ending.h"
 #include "UI.h"
+#include "GuiManager.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -142,6 +143,13 @@ bool Scene::Update(float dt)
 		player->SetPos(player->savedPosition.x + 46, player->savedPosition.y + 60);
 	}
 
+	if (app->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
+	{
+		capTo30fps = !capTo30fps;
+	}
+
+	
+
 	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		app->render->camera.y += camSpeed;
 
@@ -174,6 +182,8 @@ bool Scene::Update(float dt)
 
 	// Draw map
 	app->map->Draw();
+
+	app->guiManager->Draw();
 
 	//Blit UI
 	app->ui->BlitItems();
@@ -220,6 +230,20 @@ bool Scene::CleanUp()
 
 	return true;
 }
+
+bool Scene::OnGuiMouseClickEvent(GuiControl* control)
+{
+	// L15: TODO 5: Implement the OnGuiMouseClickEvent method
+	switch (control->id)
+	{
+
+	default:
+		break;
+	}
+
+	return true;
+}
+
 
 void Scene::ResetScene() {
 

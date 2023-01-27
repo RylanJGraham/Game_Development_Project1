@@ -30,6 +30,7 @@ class Logo;
 class Title;
 class Ending;
 class PathFinding;
+class GuiManager;
 
 class App
 {
@@ -116,6 +117,8 @@ public:
 	Title* titleScreen;
 	Ending* endScreen;
 	PathFinding* pathfinding;
+	GuiManager* guiManager;
+
 
 	// L01: DONE 2: Create new variables from pugui namespace:
 	// xml_document to store the config file and
