@@ -79,14 +79,14 @@
     <ClCompile Include="Source\Timer.cpp">
       <Filter>Modules\Core</Filter>
     </ClCompile>
-    <ClCompile Include="SettingsMenu.cpp">
-      <Filter>Modules\Scenes</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GuiManager.cpp">
       <Filter>Modules\Core</Filter>
     </ClCompile>
     <ClCompile Include="Source\GuiButton.cpp">
       <Filter>Modules\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SettingsMenu.cpp">
+      <Filter>Modules\Scenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -196,9 +196,6 @@
     <ClInclude Include="Source\Timer.h">
       <Filter>Modules\Core</Filter>
     </ClInclude>
-    <ClInclude Include="SettingsMenu.h">
-      <Filter>Modules\Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GuiManager.h">
       <Filter>Modules\Core</Filter>
     </ClInclude>
@@ -214,6 +211,10 @@
     <ClInclude Include="Source\Point.h" />
     <ClInclude Include="Source\Entity.h">
       <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Point.h" />
+    <ClInclude Include="Source\SettingsMenu.h">
+      <Filter>Modules\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
