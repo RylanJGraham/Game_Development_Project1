@@ -79,6 +79,15 @@
     <ClCompile Include="Source\Timer.cpp">
       <Filter>Modules\Core</Filter>
     </ClCompile>
+    <ClCompile Include="SettingsMenu.cpp">
+      <Filter>Modules\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GuiManager.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GuiButton.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -188,6 +197,21 @@
       <Filter>Modules\Core</Filter>
     </ClInclude>
     <ClInclude Include="Source\Timer.h">
+      <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingsMenu.h">
+      <Filter>Modules\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GuiManager.h">
+      <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GuiButton.h">
+      <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GuiControl.h">
+      <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Point.h">
       <Filter>Modules\Core</Filter>
     </ClInclude>
   </ItemGroup>
