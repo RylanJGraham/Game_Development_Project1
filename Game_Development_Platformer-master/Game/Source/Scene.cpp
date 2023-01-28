@@ -144,7 +144,7 @@ bool Scene::Update(float dt)
 #pragma region DEBUG_KEYS
 
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
-		app->fade->FadeBlack((Module*)app->scene, (Module*)app->scene, 60);
+		app->fade->FadeBlack((Module*)app->scene, (Module*)app->scene, 60 * (16.0f / dt));
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
@@ -158,6 +158,7 @@ bool Scene::Update(float dt)
 
 		Mix_PauseMusic();
 	}
+
 
 	if (gamePaused != true)
 	{
