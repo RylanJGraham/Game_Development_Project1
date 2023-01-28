@@ -59,7 +59,10 @@ bool Item::Update(float dt)
 		if (pbody != nullptr) {
 		app->physics->world->DestroyBody(pbody->body);
 		}
+		if (app->scene->player->Items == 5) {
 		app->fade->FadeBlack((Module*)app->scene, (Module*)app->titleScreen, 60 * (16.0f / dt));
+		}
+
 	pbody = nullptr;
 	CleanUp();
 	}

@@ -183,16 +183,16 @@ bool Scene::Update(float dt)
 		player->SetPos(player->savedPosition.x + 46, player->savedPosition.y + 60);
 		}
 
-		if (app->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
-		{
-			app->render->limitFPS = !app->render->limitFPS;
-			app->audio->PlayFx(selectSFX);
-		}
+		//if (app->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
+		//{
+		//	app->render->limitFPS = !app->render->limitFPS;
+		//	app->audio->PlayFx(selectSFX);
+		//}
 
-		if (app->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
-		{
-		capTo30fps = !capTo30fps;
-		}
+		//if (app->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
+		//{
+		//capTo30fps = !capTo30fps;
+		//}
 	}
 
 	
@@ -214,11 +214,11 @@ bool Scene::Update(float dt)
 	}
 	if (app->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_I) == KEY_DOWN) {
 		//FPS control
-		if (app->fps == 60) {
-			app->fps = 30;
+		if (app->maxFrameDuration != 33) {
+			app->maxFrameDuration = 33;
 		}
-		else if (app->fps == 30) {
-			app->fps = 60;
+		else if (app->maxFrameDuration == 33) {
+			app->maxFrameDuration = 16;
 		}
 	}
 

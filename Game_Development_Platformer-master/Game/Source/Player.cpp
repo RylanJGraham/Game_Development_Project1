@@ -238,7 +238,6 @@ bool Player::Update(float dt)
 
 	if (iFrames > 0) {
 		iFrames--;
-		LOG("iFrames Remaining: %d", iFrames);
 	}
 
 	return true;

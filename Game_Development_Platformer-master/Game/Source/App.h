@@ -133,6 +133,8 @@ public:
 	int fps = 60;
 	float dt;
 
+	uint32 maxFrameDuration = 0;
+
 private:
 
 	int argc;
@@ -164,8 +166,6 @@ private:
 
 	float averageFps = 0.0f;
 	float secondsSinceStartup = 0.0f;
-
-	uint32 maxFrameDuration = 0;
 
 };
 
