@@ -50,7 +50,6 @@ bool GuiButton::Update(float dt)
 					app->fonts->BlitText(this->bounds.x + (this->bounds.w / 4.5), (this->bounds.y + 2) + (this->bounds.h / 3), app->ui->font1_id, this->text);
 				else if (textSize > 8 && textSize <= 12)
 					app->fonts->BlitText(this->bounds.x + (this->bounds.w / 5), (this->bounds.y + 2) + (this->bounds.h / 3), app->ui->font1_id, this->text);
-
 			}
 
 			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT)
@@ -66,7 +65,6 @@ bool GuiButton::Update(float dt)
 					else if (textSize > 8 && textSize <= 12)
 						app->fonts->BlitText(this->bounds.x + (this->bounds.w / 5), (this->bounds.y + 2) + (this->bounds.h / 3), app->ui->font1_id, this->text);
 				}
-
 			}
 
 			// If mouse button pressed -> Generate event!
@@ -111,29 +109,28 @@ bool GuiButton::Draw(Render* render)
 	{
 		if (app->render->viewGUIbounds == true)
 			render->DrawRectangle(bounds, 255, 255, 0, 255);
-		SDL_Rect rect = { 0,29,93,29 };
+		SDL_Rect rect = { 371,2,247,90 };
 		render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
 
 	} break;
 
-	//L15: TODO 4: Draw the button according the GuiControl State
 	case GuiControlState::FOCUSED:
 	{
 		if (app->render->viewGUIbounds == true)
 			render->DrawRectangle(bounds, 255, 255, 255, 160);
-		SDL_Rect rect = { 0,57,93,29 };
+		SDL_Rect rect = { 640,9,250,89 };
 		render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
 
 	} break;
+	//idfk diff between pressed and focused because only 2 anims
 	case GuiControlState::PRESSED:
 	{
 		if (app->render->viewGUIbounds == true)
 			render->DrawRectangle(bounds, 255, 255, 255, 0);
-		SDL_Rect rect = { 0,0,93,29 };
+		SDL_Rect rect = { 371,2,247,90 };
 		render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
 
 	} break;
-
 	case GuiControlState::SELECTED:
 		render->DrawRectangle(bounds, 0, 255, 0, 255);
 

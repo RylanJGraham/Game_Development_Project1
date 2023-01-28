@@ -15,6 +15,7 @@
 #include "GuiManager.h"
 #include "Title.h"
 #include "Audio.h"
+#include "Fonts.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -112,10 +113,9 @@ bool Scene::Start()
 	uint w, h;
 	app->win->GetWindowSize(w, h);
 	resumeButton14 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 14, "resume", 7, { 469, 305, 93, 29 }, this);
-	backToTitleButton15 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 15, "back to title", 14, { 469, 344, 93, 29 }, this);
-	exitButton16 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 16, "exit", 5, { 469, 385, 93, 29 }, this);
-	closeButton17 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 17, "close", 6, { 767, 114, 93, 29 }, this);
-
+	backToTitleButton15 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 15, "back to title", 14, { 100, 305, 93, 29 }, this);
+	exitButton16 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 16, "exit", 5, { 200, 500, 93, 29 }, this);
+	closeButton17 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 17, "close", 6, { 700, 800, 93, 29 }, this);
 	ResetScene();
 
 	return true;
@@ -147,7 +147,7 @@ bool Scene::Update(float dt)
 		app->fade->FadeBlack((Module*)app->scene, (Module*)app->scene, 60 * (16.0f / dt));
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_V) == KEY_DOWN)
 	{
 		app->render->viewGUIbounds = !app->render->viewGUIbounds;
 	}
@@ -251,6 +251,8 @@ bool Scene::Update(float dt)
 	{
 		// Display pause menu
 		LOG("PauseMenuDrawing");
+		app->render->camera.x = 0;
+		app->render->camera.y = 0;
 		app->render->DrawTexture(img_pause, 0, 0, NULL);
 			
 		resumeButton14->state = GuiControlState::NORMAL;
@@ -295,7 +297,6 @@ bool Scene::CleanUp()
 
 	app->tex->UnLoad(img_pause);
 
-
 	if (resumeButton14 != nullptr)
 		resumeButton14->state = GuiControlState::DISABLED;
 	if (backToTitleButton15 != nullptr)
@@ -317,7 +318,6 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)
 	// L15: TODO 5: Implement the OnGuiMouseClickEvent method
 	switch (control->id)
 	{
-	case 17:
 	case 14:
 		gamePaused = !gamePaused;
 		app->audio->PlayFx(app->titleScreen->menuSelectionSFX);

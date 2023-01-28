@@ -29,6 +29,10 @@
 	<logo>
 		<logoImage x="0" y="0" texturepath="Assets/Textures/logo.png"/>
 	</logo>
+
+	<title>
+		<popImage settingtexturepath="Assets/Textures/settings.png" creditstexturepath="Assets/Textures/Credits_Screen.png"/>
+	</title>
   <!-- L02: DONE: Add an element for the entity manager and add the player parameters -->
   <scene>
 	<originTexture origintexturePath = "Assets/Textures/xmark.png" />
@@ -44,5 +48,10 @@
     <mapfolder path="Assets/Maps/"/>
     <mapfile path="Assets/Maps/Map.tmx"/>
   </map>
+
+	<gui>
+		<guiButtons buttonsTexPath="Assets/Textures/buttons1x.png"/>
+
+	</gui>
   
 </config>

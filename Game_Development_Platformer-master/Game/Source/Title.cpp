@@ -49,10 +49,16 @@ bool Title::Start()
 
 	selectSFX = app->audio->LoadFx("Assets/Audio/Fx/swordswing.wav");
 
+	popImgCreditsPath = app->configNode.child("title").child("popImage").attribute("creditstexturepath").as_string();
+	popImgSettingsPath = app->configNode.child("title").child("popImage").attribute("settingtexturepath").as_string();
+	//ImgCreditsPath = app->configNode.child("title").child("popImage").attribute("creditstexturepath").as_string();
 	img = app->tex->Load("Assets/Textures/titlescreen.png");
 
 	// Music
 	app->audio->PlayMusic("Assets/Audio/Music/title_screen.ogg");
+
+	Img_settings = app->tex->Load(popImgSettingsPath);
+	Img_credits = app->tex->Load(popImgCreditsPath);
 
 	if (app->map) {
 		app->map->Disable();
@@ -65,9 +71,9 @@ bool Title::Start()
 	uint w, h;
 	app->win->GetWindowSize(w, h);
 
-	playButton1 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "play", 5, { ((int)w / 2) - (93 / 2), (int(h) - 200), 93, 29 }, this);
-	settingsButton2 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "setting", 8, { ((int)w / 2) - (93 / 2), (int(h) - 170), 93, 29 }, this);
-	creditsButton3 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 3, "credits", 8, { ((int)w / 2) - (93 / 2), (int(h) - 140), 93, 29 }, this);
+	playButton1 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "play", 5, { ((int)w / 2) - 490, (int(h) / 2) - 280, 227, 83 }, this);
+	settingsButton2 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "setting", 8, { ((int)w / 2) - 490, (int(h) / 2) - 190, 227, 83 }, this);
+	creditsButton3 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 3, "credits", 8, { ((int)w / 2) - 490, (int(h) / 2) - 100, 227, 83 }, this);
 	exitButton4 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 4, "exit", 5, { ((int)w / 2) - (93 / 2), (int(h) - 110), 93, 29 }, this);
 
 	pugi::xml_document gameStateFile;
@@ -77,8 +83,8 @@ bool Title::Start()
 		continueButton5 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 5, "continue", 9, { ((int)w / 2) - (93 / 2), (int(h) - 240), 93, 29 }, this);
 	}
 
-	closeSettingMenuButton6 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 6, "close", 6, { 780, 110, 93, 29 }, this);
-	closeCreditsMenuButton7 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 7, "close", 6, { 780, 110, 93, 29 }, this);
+	closeSettingMenuButton6 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 6, "close", 6, { ((int)w / 2) - 490, (int(h) / 2) - 280, 227, 83 }, this);
+	closeCreditsMenuButton7 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 7, "close", 6, { ((int)w / 2) - 490, (int(h) / 2) - 280, 227, 83 }, this);
 
 	decreaseMusicButton8 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 8, "decrease", 9, { 378, 243, 93, 29 }, this);
 	increaseMusicButton9 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 9, "increase", 9, { 555, 243, 93, 29 }, this);
@@ -86,7 +92,7 @@ bool Title::Start()
 	decreaseSFXButton10 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 10, "decrease", 9, { 378, 322, 93, 29 }, this);
 	increaseSFXButton11 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 11, "increase", 9, { 555, 322, 93, 29 }, this);
 
-	fullscreenButton12 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 12, "fullscreen", 11, { 466, 420, 93, 29 }, this);
+	fullscreenButton12 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 12, "fullscreen", 11, { ((int)w / 2) - 490, (int(h) / 2) - 280, 227, 83 }, this);
 
 	vsyncButton13 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 13, "vsync", 6, { 466, 502, 93, 29 }, this);
 
@@ -133,9 +139,24 @@ bool Title::Update(float dt)
 		app->audio->PlayFx(selectSFX);
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_V) == KEY_DOWN)
 	{
+		LOG("DebugGUIPressed");
 		app->render->viewGUIbounds = !app->render->viewGUIbounds;
+		app->audio->PlayFx(selectSFX);
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
+	{
+		LOG("SettingsPressed");
+		settingMenu = !settingMenu;
+		app->audio->PlayFx(selectSFX);
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN)
+	{
+		LOG("CreditsPressed");
+		creditsMenu = !creditsMenu;
 		app->audio->PlayFx(selectSFX);
 	}
 
@@ -160,7 +181,7 @@ bool Title::Update(float dt)
 		creditsButton3->state = GuiControlState::DISABLED;
 		exitButton4->state = GuiControlState::DISABLED;
 
-		app->render->DrawTexture(popImg_settings, 0, 0, NULL);
+		app->render->DrawTexture(Img_settings, 0, 0, NULL);
 
 		closeSettingMenuButton6->state = GuiControlState::NORMAL;
 		decreaseMusicButton8->state = GuiControlState::NORMAL;
@@ -198,7 +219,7 @@ bool Title::Update(float dt)
 		creditsButton3->state = GuiControlState::DISABLED;
 		exitButton4->state = GuiControlState::DISABLED;
 
-		app->render->DrawTexture(popImg_credits, 0, 0, NULL);
+		app->render->DrawTexture(Img_credits, 0, 0, NULL);
 
 		closeCreditsMenuButton7->state = GuiControlState::NORMAL;
 	}
@@ -229,10 +250,10 @@ bool Title::CleanUp()
 		app->tex->UnLoad(img);
 	}
 
-	if (img != nullptr && popImg_settings != nullptr && popImg_credits != nullptr) {
+	if (img != nullptr && Img_settings != nullptr && Img_credits != nullptr) {
 		app->tex->UnLoad(img);
-		app->tex->UnLoad(popImg_settings);
-		app->tex->UnLoad(popImg_credits);
+		app->tex->UnLoad(Img_settings);
+		app->tex->UnLoad(Img_credits);
 	}
 
 	//STORE IN A LIST THIS BUTTONS AND THEN CHECK HERE IF NULLPTR TO CLEAN THEM UP

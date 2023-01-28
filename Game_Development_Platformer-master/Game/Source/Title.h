@@ -65,8 +65,8 @@ public:
 
 private:
 	SDL_Texture* img = nullptr;
-	SDL_Texture* popImg_settings = nullptr;
-	SDL_Texture* popImg_credits = nullptr;
+	SDL_Texture* Img_settings = nullptr;
+	SDL_Texture* Img_credits = nullptr;
 
 	const char* imgPath;
 	const char* popImgSettingsPath;
