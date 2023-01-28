@@ -7,6 +7,8 @@
 
 #include "SDL/include/SDL.h"
 
+
+
 class Render : public Module
 {
 public:
@@ -49,10 +51,14 @@ public:
 
 public:
 
+	bool limitFPS;
+
 	SDL_Renderer* renderer;
 	SDL_Rect camera;
 	SDL_Rect viewport;
 	SDL_Color background;
+
+	bool viewGUIbounds = false;
 };
 
 #endif // __RENDER_H__

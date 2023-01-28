@@ -26,6 +26,7 @@ enum class GuiControlType
 
 enum class GuiControlState
 {
+	ENABLED,
 	DISABLED,
 	NORMAL,
 	FOCUSED,
@@ -81,7 +82,8 @@ public:
 	GuiControlType type;
 	GuiControlState state;
 
-	SString text;           // Control text (if required)
+	const char* text;       // Control text (if required)
+	int textSize;
 	SDL_Rect bounds;        // Position and size
 	SDL_Color color;        // Tint color
 

@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include "SDL/include/SDL.h"
+#include "GuiButton.h"
 
 struct SDL_Texture;
 
@@ -33,11 +34,51 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-public:
+	bool OnGuiMouseClickEvent(GuiControl* control);
+
+
+	uint startSFX = 0;
+	uint menuSelectionSFX = 0;
 	uint selectSFX = 0;
+
+	// Declare a GUI Button and create it using the GuiManager
+	GuiButton* playButton1;
+	GuiButton* settingsButton2;
+	GuiButton* creditsButton3;
+	GuiButton* exitButton4;
+	GuiButton* continueButton5; // Show only if there is a saved game in "save_game.xml"
+	GuiButton* closeSettingMenuButton6; // Show only if bool "settingMenu" is true
+	GuiButton* closeCreditsMenuButton7; // Show only if bool "creditsMenu" is true
+
+	GuiButton* decreaseMusicButton8;
+	GuiButton* increaseMusicButton9;
+
+	GuiButton* decreaseSFXButton10;
+	GuiButton* increaseSFXButton11;
+
+	GuiButton* fullscreenButton12;
+
+	GuiButton* vsyncButton13;
+
+	bool settingMenu = false;
+	bool creditsMenu = false;
 
 private:
 	SDL_Texture* img = nullptr;
+	SDL_Texture* popImg_settings = nullptr;
+	SDL_Texture* popImg_credits = nullptr;
+
+	const char* imgPath;
+	const char* popImgSettingsPath;
+	const char* popImgCreditsPath;
+	const char* musicPath;
+	const char* startSFXPath;
+	const char* selectSFXPath;
+	const char* select2SFXPath;
+
+	bool isSaved = false;
+
+	bool exitGame = false;
 
 };
 

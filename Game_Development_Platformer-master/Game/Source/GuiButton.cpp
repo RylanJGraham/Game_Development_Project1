@@ -5,11 +5,14 @@
 #include "Textures.h"
 #include "Title.h"
 #include "Scene.h"
+#include "Fonts.h"
+#include "UI.h"
 
-GuiButton::GuiButton(uint32 id, SDL_Rect bounds, const char* text) : GuiControl(GuiControlType::BUTTON, id)
+GuiButton::GuiButton(uint32 id, SDL_Rect bounds, const char* text, int textSize) : GuiControl(GuiControlType::BUTTON, id)
 {
 	this->bounds = bounds;
 	this->text = text;
+	this->textSize = textSize;
 
 	canClick = true;
 	drawBasic = false;
@@ -39,9 +42,31 @@ bool GuiButton::Update(float dt)
 		{
 			state = GuiControlState::FOCUSED;
 
+			if (app->titleScreen->settingMenu == false && app->titleScreen->creditsMenu == false && app->scene->gamePaused == false)
+			{
+				if (textSize <= 5)
+					app->fonts->BlitText(this->bounds.x + (this->bounds.w / 3), (this->bounds.y + 2) + (this->bounds.h / 3), app->ui->font1_id, this->text);
+				else if (textSize > 5 && textSize <= 8)
+					app->fonts->BlitText(this->bounds.x + (this->bounds.w / 4.5), (this->bounds.y + 2) + (this->bounds.h / 3), app->ui->font1_id, this->text);
+				else if (textSize > 8 && textSize <= 12)
+					app->fonts->BlitText(this->bounds.x + (this->bounds.w / 5), (this->bounds.y + 2) + (this->bounds.h / 3), app->ui->font1_id, this->text);
+
+			}
+
 			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT)
 			{
 				state = GuiControlState::PRESSED;
+
+				if (app->titleScreen->settingMenu == false && app->titleScreen->creditsMenu == false && app->scene->gamePaused == false)
+				{
+					if (textSize <= 5)
+						app->fonts->BlitText(this->bounds.x + (this->bounds.w / 3), (this->bounds.y + 2) + (this->bounds.h / 3), app->ui->font1_id, this->text);
+					else if (textSize > 5 && textSize <= 8)
+						app->fonts->BlitText(this->bounds.x + (this->bounds.w / 4.5), (this->bounds.y + 2) + (this->bounds.h / 3), app->ui->font1_id, this->text);
+					else if (textSize > 8 && textSize <= 12)
+						app->fonts->BlitText(this->bounds.x + (this->bounds.w / 5), (this->bounds.y + 2) + (this->bounds.h / 3), app->ui->font1_id, this->text);
+				}
+
 			}
 
 			// If mouse button pressed -> Generate event!
@@ -53,8 +78,17 @@ bool GuiButton::Update(float dt)
 		}
 		else {
 			state = GuiControlState::NORMAL;
-		}
 
+			if (app->titleScreen->settingMenu == false && app->titleScreen->creditsMenu == false && app->scene->gamePaused == false)
+			{
+				if (textSize <= 5)
+					app->fonts->BlitText(this->bounds.x + (this->bounds.w / 3), (this->bounds.y) + (this->bounds.h / 3), app->ui->font1_id, this->text);
+				else if (textSize > 5 && textSize <= 8)
+					app->fonts->BlitText(this->bounds.x + (this->bounds.w / 4.5), (this->bounds.y) + (this->bounds.h / 3), app->ui->font1_id, this->text);
+				else if (textSize > 8 && textSize <= 12)
+					app->fonts->BlitText(this->bounds.x + (this->bounds.w / 5), (this->bounds.y) + (this->bounds.h / 3), app->ui->font1_id, this->text);
+			}
+		}
 	}
 
 	return false;
@@ -69,12 +103,14 @@ bool GuiButton::Draw(Render* render)
 
 	case GuiControlState::DISABLED:
 	{
-		render->DrawRectangle(bounds, 0, 0, 0, 0);
+		if (app->render->viewGUIbounds == true)
+			render->DrawRectangle(bounds, 0, 0, 0, 0);
 	} break;
 
 	case GuiControlState::NORMAL:
 	{
-		//render->DrawRectangle(bounds, 255, 0, 0, 255);
+		if (app->render->viewGUIbounds == true)
+			render->DrawRectangle(bounds, 255, 255, 0, 255);
 		SDL_Rect rect = { 0,29,93,29 };
 		render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
 
@@ -83,16 +119,18 @@ bool GuiButton::Draw(Render* render)
 	//L15: TODO 4: Draw the button according the GuiControl State
 	case GuiControlState::FOCUSED:
 	{
-		//render->DrawRectangle(bounds, 255, 255, 255, 160);
+		if (app->render->viewGUIbounds == true)
+			render->DrawRectangle(bounds, 255, 255, 255, 160);
 		SDL_Rect rect = { 0,57,93,29 };
 		render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
 
 	} break;
 	case GuiControlState::PRESSED:
 	{
+		if (app->render->viewGUIbounds == true)
+			render->DrawRectangle(bounds, 255, 255, 255, 0);
 		SDL_Rect rect = { 0,0,93,29 };
 		render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
-		render->DrawRectangle(bounds, 255, 255, 255, 0);
 
 	} break;
 

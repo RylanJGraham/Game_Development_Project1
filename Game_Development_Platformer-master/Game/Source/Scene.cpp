@@ -13,6 +13,8 @@
 #include "Ending.h"
 #include "UI.h"
 #include "GuiManager.h"
+#include "Title.h"
+#include "Audio.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -47,6 +49,10 @@ bool Scene::Start()
 	// Texture to show path origin 
 	originTex = app->tex->Load(origintexturePath);
 
+	imgPausePath = app->configNode.child("scene").child("imgPause").attribute("imgPausePath").as_string();
+
+	selectSFX = app->audio->LoadFx("Assets/Audio/Fx/swordswing.wav");
+
 	// iterate all objects in the scene
 	// Check https://pugixml.org/docs/quickstart.html#access
 	for (pugi::xml_node itemNode = app->configNode.child("scene").child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
@@ -73,6 +79,7 @@ bool Scene::Start()
 	app->fonts->Enable();
 	LOG("--STARTS GAME SCENE--");
 	app->physics->debug = false;
+	exitGame = false;
 	app->scene->airenemy->health = 2;
 
 	app->render->camera.x = 0;
@@ -99,6 +106,16 @@ bool Scene::Start()
 
 	app->win->SetTitle(title.GetString());
 
+	img_pause = app->tex->Load(imgPausePath);
+
+	// L15: TODO 2: Declare a GUI Button and create it using the GuiManager
+	uint w, h;
+	app->win->GetWindowSize(w, h);
+	resumeButton14 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 14, "resume", 7, { 469, 305, 93, 29 }, this);
+	backToTitleButton15 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 15, "back to title", 14, { 469, 344, 93, 29 }, this);
+	exitButton16 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 16, "exit", 5, { 469, 385, 93, 29 }, this);
+	closeButton17 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 17, "close", 6, { 767, 114, 93, 29 }, this);
+
 	ResetScene();
 
 	return true;
@@ -113,6 +130,13 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
+	if (continueGame == true)
+	{
+		app->LoadGameRequest();
+		app->audio->PlayFx(selectSFX);
+		continueGame = false;
+	}
+
 	int scale = app->win->GetScale();
 	int camSpeed = (0 / scale)*dt;
 
@@ -123,29 +147,52 @@ bool Scene::Update(float dt)
 		app->fade->FadeBlack((Module*)app->scene, (Module*)app->scene, 60 * (16.0f / dt));
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
-
+	if (app->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
+	{
+		app->render->viewGUIbounds = !app->render->viewGUIbounds;
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) {
-		app->fade->FadeBlack((Module*)app->scene, (Module*)app->scene, 60 * (16.0f / dt));
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	{
+		gamePaused = !gamePaused;
+
+		Mix_PauseMusic();
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) {
+
+	if (gamePaused != true)
+	{
+		Mix_ResumeMusic();
+		if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
+				
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) {
+		app->fade->FadeBlack((Module*)app->scene, (Module*)app->scene, 60);
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) {
 		app->SaveGameRequest();
 		player->savedPosition.x = player->position.x;
 		player->savedPosition.y = player->position.y;
 
-	}
+		}
 
-	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) {
+		if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) {
 		app->LoadGameRequest();
 		player->SetPos(player->savedPosition.x + 46, player->savedPosition.y + 60);
-	}
+		}
 
-	if (app->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
-	{
+		if (app->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
+		{
+			app->render->limitFPS = !app->render->limitFPS;
+			app->audio->PlayFx(selectSFX);
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
+		{
 		capTo30fps = !capTo30fps;
+		}
 	}
 
 	
@@ -195,6 +242,23 @@ bool Scene::Update(float dt)
 		app->ui->BlitPlayerYPos();
 	}
 
+	resumeButton14->state = GuiControlState::DISABLED;
+	backToTitleButton15->state = GuiControlState::DISABLED;
+	exitButton16->state = GuiControlState::DISABLED;
+	closeButton17->state = GuiControlState::DISABLED;
+
+	if (gamePaused == true)
+	{
+		// Display pause menu
+		LOG("PauseMenuDrawing");
+		app->render->DrawTexture(img_pause, 0, 0, NULL);
+			
+		resumeButton14->state = GuiControlState::NORMAL;
+		backToTitleButton15->state = GuiControlState::NORMAL;
+		exitButton16->state = GuiControlState::NORMAL;
+		closeButton17->state = GuiControlState::NORMAL;
+	}
+
 
 	return true;
 }
@@ -204,7 +268,7 @@ bool Scene::PostUpdate()
 {
 	bool ret = true;
 
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	if (exitGame == true)
 		ret = false;
 
 	return ret;
@@ -218,13 +282,29 @@ bool Scene::CleanUp()
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;
 	//if (player != nullptr) {
-	//	if (player->lives == 0) {
-			if (player) { app->entityManager->DestroyEntity(player); }
-			if (airenemy) { app->entityManager->DestroyEntity(airenemy); }
-			if (groundenemy) { app->entityManager->DestroyEntity(groundenemy); }
-			if (item) { app->entityManager->DestroyEntity(item); }
-	//	}
-	//}
+	//	if (player->lives == 0) 
+
+		if (player) { app->entityManager->DestroyEntity(player); }		
+		if (airenemy) { app->entityManager->DestroyEntity(airenemy); }
+		if (groundenemy) { app->entityManager->DestroyEntity(groundenemy); }
+		if (item) { app->entityManager->DestroyEntity(item); }
+
+
+	gamePaused = false;
+	Mix_ResumeMusic();
+
+	app->tex->UnLoad(img_pause);
+
+
+	if (resumeButton14 != nullptr)
+		resumeButton14->state = GuiControlState::DISABLED;
+	if (backToTitleButton15 != nullptr)
+		backToTitleButton15->state = GuiControlState::DISABLED;
+	if (exitButton16 != nullptr)
+		exitButton16->state = GuiControlState::DISABLED;
+	if (closeButton17 != nullptr)
+		closeButton17->state = GuiControlState::DISABLED;
+
 	app->entityManager->Disable();
 	app->physics->Disable();
 	app->map->Disable();
@@ -237,6 +317,21 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)
 	// L15: TODO 5: Implement the OnGuiMouseClickEvent method
 	switch (control->id)
 	{
+	case 17:
+	case 14:
+		gamePaused = !gamePaused;
+		app->audio->PlayFx(app->titleScreen->menuSelectionSFX);
+		break;
+
+	case 15:
+		app->fade->FadeBlack(this, (Module*)app->titleScreen, 90);
+		app->audio->PlayFx(app->titleScreen->startSFX);
+		break;
+
+	case 16:
+		exitGame = !exitGame;
+		app->audio->PlayFx(app->titleScreen->menuSelectionSFX);
+		break;
 
 	default:
 		break;
@@ -248,7 +343,7 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)
 
 void Scene::ResetScene() {
 
-	/*app->audio->PlayMusic("Assets/Audio/Music/song1.ogg", 1.0f);*/
+	app->audio->PlayMusic("Assets/Audio/Music/medieval.ogg", 1.0f);
 	player->ResetPlayerPos();
 	player->lives = 3;
 
