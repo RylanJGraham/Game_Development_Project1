@@ -109,7 +109,7 @@ bool AirEnemy::Update(float dt)
 			refreshPathTime = 0;
 		}
 
-		MovementDirection(origin, playerTile);
+		MovementDirection(origin, playerTile, dt);
 	}
 	else
 	{
@@ -201,17 +201,17 @@ bool AirEnemy::CleanUp()
 	return true;
 }
 
-void AirEnemy::MovementDirection(const iPoint& origin, const iPoint& destination) {
+void AirEnemy::MovementDirection(const iPoint& origin, const iPoint& destination, float dt) {
 
 	float res = destination.x - origin.x;
 	iPoint playerTile = app->map->WorldToMap(app->scene->player->position.x, app->scene->player->position.y);
 	if (app->pathfinding->IsWalkable(playerTile) != 0) {
 		//Check if player is to the right or the left of the origin
 		if (res < 0) {
-			velocity.x = -2;
+			velocity.x = -0.15*dt;
 		}
 		if (res > 0) {
-			velocity.x = +2;
+			velocity.x = +0.15*dt;
 		}
 	}
 	else {

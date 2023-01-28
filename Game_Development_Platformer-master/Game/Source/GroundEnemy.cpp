@@ -212,11 +212,11 @@ void GroundEnemy::MovementDirection(const iPoint& origin, const iPoint& destinat
 	if (app->pathfinding->IsWalkable(destination) != 0) {
 		//Check if player is to the right or the left of the origin
 		if (resX < 0) {
-			velocity.x = -1*dt;
+			velocity.x = -0.12*dt;
 			/*fliped = SDL_FLIP_NONE;*/
 		}
 		if (resX > 0) {
-			velocity.x = +1*dt;
+			velocity.x = +0.12*dt;
 			//fliped = SDL_FLIP_HORIZONTAL;
 		}
 		if (resY < 0 && jump == false && app->pathfinding->GetNextTileY(2) < 15 && app->pathfinding->GetNextTileY(2) > 13) {

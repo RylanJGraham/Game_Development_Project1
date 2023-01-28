@@ -87,7 +87,7 @@ void Player::SetPos(int x, int y) {
 bool Player::Update(float dt)
 {
 
-	int speed = 5*dt;
+	int speed = 0.25*dt;
 
 	DebugKeys();
 
