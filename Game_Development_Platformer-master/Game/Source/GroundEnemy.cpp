@@ -104,7 +104,7 @@ bool GroundEnemy::Update(float dt)
 	AttackL.speed = 0.009375f *dt;
 
 	currentAnim = &AttackL;
-	velocity.y = -GRAVITY_Y;
+	velocity.y = -GRAVITY_Y * 0.166f * (dt / 16) * (dt / 16);
 
 	iPoint playerTile = app->map->WorldToMap(app->scene->player->position.x + 32 , app->scene->player->position.y);
 
