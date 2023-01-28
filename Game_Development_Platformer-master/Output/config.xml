@@ -2,7 +2,7 @@
   <app>
     <title>Knights Vow - Game Development</title>
     <organization>UPC</organization>
-	<frcap value = "44"/>
+	<frcap value = "16"/>
   </app>
 
   <renderer>

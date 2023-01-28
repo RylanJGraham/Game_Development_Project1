@@ -54,7 +54,7 @@ bool Logo::Update(float dt)
 {
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
-		app->fade->FadeBlack(this, (Module*)app->titleScreen, 60);
+		app->fade->FadeBlack(this, (Module*)app->titleScreen, 60 * (16.0f / dt));
 		app->audio->PlayFx(BackgroundSFX, 1);
 		app->audio->PlayFx(selectSFX);
 	}
