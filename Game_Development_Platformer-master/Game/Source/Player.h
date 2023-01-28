@@ -32,6 +32,7 @@ public:
 
 public:
 
+	int baseLives;
 	int lives;
 
 	bool isGrounded;

@@ -38,6 +38,7 @@ bool Player::Start()
 	startPos.x = parameters.attribute("x").as_int();
 	startPos.y = parameters.attribute("y").as_int();
 	texturePath = parameters.attribute("texturepath").as_string();
+	baseLives = parameters.attribute("hp").as_int();
 
 	texture = app->tex->Load(texturePath);
 
@@ -65,11 +66,11 @@ bool Player::Start()
 	
 	LoadAnimations();
 
+	lives = baseLives;
 	alive = true;
 	isAttacking = false;
 	godMode = false;
 	attackCooldown = attackCooldownMax;
-	lives = 3;
 	isHit = false;
 	iFrames = 0;
 
@@ -237,6 +238,7 @@ bool Player::Update(float dt)
 
 	if (iFrames > 0) {
 		iFrames--;
+		LOG("iFrames Remaining: %d", iFrames);
 	}
 
 	return true;
@@ -290,10 +292,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 		}
 		break;
 	case ColliderType::ENEMY:
-		LOG("Collision ENEMY SLIME");
+		LOG("Collision ENEMY");
 		if (!godMode) {
 			if (lives > 0 && iFrames <= 0) {
-				lives--;
+				lives = lives - 2;
 				if(lives >= 1){ isHit = true; }
 			}
 		}

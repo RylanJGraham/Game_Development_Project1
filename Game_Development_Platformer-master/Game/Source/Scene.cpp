@@ -345,7 +345,7 @@ void Scene::ResetScene() {
 
 	app->audio->PlayMusic("Assets/Audio/Music/medieval.ogg", 1.0f);
 	player->ResetPlayerPos();
-	player->lives = 3;
+	player->lives = player->baseLives;
 
 	//coin->ResetCoin();
 }
