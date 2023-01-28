@@ -25,7 +25,7 @@ public:
 
 	void AirEnemy::DebugKeys();
 
-	void MovementDirection(const iPoint& origin, const iPoint& destination);
+	void MovementDirection(const iPoint& origin, const iPoint& destination, float dt);
 
 	void OnCollision(PhysBody* physA, PhysBody* physB);
 

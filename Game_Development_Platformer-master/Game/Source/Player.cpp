@@ -87,7 +87,18 @@ void Player::SetPos(int x, int y) {
 bool Player::Update(float dt)
 {
 
-	int speed = 5*dt;
+	IdleR.speed = 0.00625 * dt;
+	IdleL.speed = 0.00625 * dt;
+	RunR.speed = 0.0125 * dt;
+	RunL.speed = 0.0125 * dt;
+	JumpR.speed = 0.03125 * dt;
+	JumpL.speed = 0.03125 * dt;
+	DeathR.speed = 0.03125 * dt;
+	DeathL.speed = 0.03125 * dt;
+	AttackR.speed = 0.021875f * dt;
+	AttackL.speed = 0.021875f * dt;
+
+	int speed = 0.25*dt;
 
 	DebugKeys();
 
@@ -310,7 +321,7 @@ void Player::LoadAnimations()
 	IdleL.PushBack({ 840, 320, 120, 80 });
 	IdleL.PushBack({ 960, 320, 120, 80 });
 	IdleL.PushBack({ 1080, 320, 120, 80 });
-	IdleL.speed = 0.1f;
+	IdleL.speed = 0.00625f;
 	IdleL.loop = true;
 
 	IdleR.PushBack({ 1080, 800, 120, 80 });
@@ -323,7 +334,7 @@ void Player::LoadAnimations()
 	IdleR.PushBack({ 240, 800, 120, 80 });
 	IdleR.PushBack({ 120, 800, 120, 80 });
 	IdleR.PushBack({ 0, 800, 120, 80 });
-	IdleR.speed = 0.1f;
+	IdleR.speed = 0.00625f;
 	IdleR.loop = true;
 
 	currentAnim = &IdleL;
@@ -339,7 +350,7 @@ void Player::LoadAnimations()
 	RunL.PushBack({ 840, 400, 120, 80 });
 	RunL.PushBack({ 960, 400, 120, 80 });
 	RunL.PushBack({ 1080, 400, 120, 80 });
-	RunL.speed = 0.2f;
+	RunL.speed = 0.01250f;
 	RunL.loop = true;
 
 	RunR.PushBack({ 1080, 880, 120, 80 });
@@ -352,7 +363,7 @@ void Player::LoadAnimations()
 	RunR.PushBack({ 240, 880, 120, 80 });
 	RunR.PushBack({ 120, 880, 120, 80 });
 	RunR.PushBack({ 0, 880, 120, 80 });
-	RunR.speed = 0.2f;
+	RunR.speed = 0.01250f;
 	RunR.loop = true;
 
 	JumpL.PushBack({ 0, 160, 120, 80 });
@@ -361,7 +372,7 @@ void Player::LoadAnimations()
 	JumpL.PushBack({ 360, 160, 120, 80 });
 	JumpL.PushBack({ 480, 160, 120, 80 });
 	JumpL.PushBack({ 600, 160, 120, 80 });
-	JumpL.speed = 0.5f;
+	JumpL.speed = 0.03125f;
 	JumpL.loop = false;
 
 	JumpR.PushBack({ 1080, 640, 120, 80 });
@@ -370,7 +381,7 @@ void Player::LoadAnimations()
 	JumpR.PushBack({ 720, 640, 120, 80 });
 	JumpR.PushBack({ 600, 640, 120, 80 });
 	JumpR.PushBack({ 480, 640, 120, 80 });
-	JumpR.speed = 0.5f;
+	JumpR.speed = 0.03125f;
 	JumpR.loop = false;
 
 	DeathL.PushBack({ 120, 240, 120, 80 });
@@ -383,7 +394,7 @@ void Player::LoadAnimations()
 	DeathL.PushBack({ 840, 0, 120, 80 });
 	DeathL.PushBack({ 960, 0, 120, 80 });
 	DeathL.PushBack({ 1080, 0, 120, 80 });
-	DeathL.speed = 0.5f;
+	DeathL.speed = 0.03125f;
 	DeathL.loop = false;
 
 	DeathR.PushBack({ 960, 720, 120, 80 });
@@ -396,21 +407,21 @@ void Player::LoadAnimations()
 	DeathR.PushBack({ 840, 480, 120, 80 });
 	DeathR.PushBack({ 960, 480, 120, 80 });
 	DeathR.PushBack({ 1080, 480, 120, 80 });
-	DeathR.speed = 0.5f;
+	DeathR.speed = 0.03125f;
 	DeathR.loop = false;
 
 	AttackL.PushBack({ 0, 80, 120, 80 });
 	AttackL.PushBack({ 125, 80, 120, 80 });
 	AttackL.PushBack({ 250, 80, 120, 80 });
 	AttackL.PushBack({ 375, 80, 120, 80 });
-	AttackL.speed = 0.35f;
+	AttackL.speed = 0.021875f;
 	AttackL.loop = false;
 
 	AttackR.PushBack({ 1080, 560, 120, 80 });
 	AttackR.PushBack({ 955, 560, 120, 80 });
 	AttackR.PushBack({ 830, 560, 120, 80 });
 	AttackR.PushBack({ 705, 560, 120, 80 });
-	AttackR.speed = 0.35f;
+	AttackR.speed = 0.021875f;
 	AttackR.loop = false;
 }
 

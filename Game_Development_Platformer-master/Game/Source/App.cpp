@@ -98,6 +98,8 @@ void App::AddModule(Module* module)
 // Called before render is available
 bool App::Awake()
 {
+	timer = Timer();
+
 	bool ret = false;
 
 	// L01: DONE 3: Load config from XML
@@ -195,6 +197,7 @@ bool App::LoadConfig()
 // ---------------------------------------------
 void App::PrepareUpdate()
 {
+	frameTime.Start();
 }
 
 // ---------------------------------------------

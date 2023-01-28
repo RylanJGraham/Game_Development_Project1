@@ -81,6 +81,13 @@ void AirEnemy::SetPos(int x, int y) {
 
 bool AirEnemy::Update(float dt)
 {
+
+	Movement.speed = 0.03125f * dt;
+	Damaged.speed = 0.03125f * dt;
+	Death.speed = 0.00625f * dt;
+	Attack.speed = 0.00625f * dt;
+	Idle.speed = 0.003125f * dt;
+
 	b2Vec2 vel;
 	int speed = 5*dt;
 
@@ -109,7 +116,7 @@ bool AirEnemy::Update(float dt)
 			refreshPathTime = 0;
 		}
 
-		MovementDirection(origin, playerTile);
+		MovementDirection(origin, playerTile, dt);
 	}
 	else
 	{
@@ -201,17 +208,17 @@ bool AirEnemy::CleanUp()
 	return true;
 }
 
-void AirEnemy::MovementDirection(const iPoint& origin, const iPoint& destination) {
+void AirEnemy::MovementDirection(const iPoint& origin, const iPoint& destination, float dt) {
 
 	float res = destination.x - origin.x;
 	iPoint playerTile = app->map->WorldToMap(app->scene->player->position.x, app->scene->player->position.y);
 	if (app->pathfinding->IsWalkable(playerTile) != 0) {
 		//Check if player is to the right or the left of the origin
 		if (res < 0) {
-			velocity.x = -2;
+			velocity.x = -0.15*dt;
 		}
 		if (res > 0) {
-			velocity.x = +2;
+			velocity.x = +0.15*dt;
 		}
 	}
 	else {
@@ -275,7 +282,7 @@ void AirEnemy::LoadAnimations()
 	Idle.PushBack({ 54, 160, 43, 34 });
 	Idle.PushBack({ 102, 160, 43, 34 });
 	Idle.PushBack({ 147, 160, 46, 34 });
-	Idle.speed = 0.05f;
+	Idle.speed = 0.003125f;
 	Idle.loop = true;
 	currentAnim = &Idle;
 
@@ -284,25 +291,25 @@ void AirEnemy::LoadAnimations()
 	Attack.PushBack({ 54, 6, 43, 41 });
 	Attack.PushBack({ 102, 6, 43, 41 });
 	Attack.PushBack({ 147, 6, 46, 41 });
-	Attack.speed = 0.1f;
+	Attack.speed = 0.00625f;
 	Attack.loop = true;
 
 	Death.PushBack({ 7, 57, 42, 41 });
 	Death.PushBack({ 54, 57, 43, 41 });
 	Death.PushBack({ 102, 57, 43, 41 });
 	Death.PushBack({ 147, 57, 46, 41 });
-	Death.speed = 0.1f;
+	Death.speed = 0.00625f;
 	Death.loop = false;
 
 	Damaged.PushBack({ 7, 112, 42, 30 });
 	Damaged.PushBack({ 54, 112, 43, 30 });
-	Damaged.speed = 0.5f;
+	Damaged.speed = 0.03125f;
 	Damaged.loop = false;
 
 	Movement.PushBack({ 7, 207, 42, 32 });
 	Movement.PushBack({ 54, 207, 43, 32 });
 	Movement.PushBack({ 102, 207, 43, 32 });
 	Movement.PushBack({ 147, 207, 46, 32 });
-	Movement.speed = 0.5f;
+	Movement.speed = 0.03125f;
 	Movement.loop = true;
 }

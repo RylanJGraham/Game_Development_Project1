@@ -91,6 +91,18 @@ bool GroundEnemy::PreUpdate() {
 
 bool GroundEnemy::Update(float dt)
 {
+
+	HitL.speed = 0.00625f * dt;
+	HitR.speed = 0.00625f *dt;
+	RunR.speed = 0.00625f *dt;
+	RunL.speed = 0.00625f *dt;
+	JumpR.speed = 0.03125f *dt;
+	JumpL.speed = 0.03125f *dt;
+	DeathR.speed = 0.00625f *dt;
+	DeathL.speed = 0.00625f *dt;
+	AttackR.speed = 0.009375f *dt;
+	AttackL.speed = 0.009375f *dt;
+
 	currentAnim = &AttackL;
 	velocity.y = -GRAVITY_Y;
 
@@ -212,11 +224,11 @@ void GroundEnemy::MovementDirection(const iPoint& origin, const iPoint& destinat
 	if (app->pathfinding->IsWalkable(destination) != 0) {
 		//Check if player is to the right or the left of the origin
 		if (resX < 0) {
-			velocity.x = -1*dt;
+			velocity.x = -0.12*dt;
 			/*fliped = SDL_FLIP_NONE;*/
 		}
 		if (resX > 0) {
-			velocity.x = +1*dt;
+			velocity.x = +0.12*dt;
 			//fliped = SDL_FLIP_HORIZONTAL;
 		}
 		if (resY < 0 && jump == false && app->pathfinding->GetNextTileY(2) < 15 && app->pathfinding->GetNextTileY(2) > 13) {
@@ -316,13 +328,13 @@ void GroundEnemy::LoadAnimations()
 	AttackL.PushBack({ 53, 14, 43, 26 });
 	AttackL.PushBack({ 99, 14, 43, 26 });
 	AttackL.PushBack({ 147, 14, 43, 26 });
-	AttackL.speed = 0.15f;
+	AttackL.speed = 0.009375f;
 	AttackL.loop = true;
 
 	HitL.PushBack({ 5, 110, 43, 26 });
 	HitL.PushBack({ 5, 110, 43, 26 });
 	HitL.PushBack({ 53, 110, 43, 26 });
-	HitL.speed = 0.1f;
+	HitL.speed = 0.00625f;
 	HitL.loop = false;
 
 	DeathL.PushBack({ 5, 110, 43, 26 });
@@ -330,7 +342,7 @@ void GroundEnemy::LoadAnimations()
 	DeathL.PushBack({ 53, 62, 43, 26 });
 	DeathL.PushBack({ 99, 62, 43, 26 });
 	DeathL.PushBack({ 147, 62, 43, 26 });
-	DeathL.speed = 0.1f;
+	DeathL.speed = 0.00625f;
 	DeathL.loop = false;
 
 	AttackR.PushBack({ 0, 86, 72, 86 });
@@ -339,7 +351,7 @@ void GroundEnemy::LoadAnimations()
 	AttackR.PushBack({ 134, 86, 72, 86 });
 	AttackR.PushBack({ 134, 86, 72, 86 });
 	AttackR.PushBack({ 201, 86, 72, 86 });
-	AttackR.speed = 0.15f;
+	AttackR.speed = 0.009375f;
 	AttackR.loop = true;
 
 	RunL.PushBack({ 0, 172, 72, 86 });
@@ -349,7 +361,7 @@ void GroundEnemy::LoadAnimations()
 	RunL.PushBack({ 292, 172, 72, 86 });
 	RunL.PushBack({ 364, 172, 72, 86 });
 	RunL.PushBack({ 436, 172, 72, 86 });
-	RunL.speed = 0.1f;
+	RunL.speed = 0.00625f;
 	RunL.loop = true;
 
 	RunR.PushBack({ 428, 258, 72, 86 });
@@ -359,18 +371,18 @@ void GroundEnemy::LoadAnimations()
 	RunR.PushBack({ 140, 258, 72, 86 });
 	RunR.PushBack({ 68, 258, 72, 86 });
 	RunR.PushBack({ 0, 258, 72, 86 });
-	RunR.speed = 0.1f;
+	RunR.speed = 0.00625f;
 	RunR.loop = true;
 
 	JumpL.PushBack({ 0, 344, 80, 86 });
 	JumpL.PushBack({ 80, 344, 80, 86 });
 	JumpL.PushBack({ 160, 344, 80, 86 });
-	JumpL.speed = 0.5f;
+	JumpL.speed = 0.03125f;
 	JumpL.loop = false;
 
 	JumpR.PushBack({ 405, 430, 80, 86 });
 	JumpR.PushBack({ 325, 430, 80, 86 });
 	JumpR.PushBack({ 245, 430, 80, 86 });
-	JumpR.speed = 0.5f;
+	JumpR.speed = 0.03125f;
 	JumpR.loop = false;
 }
