@@ -400,7 +400,7 @@ void Player::LoadAnimations()
 	DeathR.PushBack({ 0, 0, 120, 80 });
 	DeathR.PushBack({ 120, 0, 120, 80 });
 	DeathR.PushBack({ 240, 0, 120, 80 });
-	DeathR.PushBack({ 350, 0, 120, 80 });
+	DeathR.PushBack({ 360, 0, 120, 80 });
 	DeathR.PushBack({ 480, 0, 120, 80 });
 	DeathR.PushBack({ 600, 0, 120, 80 });
 	DeathR.PushBack({ 720, 0, 120, 80 });
@@ -417,7 +417,7 @@ void Player::LoadAnimations()
 	DeathL.PushBack({ 720, 480, 120, 80 });
 	DeathL.PushBack({ 600, 480, 120, 80 });
 	DeathL.PushBack({ 480, 480, 120, 80 });
-	DeathL.PushBack({ 350, 480, 120, 80 });
+	DeathL.PushBack({ 360, 480, 120, 80 });
 	DeathL.PushBack({ 240, 480, 120, 80 });
 	DeathL.PushBack({ 120, 480, 120, 80 });
 	DeathL.PushBack({ 0, 480, 120, 80 });
