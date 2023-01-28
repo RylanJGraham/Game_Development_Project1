@@ -9,6 +9,7 @@
 #include "Point.h"
 #include "Physics.h"
 #include "EntityManager.h"
+#include "FadeToBlack.h"
 
 Item::Item() : Entity(EntityType::ITEM)
 {
@@ -53,9 +54,12 @@ bool Item::Update(float dt)
 		app->render->DrawTexture(texture, position.x, position.y);
 	}
 	else{
+		pbody->body->SetActive(false);
+		this->Disable();
 		if (pbody != nullptr) {
 		app->physics->world->DestroyBody(pbody->body);
 		}
+		app->fade->FadeBlack((Module*)app->scene, (Module*)app->titleScreen, 60 * (16.0f / dt));
 	pbody = nullptr;
 	CleanUp();
 	}
@@ -84,8 +88,7 @@ void Item::OnCollision(PhysBody* physA, PhysBody* physB)
 	case ColliderType::PLAYER:
 		LOG("Collision PLAYER");
 		isPicked = true;
-		pbody->body->SetActive(false);
-		this->Disable();
+
 		//this->Disable();
 		break;
 	case ColliderType::PLATFORM:

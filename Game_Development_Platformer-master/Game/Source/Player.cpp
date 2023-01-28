@@ -123,7 +123,7 @@ bool Player::Update(float dt)
 	{
 		velocity = { 0, -GRAVITY_Y };
 		pbody->body->SetGravityScale(1);
-		velocity = pbody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y / (dt *3.75f ));
+		velocity = pbody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.0166f * (dt/16) * (dt/16));
 	}
 
 	if (!alive)
@@ -190,8 +190,7 @@ bool Player::Update(float dt)
 	//Apply Jump Force
 	if (remainingJumpSteps > 0)
 	{
-		float force = pbody->body->GetMass() * 0.0166666f; //F = mv/t (t = 1/60fps)
-		force /= 6.0;
+		float force = pbody->body->GetMass() * 80 * (dt / 16);
 		pbody->body->ApplyForce(b2Vec2(0, -force), pbody->body->GetWorldCenter(), true);
 		remainingJumpSteps--;
 	}
@@ -244,7 +243,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 		//app->audio->PlayFx(pickCoinSFX);
 		LOG("Items: %d", Items);
 		app->audio->PlayFx(chestopenSFX);
-		app->fade->FadeBlack((Module*)app->scene, (Module*)app->titleScreen, 60);
 		/*app->physics->Disable();
 		app->scene->Disable();*/
 		break;
@@ -253,7 +251,9 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 		break;
 	case ColliderType::GROUND:
 		LOG("Collision GROUND");
-		isGrounded = true;
+		if (remainingJumpSteps <= 0) {
+			isGrounded = true;
+		}
 		break;
 	case ColliderType::PLATFORM:
 		LOG("Collision PLATFORM");
