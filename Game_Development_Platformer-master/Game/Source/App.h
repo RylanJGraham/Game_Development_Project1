@@ -131,6 +131,7 @@ public:
 	int sfxValue = 100;
 
 	int fps = 60;
+	float dt;
 
 private:
 
@@ -142,7 +143,7 @@ private:
 	List<Module*> modules;
 
 	uint frames;
-	float dt;
+
 
 	// L03: DONE 1: Create control variables to control that the real Load and Save happens at the end of the frame
     bool saveGameRequested;

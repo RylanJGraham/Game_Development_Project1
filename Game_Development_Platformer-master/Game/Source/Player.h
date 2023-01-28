@@ -64,6 +64,7 @@ private:
 
 	int width;
 	int height;
+	bool isHit;
 
 	//Texture
 	SDL_Texture* texture;
@@ -75,7 +76,7 @@ private:
 	//Animation
 	Animation IdleL, IdleR;	// jump?
 	Animation RunL, RunR, JumpL, JumpR;
-	Animation DeathL, DeathR;
+	Animation DeathL, DeathR, HitL, HitR;
 	Animation AttackL, AttackR;
 	Animation* currentAnim = nullptr;
 

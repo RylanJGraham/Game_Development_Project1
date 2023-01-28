@@ -168,7 +168,7 @@ bool Scene::Update(float dt)
 		}
 
 		if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) {
-		app->fade->FadeBlack((Module*)app->scene, (Module*)app->scene, 60);
+		app->fade->FadeBlack((Module*)app->scene, (Module*)app->scene, 60 * (16.0f / dt));
 		}
 
 		if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) {
@@ -324,7 +324,7 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)
 		break;
 
 	case 15:
-		app->fade->FadeBlack(this, (Module*)app->titleScreen, 90);
+		app->fade->FadeBlack(this, (Module*)app->titleScreen, 90 * (16.0f / app->dt));
 		app->audio->PlayFx(app->titleScreen->startSFX);
 		break;
 
