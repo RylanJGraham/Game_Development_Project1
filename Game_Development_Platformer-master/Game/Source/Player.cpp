@@ -70,6 +70,8 @@ bool Player::Start()
 	godMode = false;
 	attackCooldown = attackCooldownMax;
 	lives = 3;
+	isHit = false;
+	iFrames = 0;
 
 	return true;
 }
@@ -97,6 +99,8 @@ bool Player::Update(float dt)
 	DeathL.speed = 0.03125 * dt;
 	AttackR.speed = 0.021875f * dt;
 	AttackL.speed = 0.021875f * dt;
+	HitR.speed = 0.03125 * dt;
+	HitL.speed = 0.03125 * dt;
 
 	int speed = 0.25*dt;
 
@@ -215,16 +219,25 @@ bool Player::Update(float dt)
 		AttackR.Reset();
 		app->physics->world->DestroyBody(hitbox->body);
 	}
+	if (HitL.GetCurrentFrameint() == 1 || HitR.GetCurrentFrameint() == 1) {
+		isHit = false;
+		iFrames = 30 * (16 / dt);
+		HitL.Reset();
+		HitR.Reset();
+	}
 	if (idle && !isAttacking) { currentAnim = leftID ? &IdleR : &IdleL; }
 	if (!isGrounded) { currentAnim = leftID ? &JumpR : &JumpL; }
+	if (isHit) { currentAnim = leftID ? &HitR : &HitL; }
+
 	SDL_Rect rect2 = currentAnim->GetCurrentFrame();
-	if (!(currentAnim == &DeathL || currentAnim == &DeathR)) {
-		app->render->DrawTexture(texture, position.x - 11, position.y, &rect2);
-	}
-	else{
+	if (iFrames % 2 == 0) {
 		app->render->DrawTexture(texture, position.x - 11, position.y, &rect2);
 	}
 	currentAnim->Update();
+
+	if (iFrames > 0) {
+		iFrames--;
+	}
 
 	return true;
 }
@@ -279,7 +292,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 	case ColliderType::ENEMY:
 		LOG("Collision ENEMY SLIME");
 		if (!godMode) {
-			lives--;
+			if (lives > 0 && iFrames <= 0) {
+				lives--;
+				if(lives >= 1){ isHit = true; }
+			}
 		}
 		else {
 			app->scene->player->ResetPlayerPos();
@@ -310,6 +326,10 @@ void Player::DebugKeys()
 
 	if (app->input->GetKey(SDL_SCANCODE_K) == KEY_DOWN) {
 		lives = 0;
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
+		isHit = true;
 	}
 
 }
@@ -390,14 +410,16 @@ void Player::LoadAnimations()
 	JumpR.loop = false;
 
 	HitL.PushBack({ 120, 240, 120, 80 });
+	HitL.PushBack({ 120, 240, 120, 80 });
 	HitL.speed = 0.03125f;
 	HitL.loop = false;
 
 	HitR.PushBack({ 960, 720, 120, 80 });
+	HitR.PushBack({ 960, 720, 120, 80 });
 	HitR.speed = 0.03125f;
 	HitR.loop = false;
 
-	DeathR.PushBack({ 0, 0, 120, 80 });
+	DeathR.PushBack({ 120, 240, 120, 80 });
 	DeathR.PushBack({ 120, 0, 120, 80 });
 	DeathR.PushBack({ 240, 0, 120, 80 });
 	DeathR.PushBack({ 360, 0, 120, 80 });
@@ -411,7 +433,7 @@ void Player::LoadAnimations()
 	DeathR.loop = false;
 
 	
-	DeathL.PushBack({ 1080, 480, 120, 80 });
+	DeathL.PushBack({ 960, 720, 120, 80 });
 	DeathL.PushBack({ 960, 480, 120, 80 });
 	DeathL.PushBack({ 840, 480, 120, 80 });
 	DeathL.PushBack({ 720, 480, 120, 80 });

@@ -64,7 +64,9 @@ private:
 
 	int width;
 	int height;
+
 	bool isHit;
+	uint iFrames;
 
 	//Texture
 	SDL_Texture* texture;
