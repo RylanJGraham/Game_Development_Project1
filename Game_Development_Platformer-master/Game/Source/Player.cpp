@@ -126,6 +126,10 @@ bool Player::Update(float dt)
 		velocity = pbody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.0166f * (dt/16) * (dt/16));
 	}
 
+	if (lives == 0) {
+		alive = false;
+	}
+
 	if (!alive)
 	{
 		if (godMode) {
@@ -134,7 +138,8 @@ bool Player::Update(float dt)
 		app->audio->PlayFx(pHurtSFX);
 		idle = false;
 		currentAnim = leftID ? &DeathL : &DeathR;
-		pbody->body->SetAwake(false);
+		pbody->body->SetActive(false);
+		app->fade->FadeBlack((Module*)app->scene, (Module*)app->endScreen, 60 * (16.0f / dt));
 	}
 	else
 	{
@@ -213,7 +218,12 @@ bool Player::Update(float dt)
 	if (idle && !isAttacking) { currentAnim = leftID ? &IdleR : &IdleL; }
 	if (!isGrounded) { currentAnim = leftID ? &JumpR : &JumpL; }
 	SDL_Rect rect2 = currentAnim->GetCurrentFrame();
-	app->render->DrawTexture(texture, position.x-11, position.y, &rect2);
+	if (!(currentAnim == &DeathL || currentAnim == &DeathR)) {
+		app->render->DrawTexture(texture, position.x - 11, position.y, &rect2);
+	}
+	else{
+		app->render->DrawTexture(texture, position.x - 11, position.y, &rect2);
+	}
 	currentAnim->Update();
 
 	return true;
@@ -263,23 +273,13 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 		LOG("Collision DEATH");
 		if (!godMode) {
 			alive = false;
-			lives--;
-		}
-		if (lives == 0) {
-			app->fade->FadeBlack((Module*)app->scene, (Module*)app->endScreen, 60);
+			lives = 0;
 		}
 		break;
 	case ColliderType::ENEMY:
 		LOG("Collision ENEMY SLIME");
 		if (!godMode) {
 			lives--;
-		}
-
-
-		if (lives <= 0) {
-			alive = false;
-		/*	app->audio->PlayFx(dieSFX);*/
-			app->fade->FadeBlack((Module*)app->scene, (Module*)app->endScreen, 60);
 		}
 		else {
 			app->scene->player->ResetPlayerPos();
@@ -307,6 +307,11 @@ void Player::DebugKeys()
 	if ((app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) || (app->input->GetKey(SDL_SCANCODE_G) == KEY_DOWN)) {
 		godMode = !godMode;
 	}
+
+	if (app->input->GetKey(SDL_SCANCODE_K) == KEY_DOWN) {
+		lives = 0;
+	}
+
 }
 
 void Player::LoadAnimations()
@@ -384,31 +389,40 @@ void Player::LoadAnimations()
 	JumpR.speed = 0.03125f;
 	JumpR.loop = false;
 
-	DeathL.PushBack({ 120, 240, 120, 80 });
-	DeathL.PushBack({ 120, 0, 120, 80 });
-	DeathL.PushBack({ 240, 0, 120, 80 });
-	DeathL.PushBack({ 320, 0, 120, 80 });
-	DeathL.PushBack({ 480, 0, 120, 80 });
-	DeathL.PushBack({ 600, 0, 120, 80 });
-	DeathL.PushBack({ 720, 0, 120, 80 });
-	DeathL.PushBack({ 840, 0, 120, 80 });
-	DeathL.PushBack({ 960, 0, 120, 80 });
-	DeathL.PushBack({ 1080, 0, 120, 80 });
-	DeathL.speed = 0.03125f;
-	DeathL.loop = false;
+	HitL.PushBack({ 120, 240, 120, 80 });
+	HitL.speed = 0.03125f;
+	HitL.loop = false;
 
-	DeathR.PushBack({ 960, 720, 120, 80 });
-	DeathR.PushBack({ 120, 480, 120, 80 });
-	DeathR.PushBack({ 240, 480, 120, 80 });
-	DeathR.PushBack({ 320, 480, 120, 80 });
-	DeathR.PushBack({ 480, 480, 120, 80 });
-	DeathR.PushBack({ 600, 480, 120, 80 });
-	DeathR.PushBack({ 720, 480, 120, 80 });
-	DeathR.PushBack({ 840, 480, 120, 80 });
-	DeathR.PushBack({ 960, 480, 120, 80 });
-	DeathR.PushBack({ 1080, 480, 120, 80 });
+	HitR.PushBack({ 960, 720, 120, 80 });
+	HitR.speed = 0.03125f;
+	HitR.loop = false;
+
+	DeathR.PushBack({ 0, 0, 120, 80 });
+	DeathR.PushBack({ 120, 0, 120, 80 });
+	DeathR.PushBack({ 240, 0, 120, 80 });
+	DeathR.PushBack({ 350, 0, 120, 80 });
+	DeathR.PushBack({ 480, 0, 120, 80 });
+	DeathR.PushBack({ 600, 0, 120, 80 });
+	DeathR.PushBack({ 720, 0, 120, 80 });
+	DeathR.PushBack({ 840, 0, 120, 80 });
+	DeathR.PushBack({ 960, 0, 120, 80 });
+	DeathR.PushBack({ 1080, 0, 120, 80 });
 	DeathR.speed = 0.03125f;
 	DeathR.loop = false;
+
+	
+	DeathL.PushBack({ 1080, 480, 120, 80 });
+	DeathL.PushBack({ 960, 480, 120, 80 });
+	DeathL.PushBack({ 840, 480, 120, 80 });
+	DeathL.PushBack({ 720, 480, 120, 80 });
+	DeathL.PushBack({ 600, 480, 120, 80 });
+	DeathL.PushBack({ 480, 480, 120, 80 });
+	DeathL.PushBack({ 350, 480, 120, 80 });
+	DeathL.PushBack({ 240, 480, 120, 80 });
+	DeathL.PushBack({ 120, 480, 120, 80 });
+	DeathL.PushBack({ 0, 480, 120, 80 });
+	DeathL.speed = 0.03125f;
+	DeathL.loop = false;
 
 	AttackL.PushBack({ 0, 80, 120, 80 });
 	AttackL.PushBack({ 125, 80, 120, 80 });
@@ -423,6 +437,8 @@ void Player::LoadAnimations()
 	AttackR.PushBack({ 705, 560, 120, 80 });
 	AttackR.speed = 0.021875f;
 	AttackR.loop = false;
+
+
 }
 
 void Player::ResetPlayerPos() {
