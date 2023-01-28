@@ -80,7 +80,7 @@ void UI::BlitLives()
 {
 	char playerLives[20];
 	sprintf_s(playerLives, 20, "lives; %d", app->scene->player->lives);
-	app->fonts->BlitText(50, 50, font1_id, playerLives);
+	app->fonts->BlitText(20, 50, font1_id, playerLives);
 }
 
 void UI::BlitItems()
@@ -96,14 +96,14 @@ void UI::BlitPlayerXPos()
 {
 	char playerXPos[25];
 	sprintf_s(playerXPos, 25, "position x; %d", app->scene->player->position.x);
-	app->fonts->BlitText(20, 55, font1_id, playerXPos);
+	app->fonts->BlitText(20, 65, font1_id, playerXPos);
 }
 
 void UI::BlitPlayerYPos()
 {
 	char playerYPos[25];
 	sprintf_s(playerYPos, 25, "position y; %d", app->scene->player->position.y);
-	app->fonts->BlitText(20, 75, font1_id, playerYPos);
+	app->fonts->BlitText(20, 80, font1_id, playerYPos);
 }
 
 void UI::BlitBatLives()
