@@ -61,13 +61,31 @@ public:
 	SDL_Texture* originTex = nullptr;
 	const char* origintexturePath = nullptr;
 
+	const char* musicPath;
+	uint selectSFX = 0;
+
+	bool gamePaused = false;
+
+	bool continueGame = false;
+
 private:
 	SDL_Texture* img;
 	SDL_Rect rectCamera;
+	SDL_Texture* img_pause;
+
+	// Declare a GUI Button and create it using the GuiManager
+	GuiButton* resumeButton14;
+	GuiButton* backToTitleButton15;
+	GuiButton* exitButton16;
+	GuiButton* closeButton17;
+
+	const char* imgPausePath;
 
 	iPoint startPosition;
 	iPoint origin;
 	bool originSelected = false;
+
+	bool exitGame = false;
 
 };
 

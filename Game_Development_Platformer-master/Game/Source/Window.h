@@ -36,6 +36,9 @@ public:
 
 	// The surface contained by the window
 	SDL_Surface* screenSurface;
+
+	bool fullscreenMode;
+
 	SString title;
 	uint width;
 	uint height;
