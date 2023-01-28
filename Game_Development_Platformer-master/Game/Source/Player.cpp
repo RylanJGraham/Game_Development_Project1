@@ -227,7 +227,7 @@ bool Player::Update(float dt)
 		HitR.Reset();
 	}
 	if (idle && !isAttacking) { currentAnim = leftID ? &IdleR : &IdleL; }
-	if (!isGrounded) { currentAnim = leftID ? &JumpR : &JumpL; }
+	if (!isGrounded && alive) { currentAnim = leftID ? &JumpR : &JumpL; }
 	if (isHit) { currentAnim = leftID ? &HitR : &HitL; }
 
 	SDL_Rect rect2 = currentAnim->GetCurrentFrame();
