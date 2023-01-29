@@ -1,6 +1,8 @@
 #include "App.h"
 #include "Window.h"
 #include "Render.h"
+#include "Title.h"
+#include "Logo.h"
 
 #include "Defs.h"
 #include "Log.h"

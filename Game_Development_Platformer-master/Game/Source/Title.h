@@ -63,10 +63,17 @@ public:
 	bool settingMenu = false;
 	bool creditsMenu = false;
 
+	int mouseX, mouseY;
+	uint font1_id = -1;
+
+
+	
 private:
 	SDL_Texture* img = nullptr;
 	SDL_Texture* Img_settings = nullptr;
 	SDL_Texture* Img_credits = nullptr;
+
+	const char* font1Path;
 
 	const char* imgPath;
 	const char* popImgSettingsPath;

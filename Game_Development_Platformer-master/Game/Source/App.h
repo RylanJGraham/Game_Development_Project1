@@ -30,6 +30,7 @@ class Logo;
 class Title;
 class Ending;
 class PathFinding;
+class Animation;
 class GuiManager;
 
 class App
@@ -125,7 +126,6 @@ public:
 	// xml_node(s) to read specific branches of the xml
 	pugi::xml_document configFile;
 	pugi::xml_node configNode;
-
 
 	int musicValue = 100;
 	int sfxValue = 100;

@@ -47,8 +47,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	fonts = new Fonts();
 	ui = new UI();
 	endScreen = new Ending(false);
-	guiManager = new GuiManager();
 	pathfinding = new PathFinding(true);
+	guiManager = new GuiManager();
 
 
 

@@ -42,8 +42,16 @@ bool Title::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool Title::Start()
 {
+	/*Initialize*/
+	font1Path = app->configNode.child("ui").child("font1").attribute("texturepath").as_string();
+
+	//Loading font 1
+	char lookupTableFont1[] = { "! @,_./0123456789$;<&?abcdefghijklmnopqrstuvwxyz" };
+	font1_id = app->fonts->Load(font1Path, lookupTableFont1, 2);
 
 	app->render->camera.x = 0;
+
+	app->map->Disable();
 
 	LOG("--STARTS TITLE SCENE--");
 
@@ -60,10 +68,6 @@ bool Title::Start()
 	Img_settings = app->tex->Load(popImgSettingsPath);
 	Img_credits = app->tex->Load(popImgCreditsPath);
 
-	if (app->map) {
-		app->map->Disable();
-	}
-
 	app->physics->debug = false;
 	settingMenu = false;
 	creditsMenu = false;
@@ -78,10 +82,11 @@ bool Title::Start()
 
 	pugi::xml_document gameStateFile;
 	pugi::xml_parse_result result = gameStateFile.load_file("save_game.xml");
-	if (result != NULL)
+
+	/*if (result != NULL)
 	{
 		continueButton5 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 5, "continue", 9, { ((int)w / 2) - (93 / 2), (int(h) - 240), 93, 29 }, this);
-	}
+	}*/
 
 	closeSettingMenuButton6 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 6, "close", 6, { ((int)w / 2) - 490, (int(h) / 2) - 280, 227, 83 }, this);
 	closeCreditsMenuButton7 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 7, "close", 6, { ((int)w / 2) - 490, (int(h) / 2) - 280, 227, 83 }, this);
@@ -112,11 +117,76 @@ bool Title::PreUpdate()
 // Called each loop iteration
 bool Title::Update(float dt)
 {
+	uint w, h;
+	app->win->GetWindowSize(w, h);
 
+	playButton1->state = GuiControlState::NORMAL;
+	settingsButton2->state = GuiControlState::NORMAL;
+	creditsButton3->state = GuiControlState::NORMAL;
+
+	char Play[20];
+	sprintf_s(Play, 20, "Play Game");
+	app->fonts->BlitText(((int)w / 2) - 490, (int(h) / 2), font1_id, Play);
+
+	char sfx[10];
+	sprintf_s(sfx, 10, "%d", app->sfxValue);
+	app->fonts->BlitText(500, 330, app->ui->font1_id, sfx);
+
+	char fullscreen[10];
+	sprintf_s(fullscreen, 10, "%s", app->win->fullscreenMode ? "on" : "off");
+	app->fonts->BlitText(502, 428, app->ui->font1_id, fullscreen);
+
+	char vsync[10];
+	sprintf_s(vsync, 10, "%s", app->render->limitFPS ? "on" : "off");
+	app->fonts->BlitText(502, 510, app->ui->font1_id, vsync);
+
+	app->input->GetMousePosition(mouseX, mouseY);
+
+	if ((mouseX > playButton1->bounds.x) && (mouseX < (playButton1->bounds.x + playButton1->bounds.w)) &&
+		(mouseY > playButton1->bounds.y) && (mouseY < (playButton1->bounds.y + playButton1->bounds.h)))
+	{
+		playButton1->state = GuiControlState::FOCUSED;
+		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
+		{
+			playButton1->state = GuiControlState::PRESSED;
+			LOG("PASA A GAME SCENE");
+			app->fade->FadeBlack(this, (Module*)app->scene, 60 * (16.0f / dt));
+			app->audio->PlayFx(selectSFX);
+		}
+	}
+
+	if ((mouseX > settingsButton2->bounds.x) && (mouseX < (settingsButton2->bounds.x + settingsButton2->bounds.w)) &&
+		(mouseY > settingsButton2->bounds.y) && (mouseY < (settingsButton2->bounds.y + settingsButton2->bounds.h)))
+	{
+		settingsButton2->state = GuiControlState::FOCUSED;
+		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
+		{
+			settingsButton2->state = GuiControlState::PRESSED;
+			LOG("PASA A settings");
+			LOG("SettingsPressed");
+			settingMenu = !settingMenu;
+			app->audio->PlayFx(selectSFX);
+		}
+	}
+
+	if ((mouseX > creditsButton3->bounds.x) && (mouseX < (creditsButton3->bounds.x + creditsButton3->bounds.w)) &&
+		(mouseY > creditsButton3->bounds.y) && (mouseY < (creditsButton3->bounds.y + creditsButton3->bounds.h)))
+	{
+		creditsButton3->state = GuiControlState::FOCUSED;
+		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
+		{
+			creditsButton3->state = GuiControlState::PRESSED;
+			LOG("PASA A settings");
+			LOG("SettingsPressed");
+			creditsMenu = !creditsMenu;
+			app->audio->PlayFx(selectSFX);
+		}
+	}
+	
 	pugi::xml_document gameStateFile;
 	pugi::xml_parse_result result = gameStateFile.load_file("save_game.xml");
 
-	if (result == NULL)
+	/*if (result == NULL)
 	{
 		if (isSaved != false)
 			continueButton5->state = GuiControlState::DISABLED;
@@ -130,7 +200,7 @@ bool Title::Update(float dt)
 			continueButton5->state = GuiControlState::NORMAL;
 
 		isSaved = true;
-	}
+	}*/
 
 
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
@@ -175,13 +245,11 @@ bool Title::Update(float dt)
 
 	if (settingMenu == true)
 	{
-		continueButton5->state = GuiControlState::DISABLED;
+		//continueButton5->state = GuiControlState::DISABLED;
 		playButton1->state = GuiControlState::DISABLED;
 		settingsButton2->state = GuiControlState::DISABLED;
 		creditsButton3->state = GuiControlState::DISABLED;
 		exitButton4->state = GuiControlState::DISABLED;
-
-		app->render->DrawTexture(Img_settings, 0, 0, NULL);
 
 		closeSettingMenuButton6->state = GuiControlState::NORMAL;
 		decreaseMusicButton8->state = GuiControlState::NORMAL;
@@ -190,6 +258,8 @@ bool Title::Update(float dt)
 		increaseSFXButton11->state = GuiControlState::NORMAL;
 		fullscreenButton12->state = GuiControlState::NORMAL;
 		vsyncButton13->state = GuiControlState::NORMAL;
+
+		app->render->DrawTexture(Img_settings, 0, 0, NULL);
 
 		char music[10];
 		sprintf_s(music, 10, "%d", app->musicValue);
@@ -213,7 +283,7 @@ bool Title::Update(float dt)
 
 	if (creditsMenu == true)
 	{
-		continueButton5->state = GuiControlState::DISABLED;
+		//continueButton5->state = GuiControlState::DISABLED;
 		playButton1->state = GuiControlState::DISABLED;
 		settingsButton2->state = GuiControlState::DISABLED;
 		creditsButton3->state = GuiControlState::DISABLED;
@@ -246,10 +316,6 @@ bool Title::CleanUp()
 {
 	LOG("Freeing TITLE SCENE");
 
-	if (img != nullptr) {
-		app->tex->UnLoad(img);
-	}
-
 	if (img != nullptr && Img_settings != nullptr && Img_credits != nullptr) {
 		app->tex->UnLoad(img);
 		app->tex->UnLoad(Img_settings);
@@ -257,8 +323,8 @@ bool Title::CleanUp()
 	}
 
 	//STORE IN A LIST THIS BUTTONS AND THEN CHECK HERE IF NULLPTR TO CLEAN THEM UP
-	if (continueButton5 != nullptr)
-		continueButton5->state = GuiControlState::DISABLED;
+	//if (continueButton5 != nullptr)
+		/*continueButton5->state = GuiControlState::DISABLED;*/
 	if (playButton1 != nullptr)
 		playButton1->state = GuiControlState::DISABLED;
 	if (settingsButton2 != nullptr)
@@ -304,15 +370,22 @@ bool Title::OnGuiMouseClickEvent(GuiControl* control)
 		// Play button
 		app->fade->FadeBlack(this, (Module*)app->scene, 90);
 		app->audio->PlayFx(startSFX);
+		app->audio->PlayFx(selectSFX);
+		if (remove("save_game.xml") != 0)
+			LOG("Error at Deleting Save Game");
+		else
+			LOG("Save Game Successfully Deleted");
 		break;
 
 	case 2:
 	case 6:
 		// Settings button
 		settingMenu = !settingMenu;
+
 		if (settingMenu == false)
 		{
-			continueButton5->state = GuiControlState::NORMAL;
+			if (continueButton5 != nullptr)
+				continueButton5->state = GuiControlState::NORMAL;
 			playButton1->state = GuiControlState::NORMAL;
 			settingsButton2->state = GuiControlState::NORMAL;
 			creditsButton3->state = GuiControlState::NORMAL;
@@ -327,7 +400,8 @@ bool Title::OnGuiMouseClickEvent(GuiControl* control)
 		creditsMenu = !creditsMenu;
 		if (creditsMenu == false)
 		{
-			continueButton5->state = GuiControlState::NORMAL;
+			if (continueButton5 != nullptr)
+				continueButton5->state = GuiControlState::NORMAL;
 			playButton1->state = GuiControlState::NORMAL;
 			settingsButton2->state = GuiControlState::NORMAL;
 			creditsButton3->state = GuiControlState::NORMAL;
