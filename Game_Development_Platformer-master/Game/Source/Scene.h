@@ -89,6 +89,9 @@ private:
 
 	bool exitGame = false;
 
+	int loadCounter;
+	int saveCounter;
+
 };
 
 #endif // __SCENE_H__

@@ -179,14 +179,16 @@ bool Scene::Update(float dt)
 
 		if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) {
 		app->SaveGameRequest();
-		player->savedPosition.x = player->position.x;
-		player->savedPosition.y = player->position.y;
+		saveCounter = 2 * dt;
+		//player->savedPosition.x = player->position.x;
+		//player->savedPosition.y = player->position.y;
 
 		}
 
 		if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) {
 		app->LoadGameRequest();
-		player->SetPos(player->savedPosition.x + 46, player->savedPosition.y + 60);
+		loadCounter = 2 * dt;
+		//player->SetPos(player->savedPosition.x + 46, player->savedPosition.y + 60);
 		}
 
 		//if (app->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
@@ -222,9 +224,11 @@ bool Scene::Update(float dt)
 		//FPS control
 		if (app->maxFrameDuration != 33) {
 			app->maxFrameDuration = 33;
+			app->vsync = true;
 		}
 		else if (app->maxFrameDuration == 33) {
 			app->maxFrameDuration = 16;
+			app->vsync = false;
 		}
 	}
 
@@ -246,6 +250,16 @@ bool Scene::Update(float dt)
 	if (app->physics->debug) {
 		app->ui->BlitPlayerXPos();
 		app->ui->BlitPlayerYPos();
+	}
+
+	if (loadCounter > 0) {
+		app->ui->BlitGameLoaded();
+		loadCounter--;
+	}
+
+	if (saveCounter > 0) {
+		app->ui->BlitGameSaved();
+		saveCounter--;
 	}
 
 	resumeButton14->state = GuiControlState::DISABLED;
@@ -361,21 +375,24 @@ bool Scene::LoadState(pugi::xml_node& data)
 {
 	// Load previous saved player position
 	b2Vec2 playerPos = { data.child("playerPosition").attribute("x").as_float(), data.child("playerPosition").attribute("y").as_float() };
-	app->scene->player->pbody->body->SetTransform(playerPos, 0);
+	player->pbody->body->SetTransform(playerPos, 0);
 
 	//Load previous saved player number of lives
-	app->scene->player->lives = data.child("playerLives").attribute("playerLives").as_int();
+	player->lives = data.child("playerLives").attribute("playerLives").as_int();
 
+	player->Items = data.child("playerItems").attribute("items").as_int();
 
-	b2Vec2 groundenemyPos = { data.child("groundenemyPosition").attribute("x").as_float(), data.child("groundenemyPosition").attribute("y").as_float() };
-	app->scene->groundenemy->pbody->body->SetTransform(groundenemyPos, 0);
+	if (groundenemy != nullptr) {
+		b2Vec2 groundenemyPos = { data.child("groundenemyPosition").attribute("x").as_float(), data.child("groundenemyPosition").attribute("y").as_float() };
+		groundenemy->pbody->body->SetTransform(groundenemyPos, 0);
+		groundenemy->hp = data.child("groundenemyLives").attribute("groundenemyLives").as_int();
+	}
 
-	app->scene->groundenemy->hp = data.child("groundenemyLives").attribute("groundenemyLives").as_int();
-
-	b2Vec2 airenemyPos = { data.child("airenemyPosition").attribute("x").as_float(), data.child("airenemyPosition").attribute("y").as_float() };
-	app->scene->airenemy->pbody->body->SetTransform(groundenemyPos, 0);
-
-	app->scene->airenemy->health = data.child("airenemyLives").attribute("airenemyLives").as_int();
+	if (airenemy != nullptr) {
+		b2Vec2 airenemyPos = { data.child("airenemyPosition").attribute("x").as_float(), data.child("airenemyPosition").attribute("y").as_float() };
+		airenemy->pbody->body->SetTransform(airenemyPos, 0);
+		airenemy->health = data.child("airenemyLives").attribute("airenemyLives").as_int();
+	}
 
 	return true;
 }
@@ -384,30 +401,33 @@ bool Scene::SaveState(pugi::xml_node& data)
 {
 	// Save current player position
 	pugi::xml_node playerPos = data.append_child("playerPosition");
-	playerPos.append_attribute("x") = app->scene->player->pbody->body->GetTransform().p.x;
-	playerPos.append_attribute("y") = app->scene->player->pbody->body->GetTransform().p.y;
+	playerPos.append_attribute("x") = player->pbody->body->GetTransform().p.x;
+	playerPos.append_attribute("y") = player->pbody->body->GetTransform().p.y;
 
 	// Save current player number of lives
 	pugi::xml_node playerLives = data.append_child("playerLives");
-	playerLives.append_attribute("playerLives") = app->scene->player->lives;
+	playerLives.append_attribute("playerLives") = player->lives;
+
+	pugi::xml_node playerItems = data.append_child("playerItems");
+	playerItems.append_attribute("Items") = player->Items;
 
 	// Save current airenemy position
 	pugi::xml_node airenemyPos = data.append_child("airenemyPosition");
-	airenemyPos.append_attribute("x") = app->scene->airenemy->pbody->body->GetTransform().p.x;
-	airenemyPos.append_attribute("y") = app->scene->airenemy->pbody->body->GetTransform().p.y;
+	airenemyPos.append_attribute("x") = airenemy->pbody->body->GetTransform().p.x;
+	airenemyPos.append_attribute("y") = airenemy->pbody->body->GetTransform().p.y;
 
 	// Save current groundenemy position
 	pugi::xml_node groundenemyPos = data.append_child("groundenemyPosition");
-	groundenemyPos.append_attribute("x") = app->scene->groundenemy->pbody->body->GetTransform().p.x;
-	groundenemyPos.append_attribute("y") = app->scene->groundenemy->pbody->body->GetTransform().p.y;
+	groundenemyPos.append_attribute("x") = groundenemy->pbody->body->GetTransform().p.x;
+	groundenemyPos.append_attribute("y") = groundenemy->pbody->body->GetTransform().p.y;
 
 	// Save current air number of lives
 	pugi::xml_node airenemyLives = data.append_child("airenemyLives");
-	airenemyLives.append_attribute("airenemyLives") = app->scene->airenemy->health;
+	airenemyLives.append_attribute("airenemyLives") = airenemy->health;
 
 	// Save current ground number of lives
 	pugi::xml_node groundenemyLives = data.append_child("groundenemyLives");
-	groundenemyLives.append_attribute("airenemyLives") = app->scene->groundenemy->hp;
+	groundenemyLives.append_attribute("airenemyLives") = groundenemy->hp;
 
 	return true;
 }

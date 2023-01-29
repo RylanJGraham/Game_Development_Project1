@@ -133,6 +133,8 @@ public:
 	int fps = 60;
 	float dt;
 
+	bool vsync = false;
+
 	uint32 maxFrameDuration = 0;
 
 private:

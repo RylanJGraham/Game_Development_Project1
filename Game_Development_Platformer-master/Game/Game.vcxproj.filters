@@ -224,6 +224,7 @@
     <ClInclude Include="Source\Medkit.h">
       <Filter>Modules\Gameplay</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Point.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">
@@ -253,6 +254,9 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Output\config.xml">
+      <Filter>Utils</Filter>
+    </Xml>
+    <Xml Include="..\Output\save_game.xml">
       <Filter>Utils</Filter>
     </Xml>
   </ItemGroup>

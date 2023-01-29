@@ -38,6 +38,8 @@ public:
 	/* Blit UI graphics funtions */
 	void BlitPlayerXPos();
 	void BlitPlayerYPos();
+	void BlitGameSaved();
+	void BlitGameLoaded();
 	void BlitItems();
 	void BlitLives();
 	void BlitBatLives();

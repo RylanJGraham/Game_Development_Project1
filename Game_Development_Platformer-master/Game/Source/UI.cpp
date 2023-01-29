@@ -106,6 +106,20 @@ void UI::BlitPlayerYPos()
 	app->fonts->BlitText(20, 80, font1_id, playerYPos);
 }
 
+void UI::BlitGameSaved()
+{
+	char gameSaved[25];
+	sprintf_s(gameSaved, 25, "game saved");
+	app->fonts->BlitText(110, 35, font1_id, gameSaved);
+}
+
+void UI::BlitGameLoaded()
+{
+	char gameLoaded[25];
+	sprintf_s(gameLoaded, 25, "game loaded");
+	app->fonts->BlitText(110, 50, font1_id, gameLoaded);
+}
+
 void UI::BlitBatLives()
 {
 	char BatLives[25];
@@ -154,3 +168,5 @@ void UI::BlitFrameCount()
 	sprintf_s(frameCount, 25, "frame count; %d", app->GetFrameCount());
 	app->fonts->BlitText(825, 70, font1_id, frameCount);
 }
+
+

@@ -175,7 +175,6 @@ bool Player::Update(float dt)
 			idle = false;
 			isGrounded = false;
 			app->audio->PlayFx(jumpSFX);
-
 		}
 
 		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isGrounded && attackCooldown == attackCooldownMax) {
