@@ -101,31 +101,6 @@ bool Title::Start()
 
 	vsyncButton13 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 13, "vsync", 6, { ((int)w / 2) - 490, (int(h) / 2) - 150, 227, 83 }, this);
 
-	char Play[20];
-	sprintf_s(Play, 20, "Play Game");
-	app->fonts->BlitText(((int)w / 2) - 200, (int(h) / 2) - 380, font1_id, Play);
-
-	playButton1->state = GuiControlState::NORMAL;
-	settingsButton2->state = GuiControlState::NORMAL;
-	creditsButton3->state = GuiControlState::NORMAL;
-
-	char Play[20];
-	sprintf_s(Play, 20, "Play Game");
-	app->fonts->BlitText(((int)w / 2) - 490, (int(h) / 2), font1_id, Play);
-
-	char sfx[10];
-	sprintf_s(sfx, 10, "%d", app->sfxValue);
-	app->fonts->BlitText(500, 330, app->ui->font1_id, sfx);
-
-	char fullscreen[10];
-	sprintf_s(fullscreen, 10, "%s", app->win->fullscreenMode ? "on" : "off");
-	app->fonts->BlitText(502, 428, app->ui->font1_id, fullscreen);
-
-	char vsync[10];
-	sprintf_s(vsync, 10, "%s", app->render->limitFPS ? "on" : "off");
-	app->fonts->BlitText(502, 510, app->ui->font1_id, vsync);
-
-
 	// Load SFXs
 	/*startSFX = app->audio->LoadFx("Assets/Audio/Fx/start_game.wav");*/
 
@@ -156,9 +131,9 @@ bool Title::Update(float dt)
 	sprintf_s(Play, 20, "Play Game");
 	app->fonts->BlitText(((int)w / 2) - 490, (int(h) / 2), font1_id, Play);
 
-	char sfx[10];
+	/*char sfx[10];
 	sprintf_s(sfx, 10, "%d", app->sfxValue);
-	app->fonts->BlitText(500, 330, app->ui->font1_id, sfx);
+	app->fonts->BlitText(500, 330, app->ui->font1_id, sfx);*/
 
 	char fullscreen[10];
 	sprintf_s(fullscreen, 10, "%s", app->win->fullscreenMode ? "on" : "off");
@@ -279,11 +254,11 @@ bool Title::Update(float dt)
 		app->render->DrawTexture(Img_settings, 0, 0, NULL);
 
 		char music[10];
-		sprintf_s(music, 10, "%d", app->musicValue);
-		app->fonts->BlitText(((int)w / 2) - 200, (int(h) / 2) - 380, app->ui->font1_id, music);
+		sprintf_s(music, 20, "Music %d", app->musicValue);
+		app->fonts->BlitText(500, 330, app->ui->font1_id, music);
 
 		char sfx[10];
-		sprintf_s(sfx, 10, "%d", app->sfxValue);
+		sprintf_s(sfx, 20, "SFX %d", app->sfxValue);
 		app->fonts->BlitText(500, 330, app->ui->font1_id, sfx);
 
 		char fullscreen[10];
@@ -291,7 +266,7 @@ bool Title::Update(float dt)
 		app->fonts->BlitText(502, 428, app->ui->font1_id, fullscreen);
 
 		char vsync[10];
-		sprintf_s(vsync, 10, "%s", app->render->limitFPS ? "on" : "off");
+		sprintf_s(vsync, 10, "Vsync %s", app->render->limitFPS ? "on" : "off");
 		app->fonts->BlitText(502, 510, app->ui->font1_id, vsync);
 
 		
@@ -332,6 +307,7 @@ bool Title::Update(float dt)
 			{
 				vsyncButton13->state = GuiControlState::PRESSED;
 				// V-Sync button
+				app->render->limitFPS = !app->render->limitFPS;
 				if (app->maxFrameDuration != 33) {
 					app->maxFrameDuration = 33;
 					app->vsync = true;
