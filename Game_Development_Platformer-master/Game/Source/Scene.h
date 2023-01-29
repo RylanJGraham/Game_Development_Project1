@@ -75,6 +75,8 @@ public:
 	int loadCounter;
 	int saveCounter;
 
+	int mouseX, mouseY;
+
 private:
 	SDL_Texture* img;
 	SDL_Rect rectCamera;
