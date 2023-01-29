@@ -34,6 +34,8 @@ public:
 	//DONE 4: Add a physics to an item
 	PhysBody* pbody;
 
+	uint id;
+
 private:
 
 	SDL_Texture* texture;

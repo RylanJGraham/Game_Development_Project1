@@ -91,6 +91,9 @@
     <ClCompile Include="Source\Medkit.cpp">
       <Filter>Modules\Gameplay</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Checkpoint.cpp">
+      <Filter>Modules\Gameplay</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -225,6 +228,10 @@
       <Filter>Modules\Gameplay</Filter>
     </ClInclude>
     <ClInclude Include="Source\Point.h" />
+    <ClInclude Include="Source\Point.h" />
+    <ClInclude Include="Source\Checkpoint.h">
+      <Filter>Modules\Gameplay</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">

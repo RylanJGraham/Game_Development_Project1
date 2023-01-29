@@ -39,6 +39,7 @@ enum class ColliderType {
 	PLATFORM,
 	WALL,
 	MEDKIT,
+	CHECKPOINT,
 	UNKNOWN,
 	DEATH
 };

@@ -95,6 +95,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Checkpoint.cpp" />
     <ClCompile Include="Source\GuiButton.cpp" />
     <ClCompile Include="Source\GuiManager.cpp" />
     <ClCompile Include="Source\AirEnemy.cpp" />
@@ -123,6 +124,7 @@
     <ClCompile Include="Source\Title.cpp" />
     <ClCompile Include="Source\UI.cpp" />
     <ClCompile Include="Source\Window.cpp" />
+    <ClInclude Include="Source\Checkpoint.h" />
     <ClInclude Include="Source\Entity.h" />
     <ClInclude Include="Source\Medkit.h" />
     <ClInclude Include="Source\Point.h" />

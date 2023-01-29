@@ -46,6 +46,8 @@
 	<item x="1750" y="527" texturepath="Assets/Textures/ChestProp.png"/>
 	<medkit x="577" y="551" texturepath ="Assets/Textures/lifelamp.png"/>
 	<medkit x="1155" y="600" texturepath ="Assets/Textures/lifelamp.png"/>
+	<checkpoint x="600" y="500" texturepath ="Assets/Textures/banner26x30.png"/>
+	<checkpoint x="1000" y="500" texturepath ="Assets/Textures/banner26x30.png"/>
 	<groundEnemy x="450" y="500" texturepath="Assets/Textures/GroundEnemy.png"/>
 	<airEnemy x="500" y="400" texturepath="Assets/Textures/AirEnemy.png"/>
   </scene>

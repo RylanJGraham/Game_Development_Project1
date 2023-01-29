@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Item.h"
 #include "Medkit.h"
+#include "Checkpoint.h"
 #include "GroundEnemy.h"
 #include "AirEnemy.h"
 #include "GuiButton.h"
@@ -52,6 +53,7 @@ public:
 	AirEnemy* airenemy;
 	Item* item;
 	Medkit* medkit;
+	Checkpoint* checkpoint;
 
 	bool playing = false;
 

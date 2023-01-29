@@ -56,16 +56,31 @@ bool Scene::Start()
 
 	// iterate all objects in the scene
 	// Check https://pugixml.org/docs/quickstart.html#access
+	int i = 0;
 	for (pugi::xml_node itemNode = app->configNode.child("scene").child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
 	{
 		item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
 		item->parameters = itemNode;
+		item->id = i;
+		i++;
 	}
 
+	i = 0;
 	for (pugi::xml_node medkitNode = app->configNode.child("scene").child("medkit"); medkitNode; medkitNode = medkitNode.next_sibling("medkit"))
 	{
 		medkit = (Medkit*)app->entityManager->CreateEntity(EntityType::MEDKIT);
 		medkit->parameters = medkitNode;
+		medkit->id = i;
+		i++;
+	}
+
+	i = 0;
+	for (pugi::xml_node checkpointNode = app->configNode.child("scene").child("checkpoint"); checkpointNode; checkpointNode = checkpointNode.next_sibling("checkpoint"))
+	{
+		checkpoint = (Checkpoint*)app->entityManager->CreateEntity(EntityType::CHECKPOINT);
+		checkpoint->parameters = checkpointNode;
+		checkpoint->id = i;
+		i++;
 	}
 
 	//L02: DONE 3: Instantiate the player using the entity manager

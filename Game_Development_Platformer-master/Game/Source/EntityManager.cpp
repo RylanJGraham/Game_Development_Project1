@@ -1,6 +1,7 @@
 #include "EntityManager.h"
 #include "Player.h"
 #include "Item.h"
+#include "Checkpoint.h"
 #include "App.h"
 #include "Textures.h"
 #include "Scene.h"
@@ -95,6 +96,10 @@ Entity* EntityManager::CreateEntity(EntityType type)
 
 	case EntityType::MEDKIT:
 		entity = new Medkit();
+		break;
+
+	case EntityType::CHECKPOINT:
+		entity = new Checkpoint();
 		break;
 
 	case EntityType::GROUNDENEMY:

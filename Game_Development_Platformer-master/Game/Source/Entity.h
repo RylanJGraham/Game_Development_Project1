@@ -16,6 +16,7 @@ enum class EntityType
 	AIRENEMY,
 	ENEMY,
 	MEDKIT,
+	CHECKPOINT,
 	UNKNOWN
 };
 

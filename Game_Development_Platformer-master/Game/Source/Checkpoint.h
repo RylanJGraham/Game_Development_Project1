@@ -1,5 +1,5 @@
-#ifndef __MEDKIT_H__
-#define __MEDKIT_H__
+#ifndef __CHECKPOINT_H__
+#define __CHECKPOINT_H__
 
 #include "Entity.h"
 #include "Point.h"
@@ -8,12 +8,12 @@
 
 struct SDL_Texture;
 
-class Medkit : public Entity
+class Checkpoint : public Entity
 {
 public:
 
-	Medkit();
-	virtual ~Medkit();
+	Checkpoint();
+	virtual ~Checkpoint();
 
 	bool Awake();
 
@@ -33,6 +33,7 @@ public:
 
 	//DONE 4: Add a physics to an item
 	PhysBody* pbody;
+	SDL_Rect section;
 
 	uint id;
 
@@ -50,4 +51,4 @@ private:
 
 };
 
-#endif // __MEDKIT_H__
+#endif // __CHECKPOINT_H__
