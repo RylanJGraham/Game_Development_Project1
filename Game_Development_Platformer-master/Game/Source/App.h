@@ -5,6 +5,7 @@
 #include "List.h"
 #include "PerfTimer.h"
 #include "Timer.h"
+#include "Optick/include/optick.h"
 
 
 #include "PugiXml/src/pugixml.hpp"
