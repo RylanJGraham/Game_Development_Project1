@@ -127,9 +127,9 @@ bool Title::Update(float dt)
 	settingsButton2->state = GuiControlState::NORMAL;
 	creditsButton3->state = GuiControlState::NORMAL;
 
-	char Play[20];
-	sprintf_s(Play, 20, "Play Game");
-	app->fonts->BlitText(((int)w / 2) - 490, (int(h) / 2), font1_id, Play);
+	//char Play[20];
+	//sprintf_s(Play, 20, "Play Game");
+	//app->fonts->BlitText(((int)w / 2) - 490, (int(h) / 2), font1_id, Play);
 
 	/*char sfx[10];
 	sprintf_s(sfx, 10, "%d", app->sfxValue);
