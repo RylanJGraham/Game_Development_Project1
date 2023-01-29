@@ -394,7 +394,6 @@ bool Scene::LoadState(pugi::xml_node& data)
 
 	//Load previous saved player number of lives
 	player->lives = data.child("player").attribute("lives").as_int();
-	int test = player->lives;
 	player->Items = data.child("player").attribute("items").as_int();
 
 	if (groundenemy != nullptr) {
