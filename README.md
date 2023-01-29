@@ -23,6 +23,7 @@
  - F6: Load the previous state (even across levels)
  - F9: View colliders / logic
  - F10: God Mode (fly around, cannot be killed, etc)
+ - F11: Establish maximum framerate of 30 fps
 
 ## Developers
 
