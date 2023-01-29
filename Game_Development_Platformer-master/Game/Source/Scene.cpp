@@ -389,13 +389,13 @@ void Scene::ResetScene() {
 bool Scene::LoadState(pugi::xml_node& data)
 {
 	// Load previous saved player position
-	b2Vec2 playerPos = { data.child("playerPosition").attribute("x").as_float(), data.child("playerPosition").attribute("y").as_float() };
+	b2Vec2 playerPos = { data.child("player").attribute("x").as_float(), data.child("player").attribute("y").as_float() };
 	player->pbody->body->SetTransform(playerPos, 0);
 
 	//Load previous saved player number of lives
-	player->lives = data.child("playerLives").attribute("playerLives").as_int();
-
-	player->Items = data.child("playerItems").attribute("items").as_int();
+	player->lives = data.child("player").attribute("lives").as_int();
+	int test = player->lives;
+	player->Items = data.child("player").attribute("items").as_int();
 
 	if (groundenemy != nullptr) {
 		b2Vec2 groundenemyPos = { data.child("groundenemyPosition").attribute("x").as_float(), data.child("groundenemyPosition").attribute("y").as_float() };
@@ -415,16 +415,14 @@ bool Scene::LoadState(pugi::xml_node& data)
 bool Scene::SaveState(pugi::xml_node& data)
 {
 	// Save current player position
-	pugi::xml_node playerPos = data.append_child("playerPosition");
+	pugi::xml_node playerPos = data.append_child("player");
 	playerPos.append_attribute("x") = player->pbody->body->GetTransform().p.x;
 	playerPos.append_attribute("y") = player->pbody->body->GetTransform().p.y;
 
 	// Save current player number of lives
-	pugi::xml_node playerLives = data.append_child("playerLives");
-	playerLives.append_attribute("playerLives") = player->lives;
+	playerPos.append_attribute("lives") = player->lives;
 
-	pugi::xml_node playerItems = data.append_child("playerItems");
-	playerItems.append_attribute("Items") = player->Items;
+	playerPos.append_attribute("items") = player->Items;
 
 	// Save current airenemy position
 	pugi::xml_node airenemyPos = data.append_child("airenemyPosition");
@@ -442,7 +440,7 @@ bool Scene::SaveState(pugi::xml_node& data)
 
 	// Save current ground number of lives
 	pugi::xml_node groundenemyLives = data.append_child("groundenemyLives");
-	groundenemyLives.append_attribute("airenemyLives") = groundenemy->hp;
+	groundenemyLives.append_attribute("groundenemyLives") = groundenemy->hp;
 
 	return true;
 }

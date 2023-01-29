@@ -10,6 +10,7 @@
 #include "Physics.h"
 #include "EntityManager.h"
 #include "FadeToBlack.h"
+#include "UI.h"
 
 Checkpoint::Checkpoint() : Entity(EntityType::CHECKPOINT)
 {

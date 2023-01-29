@@ -9,6 +9,7 @@
 #include "Log.h"
 #include "Point.h"
 #include "Map.h"
+#include "UI.h"
 #include "FadeToBlack.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
@@ -309,6 +310,9 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 			//app->audio->PlayFx(hurtSFX);
 		}
 		break;
+	case ColliderType::CHECKPOINT:
+		LOG("Collision CHECKPOINT");
+		break;
 	case ColliderType::PLAYERATTACK:
 		LOG("Collision PLAYERATTACK");
 		break;
@@ -327,6 +331,17 @@ void Player::DebugKeys()
 	//}
 
 	// F10: God Mode (fly around, cannot be killed, etc)
+
+	if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN) {
+		if (!checkpointswitch) {
+			SetPos(835, 526);
+		}
+		else {
+			SetPos(1313, 606);
+		}
+		checkpointswitch = !checkpointswitch;
+	}
+
 	if ((app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) || (app->input->GetKey(SDL_SCANCODE_G) == KEY_DOWN)) {
 		godMode = !godMode;
 	}
