@@ -14,9 +14,10 @@
 ## Controls
 
  - {ControlsScheme}
- - WASD: Movement
- - SPACE: Jump
- - ESC: Quit
+ - AS: Horizontal movement
+ - W: Jump
+ - SPACE: Attack
+ - ESC: Pause
  - F1/F2: Start from the first/second level
  - F3: Start from the beginning of the current level
  - F5: Save the current game state
