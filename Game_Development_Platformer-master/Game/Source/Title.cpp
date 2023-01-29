@@ -91,15 +91,39 @@ bool Title::Start()
 	closeSettingMenuButton6 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 6, "close", 6, { ((int)w / 2) - 200, (int(h) / 2) - 380, 227, 83 }, this);
 	closeCreditsMenuButton7 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 7, "close", 6, { ((int)w / 2) - 200, (int(h) / 2) - 380, 227, 83 }, this);
 
-	decreaseMusicButton8 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 8, "decrease", 9, { ((int)w / 2) - 400, (int(h) / 2) - 280, 227, 83 }, this);
-	increaseMusicButton9 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 9, "increase", 9, { ((int)w / 2) - 200, (int(h) / 2) - 380, 227, 83 }, this);
+	decreaseMusicButton8 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 8, "decrease", 9, { ((int)w / 2) - 400, (int(h) / 2) - 280, 150, 150 }, this);
+	increaseMusicButton9 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 9, "increase", 9, { ((int)w / 2) - 200, (int(h) / 2) - 280, 227, 150 }, this);
 
-	decreaseSFXButton10 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 10, "decrease", 9, { 378, 322, 93, 29 }, this);
-	increaseSFXButton11 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 11, "increase", 9, { 555, 322, 93, 29 }, this);
+	decreaseSFXButton10 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 10, "decrease", 9, { ((int)w / 2) - 680, (int(h) / 2) - 280, 100, 150 }, this);
+	increaseSFXButton11 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 11, "increase", 9, { ((int)w / 2) - 500, (int(h) / 2) - 280, 100, 150 }, this);
 
 	fullscreenButton12 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 12, "fullscreen", 11, { ((int)w / 2) - 490, (int(h) / 2) - 280, 227, 83 }, this);
 
-	vsyncButton13 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 13, "vsync", 6, { ((int)w / 2) - 490, (int(h) / 2) - 100, 227, 83 }, this);
+	vsyncButton13 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 13, "vsync", 6, { ((int)w / 2) - 490, (int(h) / 2) - 150, 227, 83 }, this);
+
+	char Play[20];
+	sprintf_s(Play, 20, "Play Game");
+	app->fonts->BlitText(((int)w / 2) - 200, (int(h) / 2) - 380, font1_id, Play);
+
+	playButton1->state = GuiControlState::NORMAL;
+	settingsButton2->state = GuiControlState::NORMAL;
+	creditsButton3->state = GuiControlState::NORMAL;
+
+	char Play[20];
+	sprintf_s(Play, 20, "Play Game");
+	app->fonts->BlitText(((int)w / 2) - 490, (int(h) / 2), font1_id, Play);
+
+	char sfx[10];
+	sprintf_s(sfx, 10, "%d", app->sfxValue);
+	app->fonts->BlitText(500, 330, app->ui->font1_id, sfx);
+
+	char fullscreen[10];
+	sprintf_s(fullscreen, 10, "%s", app->win->fullscreenMode ? "on" : "off");
+	app->fonts->BlitText(502, 428, app->ui->font1_id, fullscreen);
+
+	char vsync[10];
+	sprintf_s(vsync, 10, "%s", app->render->limitFPS ? "on" : "off");
+	app->fonts->BlitText(502, 510, app->ui->font1_id, vsync);
 
 
 	// Load SFXs
@@ -119,6 +143,10 @@ bool Title::Update(float dt)
 {
 	uint w, h;
 	app->win->GetWindowSize(w, h);
+
+	char Play[20];
+	sprintf_s(Play, 20, "Play Game");
+	app->fonts->BlitText(((int)w / 2) - 200, (int(h) / 2) - 380, font1_id, Play);
 
 	playButton1->state = GuiControlState::NORMAL;
 	settingsButton2->state = GuiControlState::NORMAL;
@@ -163,8 +191,7 @@ bool Title::Update(float dt)
 			settingsButton2->state = GuiControlState::FOCUSED;
 			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
 			{
-				exitButton4->state = GuiControlState::PRESSED;
-				LOG("PASA A settings");
+				settingsButton2->state = GuiControlState::PRESSED;
 				LOG("SettingsPressed");
 				settingMenu = !settingMenu;
 				app->audio->PlayFx(selectSFX);
@@ -247,8 +274,32 @@ bool Title::Update(float dt)
 	vsyncButton13->state = GuiControlState::DISABLED;
 
 	/*SettingsMenu*/
-	if (settingMenu == true && creditsMenu == false)
+	if (settingMenu == true)
 	{
+		app->render->DrawTexture(Img_settings, 0, 0, NULL);
+
+		char music[10];
+		sprintf_s(music, 10, "%d", app->musicValue);
+		app->fonts->BlitText(((int)w / 2) - 200, (int(h) / 2) - 380, app->ui->font1_id, music);
+
+		char sfx[10];
+		sprintf_s(sfx, 10, "%d", app->sfxValue);
+		app->fonts->BlitText(500, 330, app->ui->font1_id, sfx);
+
+		char fullscreen[10];
+		sprintf_s(fullscreen, 10, "%s", app->win->fullscreenMode ? "on" : "off");
+		app->fonts->BlitText(502, 428, app->ui->font1_id, fullscreen);
+
+		char vsync[10];
+		sprintf_s(vsync, 10, "%s", app->render->limitFPS ? "on" : "off");
+		app->fonts->BlitText(502, 510, app->ui->font1_id, vsync);
+
+		
+
+		playButton1->state = GuiControlState::DISABLED;
+		settingsButton2->state = GuiControlState::DISABLED;
+		creditsButton3->state = GuiControlState::DISABLED;
+		/*exitButton4->state = GuiControlState::DISABLED;*/
 
 		closeSettingMenuButton6->state = GuiControlState::NORMAL;
 		decreaseMusicButton8->state = GuiControlState::NORMAL;
@@ -259,11 +310,7 @@ bool Title::Update(float dt)
 		vsyncButton13->state = GuiControlState::NORMAL;
 
 		//continueButton5->state = GuiControlState::DISABLED;
-		playButton1->state = GuiControlState::DISABLED;
-		settingsButton2->state = GuiControlState::DISABLED;
-		creditsButton3->state = GuiControlState::DISABLED;
-		exitButton4->state = GuiControlState::DISABLED;
-
+	
 		if ((mouseX > closeSettingMenuButton6->bounds.x) && (mouseX < (closeSettingMenuButton6->bounds.x + closeSettingMenuButton6->bounds.w)) &&
 			(mouseY > closeSettingMenuButton6->bounds.y) && (mouseY < (closeSettingMenuButton6->bounds.y + closeSettingMenuButton6->bounds.h)))
 		{
@@ -285,18 +332,23 @@ bool Title::Update(float dt)
 			{
 				vsyncButton13->state = GuiControlState::PRESSED;
 				// V-Sync button
-				app->render->limitFPS = !app->render->limitFPS;
+				if (app->maxFrameDuration != 33) {
+					app->maxFrameDuration = 33;
+					app->vsync = true;
+				}
+				else if (app->maxFrameDuration == 33) {
+					app->maxFrameDuration = 16;
+					app->vsync = false;
+				}
 				app->audio->PlayFx(menuSelectionSFX);
 			}
 		}
-
-		
 
 		if ((mouseX > increaseMusicButton9->bounds.x) && (mouseX < (increaseMusicButton9->bounds.x + increaseMusicButton9->bounds.w)) &&
 			(mouseY > increaseMusicButton9->bounds.y) && (mouseY < (increaseMusicButton9->bounds.y + increaseMusicButton9->bounds.h)))
 		{
 			increaseMusicButton9->state = GuiControlState::FOCUSED;
-			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
+			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT)
 			{
 				increaseMusicButton9->state = GuiControlState::PRESSED;
 				app->musicValue = app->musicValue + 1;
@@ -313,7 +365,7 @@ bool Title::Update(float dt)
 			(mouseY > decreaseMusicButton8->bounds.y) && (mouseY < (decreaseMusicButton8->bounds.y + decreaseMusicButton8->bounds.h)))
 		{
 			decreaseMusicButton8->state = GuiControlState::FOCUSED;
-			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
+			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT)
 			{
 				decreaseMusicButton8->state = GuiControlState::PRESSED;
 				app->musicValue = app->musicValue - 1;
@@ -326,23 +378,39 @@ bool Title::Update(float dt)
 			}
 		}
 
-		app->render->DrawTexture(Img_settings, 0, 0, NULL);
+		if ((mouseX > decreaseSFXButton10->bounds.x) && (mouseX < (decreaseSFXButton10->bounds.x + decreaseSFXButton10->bounds.w)) &&
+			(mouseY > decreaseSFXButton10->bounds.y) && (mouseY < (decreaseSFXButton10->bounds.y + decreaseSFXButton10->bounds.h)))
+		{
+			decreaseSFXButton10->state = GuiControlState::FOCUSED;
+			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT)
+			{
+				decreaseSFXButton10->state = GuiControlState::PRESSED;
+				app->sfxValue = app->sfxValue - 1;
+				if (app->sfxValue <= 0)
+					app->sfxValue = 0;
+				if (app->sfxValue >= 100)
+					app->sfxValue = 100;
+				Mix_Volume(-1, app->sfxValue);
+				app->audio->PlayFx(menuSelectionSFX);
+			}
+		}
 
-		char music[10];
-		sprintf_s(music, 10, "%d", app->musicValue);
-		app->fonts->BlitText(500, 250, app->ui->font1_id, music);
-
-		char sfx[10];
-		sprintf_s(sfx, 10, "%d", app->sfxValue);
-		app->fonts->BlitText(500, 330, app->ui->font1_id, sfx);
-
-		char fullscreen[10];
-		sprintf_s(fullscreen, 10, "%s", app->win->fullscreenMode ? "on" : "off");
-		app->fonts->BlitText(502, 428, app->ui->font1_id, fullscreen);
-
-		char vsync[10];
-		sprintf_s(vsync, 10, "%s", app->render->limitFPS ? "on" : "off");
-		app->fonts->BlitText(502, 510, app->ui->font1_id, vsync);
+		if ((mouseX > increaseSFXButton11->bounds.x) && (mouseX < (increaseSFXButton11->bounds.x + increaseSFXButton11->bounds.w)) &&
+			(mouseY > increaseSFXButton11->bounds.y) && (mouseY < (increaseSFXButton11->bounds.y + increaseSFXButton11->bounds.h)))
+		{
+			increaseSFXButton11->state = GuiControlState::FOCUSED;
+			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT)
+			{
+				increaseSFXButton11->state = GuiControlState::PRESSED;
+				app->sfxValue = app->sfxValue + 1;
+				if (app->sfxValue <= 0)
+					app->sfxValue = 0;
+				if (app->sfxValue >= 100)
+					app->sfxValue = 100;
+				Mix_Volume(-1, app->sfxValue);
+				app->audio->PlayFx(menuSelectionSFX);
+			}
+		}
 	}
 
 	// Credits Menu
