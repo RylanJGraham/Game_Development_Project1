@@ -78,7 +78,7 @@ bool Title::Start()
 	playButton1 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "play", 5, { ((int)w / 2) - 490, (int(h) / 2) - 280, 227, 83 }, this);
 	settingsButton2 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "setting", 8, { ((int)w / 2) - 490, (int(h) / 2) - 190, 227, 83 }, this);
 	creditsButton3 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 3, "credits", 8, { ((int)w / 2) - 490, (int(h) / 2) - 100, 227, 83 }, this);
-	exitButton4 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 4, "exit", 5, { ((int)w / 2) - (93 / 2), (int(h) - 110), 93, 29 }, this);
+	//exitButton4 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 4, "exit", 5, { ((int)w / 2) - 200, (int(h) / 2) - 380, 227, 83 }, this);
 
 	pugi::xml_document gameStateFile;
 	pugi::xml_parse_result result = gameStateFile.load_file("save_game.xml");
@@ -88,18 +88,18 @@ bool Title::Start()
 		continueButton5 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 5, "continue", 9, { ((int)w / 2) - (93 / 2), (int(h) - 240), 93, 29 }, this);
 	}*/
 
-	closeSettingMenuButton6 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 6, "close", 6, { ((int)w / 2) - 490, (int(h) / 2) - 280, 227, 83 }, this);
-	closeCreditsMenuButton7 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 7, "close", 6, { ((int)w / 2) - 490, (int(h) / 2) - 280, 227, 83 }, this);
+	closeSettingMenuButton6 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 6, "close", 6, { ((int)w / 2) - 200, (int(h) / 2) - 380, 227, 83 }, this);
+	closeCreditsMenuButton7 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 7, "close", 6, { ((int)w / 2) - 200, (int(h) / 2) - 380, 227, 83 }, this);
 
-	decreaseMusicButton8 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 8, "decrease", 9, { 378, 243, 93, 29 }, this);
-	increaseMusicButton9 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 9, "increase", 9, { 555, 243, 93, 29 }, this);
+	decreaseMusicButton8 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 8, "decrease", 9, { ((int)w / 2) - 400, (int(h) / 2) - 280, 227, 83 }, this);
+	increaseMusicButton9 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 9, "increase", 9, { ((int)w / 2) - 200, (int(h) / 2) - 380, 227, 83 }, this);
 
 	decreaseSFXButton10 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 10, "decrease", 9, { 378, 322, 93, 29 }, this);
 	increaseSFXButton11 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 11, "increase", 9, { 555, 322, 93, 29 }, this);
 
 	fullscreenButton12 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 12, "fullscreen", 11, { ((int)w / 2) - 490, (int(h) / 2) - 280, 227, 83 }, this);
 
-	vsyncButton13 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 13, "vsync", 6, { 466, 502, 93, 29 }, this);
+	vsyncButton13 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 13, "vsync", 6, { ((int)w / 2) - 490, (int(h) / 2) - 100, 227, 83 }, this);
 
 
 	// Load SFXs
@@ -142,47 +142,50 @@ bool Title::Update(float dt)
 
 	app->input->GetMousePosition(mouseX, mouseY);
 
-	if ((mouseX > playButton1->bounds.x) && (mouseX < (playButton1->bounds.x + playButton1->bounds.w)) &&
-		(mouseY > playButton1->bounds.y) && (mouseY < (playButton1->bounds.y + playButton1->bounds.h)))
-	{
-		playButton1->state = GuiControlState::FOCUSED;
-		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
+	/*Title Screen*/
+	if (settingMenu == false && creditsMenu == false) {
+		if ((mouseX > playButton1->bounds.x) && (mouseX < (playButton1->bounds.x + playButton1->bounds.w)) &&
+			(mouseY > playButton1->bounds.y) && (mouseY < (playButton1->bounds.y + playButton1->bounds.h)))
 		{
-			playButton1->state = GuiControlState::PRESSED;
-			LOG("PASA A GAME SCENE");
-			app->fade->FadeBlack(this, (Module*)app->scene, 60 * (16.0f / dt));
-			app->audio->PlayFx(selectSFX);
+			playButton1->state = GuiControlState::FOCUSED;
+			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
+			{
+				playButton1->state = GuiControlState::PRESSED;
+				LOG("PASA A GAME SCENE");
+				app->fade->FadeBlack(this, (Module*)app->scene, 60 * (16.0f / dt));
+				app->audio->PlayFx(selectSFX);
+			}
+		}
+
+		if ((mouseX > settingsButton2->bounds.x) && (mouseX < (settingsButton2->bounds.x + settingsButton2->bounds.w)) &&
+			(mouseY > settingsButton2->bounds.y) && (mouseY < (settingsButton2->bounds.y + settingsButton2->bounds.h)))
+		{
+			settingsButton2->state = GuiControlState::FOCUSED;
+			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
+			{
+				exitButton4->state = GuiControlState::PRESSED;
+				LOG("PASA A settings");
+				LOG("SettingsPressed");
+				settingMenu = !settingMenu;
+				app->audio->PlayFx(selectSFX);
+			}
+		}
+
+		if ((mouseX > creditsButton3->bounds.x) && (mouseX < (creditsButton3->bounds.x + creditsButton3->bounds.w)) &&
+			(mouseY > creditsButton3->bounds.y) && (mouseY < (creditsButton3->bounds.y + creditsButton3->bounds.h)))
+		{
+			creditsButton3->state = GuiControlState::FOCUSED;
+			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
+			{
+				creditsButton3->state = GuiControlState::PRESSED;
+				LOG("PASA A settings");
+				LOG("SettingsPressed");
+				creditsMenu = !creditsMenu;
+				app->audio->PlayFx(selectSFX);
+			}
 		}
 	}
 
-	if ((mouseX > settingsButton2->bounds.x) && (mouseX < (settingsButton2->bounds.x + settingsButton2->bounds.w)) &&
-		(mouseY > settingsButton2->bounds.y) && (mouseY < (settingsButton2->bounds.y + settingsButton2->bounds.h)))
-	{
-		settingsButton2->state = GuiControlState::FOCUSED;
-		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
-		{
-			settingsButton2->state = GuiControlState::PRESSED;
-			LOG("PASA A settings");
-			LOG("SettingsPressed");
-			settingMenu = !settingMenu;
-			app->audio->PlayFx(selectSFX);
-		}
-	}
-
-	if ((mouseX > creditsButton3->bounds.x) && (mouseX < (creditsButton3->bounds.x + creditsButton3->bounds.w)) &&
-		(mouseY > creditsButton3->bounds.y) && (mouseY < (creditsButton3->bounds.y + creditsButton3->bounds.h)))
-	{
-		creditsButton3->state = GuiControlState::FOCUSED;
-		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
-		{
-			creditsButton3->state = GuiControlState::PRESSED;
-			LOG("PASA A settings");
-			LOG("SettingsPressed");
-			creditsMenu = !creditsMenu;
-			app->audio->PlayFx(selectSFX);
-		}
-	}
-	
 	pugi::xml_document gameStateFile;
 	pugi::xml_parse_result result = gameStateFile.load_file("save_game.xml");
 
@@ -234,7 +237,7 @@ bool Title::Update(float dt)
 
 	app->guiManager->Draw();
 
-	// Setting Menu
+	//Setting Menu
 	closeSettingMenuButton6->state = GuiControlState::DISABLED;
 	decreaseMusicButton8->state = GuiControlState::DISABLED;
 	increaseMusicButton9->state = GuiControlState::DISABLED;
@@ -243,13 +246,9 @@ bool Title::Update(float dt)
 	fullscreenButton12->state = GuiControlState::DISABLED;
 	vsyncButton13->state = GuiControlState::DISABLED;
 
-	if (settingMenu == true)
+	/*SettingsMenu*/
+	if (settingMenu == true && creditsMenu == false)
 	{
-		//continueButton5->state = GuiControlState::DISABLED;
-		playButton1->state = GuiControlState::DISABLED;
-		settingsButton2->state = GuiControlState::DISABLED;
-		creditsButton3->state = GuiControlState::DISABLED;
-		exitButton4->state = GuiControlState::DISABLED;
 
 		closeSettingMenuButton6->state = GuiControlState::NORMAL;
 		decreaseMusicButton8->state = GuiControlState::NORMAL;
@@ -258,6 +257,74 @@ bool Title::Update(float dt)
 		increaseSFXButton11->state = GuiControlState::NORMAL;
 		fullscreenButton12->state = GuiControlState::NORMAL;
 		vsyncButton13->state = GuiControlState::NORMAL;
+
+		//continueButton5->state = GuiControlState::DISABLED;
+		playButton1->state = GuiControlState::DISABLED;
+		settingsButton2->state = GuiControlState::DISABLED;
+		creditsButton3->state = GuiControlState::DISABLED;
+		exitButton4->state = GuiControlState::DISABLED;
+
+		if ((mouseX > closeSettingMenuButton6->bounds.x) && (mouseX < (closeSettingMenuButton6->bounds.x + closeSettingMenuButton6->bounds.w)) &&
+			(mouseY > closeSettingMenuButton6->bounds.y) && (mouseY < (closeSettingMenuButton6->bounds.y + closeSettingMenuButton6->bounds.h)))
+		{
+			closeSettingMenuButton6->state = GuiControlState::FOCUSED;
+			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
+			{
+				closeSettingMenuButton6->state = GuiControlState::PRESSED;
+				LOG("Leaving settings Menu Pressed");
+				settingMenu = !settingMenu;
+				app->audio->PlayFx(selectSFX);
+			}
+		}
+
+		if ((mouseX > vsyncButton13->bounds.x) && (mouseX < (vsyncButton13->bounds.x + vsyncButton13->bounds.w)) &&
+			(mouseY > vsyncButton13->bounds.y) && (mouseY < (vsyncButton13->bounds.y + vsyncButton13->bounds.h)))
+		{
+			vsyncButton13->state = GuiControlState::FOCUSED;
+			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
+			{
+				vsyncButton13->state = GuiControlState::PRESSED;
+				// V-Sync button
+				app->render->limitFPS = !app->render->limitFPS;
+				app->audio->PlayFx(menuSelectionSFX);
+			}
+		}
+
+		
+
+		if ((mouseX > increaseMusicButton9->bounds.x) && (mouseX < (increaseMusicButton9->bounds.x + increaseMusicButton9->bounds.w)) &&
+			(mouseY > increaseMusicButton9->bounds.y) && (mouseY < (increaseMusicButton9->bounds.y + increaseMusicButton9->bounds.h)))
+		{
+			increaseMusicButton9->state = GuiControlState::FOCUSED;
+			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
+			{
+				increaseMusicButton9->state = GuiControlState::PRESSED;
+				app->musicValue = app->musicValue + 1;
+				if (app->musicValue <= 0)
+					app->musicValue = 0;
+				if (app->musicValue >= 100)
+					app->musicValue = 100;
+				Mix_VolumeMusic(app->musicValue);
+				app->audio->PlayFx(menuSelectionSFX);
+			}
+		}
+
+		if ((mouseX > decreaseMusicButton8->bounds.x) && (mouseX < (decreaseMusicButton8->bounds.x + decreaseMusicButton8->bounds.w)) &&
+			(mouseY > decreaseMusicButton8->bounds.y) && (mouseY < (decreaseMusicButton8->bounds.y + decreaseMusicButton8->bounds.h)))
+		{
+			decreaseMusicButton8->state = GuiControlState::FOCUSED;
+			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
+			{
+				decreaseMusicButton8->state = GuiControlState::PRESSED;
+				app->musicValue = app->musicValue - 1;
+				if (app->musicValue <= 0)
+					app->musicValue = 0;
+				if (app->musicValue >= 100)
+					app->musicValue = 100;
+				Mix_VolumeMusic(app->musicValue);
+				app->audio->PlayFx(menuSelectionSFX);
+			}
+		}
 
 		app->render->DrawTexture(Img_settings, 0, 0, NULL);
 
@@ -281,17 +348,30 @@ bool Title::Update(float dt)
 	// Credits Menu
 	closeCreditsMenuButton7->state = GuiControlState::DISABLED;
 
-	if (creditsMenu == true)
+	if (creditsMenu == true && settingMenu == false)
 	{
 		//continueButton5->state = GuiControlState::DISABLED;
 		playButton1->state = GuiControlState::DISABLED;
 		settingsButton2->state = GuiControlState::DISABLED;
 		creditsButton3->state = GuiControlState::DISABLED;
-		exitButton4->state = GuiControlState::DISABLED;
+		//exitButton4->state = GuiControlState::DISABLED;
 
 		app->render->DrawTexture(Img_credits, 0, 0, NULL);
 
 		closeCreditsMenuButton7->state = GuiControlState::NORMAL;
+
+		if ((mouseX > closeCreditsMenuButton7->bounds.x) && (mouseX < (closeCreditsMenuButton7->bounds.x + closeCreditsMenuButton7->bounds.w)) &&
+			(mouseY > closeCreditsMenuButton7->bounds.y) && (mouseY < (closeCreditsMenuButton7->bounds.y + closeCreditsMenuButton7->bounds.h)))
+		{
+			closeCreditsMenuButton7->state = GuiControlState::FOCUSED;
+			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
+			{
+				closeCreditsMenuButton7->state = GuiControlState::PRESSED;
+				LOG("Leaving credits Menu Pressed");
+				creditsMenu = !creditsMenu;
+				app->audio->PlayFx(selectSFX);
+			}
+		}
 	}
 
 	return true;

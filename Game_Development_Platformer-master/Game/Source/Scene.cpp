@@ -133,10 +133,10 @@ bool Scene::Start()
 	// L15: TODO 2: Declare a GUI Button and create it using the GuiManager
 	uint w, h;
 	app->win->GetWindowSize(w, h);
-	resumeButton14 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 14, "resume", 7, { 469, 305, 93, 29 }, this);
-	backToTitleButton15 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 15, "back to title", 14, { 100, 305, 93, 29 }, this);
-	exitButton16 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 16, "exit", 5, { 200, 500, 93, 29 }, this);
-	closeButton17 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 17, "close", 6, { 700, 800, 93, 29 }, this);
+	resumeButton14 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 14, "resume", 7, { ((int)w / 2) - 490, (int(h) / 2) - 280, 227, 83 }, this);
+	backToTitleButton15 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 15, "back to title", 14, { ((int)w / 2) - 340, (int(h) / 2) - 150, 100, 83 }, this);
+	exitButton16 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 16, "exit", 5, { ((int)w / 2) - 200, (int(h) / 2) - 380, 227, 83 }, this);
+	closeButton17 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 17, "close", 6, { ((int)w / 2) - 490, (int(h) / 2) - 150, 100, 83 }, this);
 	ResetScene();
 
 	return true;
@@ -151,6 +151,12 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
+
+	uint w, h;
+	app->win->GetWindowSize(w, h);
+
+	app->input->GetMousePosition(mouseX, mouseY);
+
 	if (continueGame == true)
 	{
 		app->LoadGameRequest();
@@ -294,6 +300,63 @@ bool Scene::Update(float dt)
 		backToTitleButton15->state = GuiControlState::NORMAL;
 		exitButton16->state = GuiControlState::NORMAL;
 		closeButton17->state = GuiControlState::NORMAL;
+
+		if ((mouseX > resumeButton14->bounds.x) && (mouseX < (resumeButton14->bounds.x + resumeButton14->bounds.w)) &&
+			(mouseY > resumeButton14->bounds.y) && (mouseY < (resumeButton14->bounds.y + resumeButton14->bounds.h)))
+		{
+			resumeButton14->state = GuiControlState::FOCUSED;
+			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
+			{
+				resumeButton14->state = GuiControlState::PRESSED;
+				LOG("Leaving pause Menu Pressed");
+				gamePaused = !gamePaused;
+				app->audio->PlayFx(selectSFX);
+			}
+		}
+
+		if ((mouseX > backToTitleButton15->bounds.x) && (mouseX < (backToTitleButton15->bounds.x + backToTitleButton15->bounds.w)) &&
+			(mouseY > backToTitleButton15->bounds.y) && (mouseY < (backToTitleButton15->bounds.y + backToTitleButton15->bounds.h)))
+		{
+			backToTitleButton15->state = GuiControlState::FOCUSED;
+			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
+			{
+				backToTitleButton15->state = GuiControlState::PRESSED;
+				LOG("Leaving pause Menu Pressed");
+				gamePaused = !gamePaused;
+				exitGame = !exitGame;
+				app->audio->PlayFx(selectSFX);
+			}
+		}
+
+		if ((mouseX > exitButton16->bounds.x) && (mouseX < (exitButton16->bounds.x + exitButton16->bounds.w)) &&
+			(mouseY > exitButton16->bounds.y) && (mouseY < (exitButton16->bounds.y + exitButton16->bounds.h)))
+		{
+			exitButton16->state = GuiControlState::FOCUSED;
+			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
+			{
+				exitButton16->state = GuiControlState::PRESSED;
+				LOG("Leaving Game Pressed");
+				gamePaused = !gamePaused;
+				app->audio->PlayFx(selectSFX);
+			}
+		}
+
+		if ((mouseX > closeButton17->bounds.x) && (mouseX < (closeButton17->bounds.x + closeButton17->bounds.w)) &&
+			(mouseY > closeButton17->bounds.y) && (mouseY < (closeButton17->bounds.y + closeButton17->bounds.h)))
+		{
+			closeButton17->state = GuiControlState::FOCUSED;
+			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
+			{
+				closeButton17->state = GuiControlState::PRESSED;
+				LOG("Leaving Game Pressed");
+				app->fade->FadeBlack(this, (Module*)app->titleScreen, 90 * (16.0f / app->dt));
+				app->audio->PlayFx(app->titleScreen->startSFX);
+				app->audio->PlayFx(selectSFX);
+			}
+		}
+
+	
+
 	}
 
 
