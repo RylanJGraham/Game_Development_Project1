@@ -72,6 +72,9 @@ public:
 
 	bool continueGame = false;
 
+	int loadCounter;
+	int saveCounter;
+
 private:
 	SDL_Texture* img;
 	SDL_Rect rectCamera;
@@ -90,9 +93,6 @@ private:
 	bool originSelected = false;
 
 	bool exitGame = false;
-
-	int loadCounter;
-	int saveCounter;
 
 };
 

@@ -36,20 +36,26 @@ bool Checkpoint::Start() {
 	texture = app->tex->Load(texturePath);
 
 	// L07 DONE 4: Add a physics to an item - initialize the physics body
-	pbody = app->physics->CreateRectangleSensor(position.x + 16, position.y + 16, 10, 24, bodyType::STATIC, ColliderType::CHECKPOINT);
+	pbody = app->physics->CreateRectangleSensor(position.x + 16, position.y + 16, 16, 32, bodyType::STATIC, ColliderType::CHECKPOINT);
 	pbody->cType = ColliderType::CHECKPOINT;
 	pbody->listener = this;
 	isPicked = false;
-	section = { 0, 0, 26, 30 };
+	section = { 26, 0, 26, 30 };
+	saveSpot = false;
 
 	return true;
 }
 
 bool Checkpoint::Update(float dt)
 {
+	if (saveSpot) {
+		app->SaveGameRequest();
+		saveSpot = false;
+		app->scene->saveCounter = 2 * dt;
+	}
 	// L07 DONE 4: Add a physics to an item - update the position of the object from the physics.  
 	if (isPicked) {
-		section = { 26, 0, 26, 30 };
+		section = { 0, 0, 26, 30 };
 		//pbody->body->SetActive(false);
 		////this->Disable();
 		//if (pbody != nullptr) {
@@ -58,10 +64,10 @@ bool Checkpoint::Update(float dt)
 		//pbody = nullptr;
 	}
 
-	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - 18;
-	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 10;
+	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - 10;
+	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 14;
 
-	app->render->DrawTexture(texture, position.x, position.y, &section, 2);
+	app->render->DrawTexture(texture, position.x, position.y, &section);
 	//CleanUp();
 	
 
@@ -72,7 +78,7 @@ bool Checkpoint::PostUpdate()
 {
 
 	// L07 TODO 4: Add a physics to an item - update the position of the object from the physics.  
-	app->render->DrawTexture(texture, position.x, position.y);
+	//app->render->DrawTexture(texture, position.x, position.y);
 
 	return true;
 }
@@ -88,6 +94,9 @@ void Checkpoint::OnCollision(PhysBody* physA, PhysBody* physB)
 	{
 	case ColliderType::PLAYER:
 		LOG("Collision PLAYER");
+		if (!isPicked) {
+			saveSpot = true;
+		}
 		isPicked = true;
 
 		//this->Disable();

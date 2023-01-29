@@ -49,6 +49,8 @@ private:
 	int width;
 	int height;
 
+	bool saveSpot;
+
 };
 
 #endif // __CHECKPOINT_H__
