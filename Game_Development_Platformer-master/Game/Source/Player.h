@@ -44,6 +44,7 @@ public:
 
 	PhysBody* hitbox;
 	b2Vec2 hitboxPos;
+	bool alive;
 
 private:
 	
@@ -54,7 +55,6 @@ private:
 	uint pHurtSFX = 0;
 	uint attackCooldownMax;
 	uint attackCooldown;
-	bool alive;
 	bool idle, leftID;
 	bool stairs;
 	bool isAttacking;
@@ -62,6 +62,7 @@ private:
 
 
 	bool godMode;
+	bool checkpointswitch = false;
 
 	int width;
 	int height;
