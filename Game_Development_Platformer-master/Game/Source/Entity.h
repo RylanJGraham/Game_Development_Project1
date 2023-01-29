@@ -15,6 +15,7 @@ enum class EntityType
 	GROUNDENEMY,
 	AIRENEMY,
 	ENEMY,
+	MEDKIT,
 	UNKNOWN
 };
 

@@ -222,7 +222,7 @@ bool Player::Update(float dt)
 	}
 	if (HitL.GetCurrentFrameint() == 1 || HitR.GetCurrentFrameint() == 1) {
 		isHit = false;
-		iFrames = 30 * (16 / dt);
+		iFrames = 50 * (16 / dt);
 		HitL.Reset();
 		HitR.Reset();
 	}
@@ -262,7 +262,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 	{
 	case ColliderType::ITEM:
 		LOG("Collision ITEM");
-		LOG("Collision COIN");
 		Items++;
 		//app->audio->PlayFx(pickCoinSFX);
 		LOG("Items: %d", Items);
@@ -270,6 +269,14 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 		/*app->physics->Disable();
 		app->scene->Disable();*/
 		break;
+	case ColliderType::MEDKIT:
+		LOG("Collision MEDKIT");
+		lives += 3;
+		if (lives > 10) {
+			lives = 10;
+		}
+		break;
+
 	case ColliderType::WALL:
 		LOG("Collision WALL");
 		break;

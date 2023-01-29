@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "Player.h"
 #include "Item.h"
+#include "Medkit.h"
 #include "GroundEnemy.h"
 #include "AirEnemy.h"
 #include "GuiButton.h"
@@ -50,6 +51,7 @@ public:
 	GroundEnemy* groundenemy;
 	AirEnemy* airenemy;
 	Item* item;
+	Medkit* medkit;
 
 	bool playing = false;
 

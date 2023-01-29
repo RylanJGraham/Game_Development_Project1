@@ -93,6 +93,10 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		entity = new Item();
 		break;
 
+	case EntityType::MEDKIT:
+		entity = new Medkit();
+		break;
+
 	case EntityType::GROUNDENEMY:
 		entity = new GroundEnemy();
 		break;

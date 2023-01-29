@@ -88,6 +88,9 @@
     <ClCompile Include="Source\SettingsMenu.cpp">
       <Filter>Modules\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Medkit.cpp">
+      <Filter>Modules\Gameplay</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -215,6 +218,11 @@
     <ClInclude Include="Source\Point.h" />
     <ClInclude Include="Source\SettingsMenu.h">
       <Filter>Modules\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Point.h" />
+    <ClInclude Include="Source\Point.h" />
+    <ClInclude Include="Source\Medkit.h">
+      <Filter>Modules\Gameplay</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -38,6 +38,7 @@ enum class ColliderType {
 	GROUND,
 	PLATFORM,
 	WALL,
+	MEDKIT,
 	UNKNOWN,
 	DEATH
 };

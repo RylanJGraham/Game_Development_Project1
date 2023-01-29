@@ -62,6 +62,12 @@ bool Scene::Start()
 		item->parameters = itemNode;
 	}
 
+	for (pugi::xml_node medkitNode = app->configNode.child("scene").child("medkit"); medkitNode; medkitNode = medkitNode.next_sibling("medkit"))
+	{
+		medkit = (Medkit*)app->entityManager->CreateEntity(EntityType::MEDKIT);
+		medkit->parameters = medkitNode;
+	}
+
 	//L02: DONE 3: Instantiate the player using the entity manager
 	player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
 	player->parameters = app->configNode.child("scene").child("player");
