@@ -232,6 +232,7 @@
     <ClInclude Include="Source\Checkpoint.h">
       <Filter>Modules\Gameplay</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Point.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">
