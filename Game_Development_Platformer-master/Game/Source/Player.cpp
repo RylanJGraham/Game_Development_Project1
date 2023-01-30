@@ -23,11 +23,6 @@ Player::~Player() {
 
 bool Player::Awake() {
 
-	//L02: DONE 1: Initialize Player parameters
-	//pos = position;
-	//texturePath = "Assets/Textures/player/idle1.png";
-
-	//L02: DONE 5: Get Player parameters from XML
 	return true;
 }
 
@@ -48,8 +43,6 @@ bool Player::Start()
 
 	remainingJumpSteps = 0;
 	idle = true;
-
-	//id = app->tex->LoadSprite(texturePath, 15, 8);
 	
 	// L07 DONE 5: Add physics to the player - initialize physics body
 	pbody = app->physics->CreateCircle(startPos.x - 20, startPos.y - 5, 18, bodyType::DYNAMIC, ColliderType::PLAYER);
@@ -63,7 +56,6 @@ bool Player::Start()
 	chestopenSFX = app->audio->LoadFx("Assets/Audio/Fx/chestopen.wav");
 	attackSFX = app->audio->LoadFx("Assets/Audio/Fx/swordAttack.wav");
 	pHurtSFX = app->audio->LoadFx("Assets/Audio/Fx/pHurt.wav");
-	//jumpSFX = app->audio->LoadFx("Assets/Audio/Fx/JumpKnight.wav");
 	
 	LoadAnimations();
 
@@ -263,11 +255,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 	case ColliderType::ITEM:
 		LOG("Collision ITEM");
 		Items++;
-		//app->audio->PlayFx(pickCoinSFX);
 		LOG("Items: %d", Items);
 		app->audio->PlayFx(chestopenSFX);
-		/*app->physics->Disable();
-		app->scene->Disable();*/
 		break;
 	case ColliderType::MEDKIT:
 		LOG("Collision MEDKIT");
@@ -307,7 +296,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 		}
 		else {
 			app->scene->player->ResetPlayerPos();
-			//app->audio->PlayFx(hurtSFX);
 		}
 		break;
 	case ColliderType::CHECKPOINT:
@@ -325,12 +313,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB)
 void Player::DebugKeys()
 {
 
-	// F9: View colliders / logic
-	//if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {
-	//	app->physics->debug = !app->physics->debug;
-	//}
-
-	// F10: God Mode (fly around, cannot be killed, etc)
+	//F7: toggle Vsync for 30fps
 
 	if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN) {
 		if (!checkpointswitch) {
@@ -341,6 +324,9 @@ void Player::DebugKeys()
 		}
 		checkpointswitch = !checkpointswitch;
 	}
+
+
+	// F10: God Mode (fly around, cannot be killed, etc)
 
 	if ((app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) || (app->input->GetKey(SDL_SCANCODE_G) == KEY_DOWN)) {
 		godMode = !godMode;
@@ -490,8 +476,6 @@ void Player::ResetPlayerPos() {
 	pbody->body->SetAwake(true);
 	velocity = { 0, 0 };
 	pbody->body->SetTransform(PIXEL_TO_METERS(startPos), 0.0f);
-	//app->scene->cameraFix2 = false;
-	//app->scene->cameraFix = false;
 	app->render->camera.x = 0;
 	alive = true;
 

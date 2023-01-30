@@ -57,12 +57,6 @@ bool Checkpoint::Update(float dt)
 	// L07 DONE 4: Add a physics to an item - update the position of the object from the physics.  
 	if (isPicked) {
 		section = { 0, 0, 26, 30 };
-		//pbody->body->SetActive(false);
-		////this->Disable();
-		//if (pbody != nullptr) {
-		//	app->physics->world->DestroyBody(pbody->body);
-		//}
-		//pbody = nullptr;
 	}
 
 	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - 10;
@@ -78,8 +72,6 @@ bool Checkpoint::Update(float dt)
 bool Checkpoint::PostUpdate()
 {
 
-	// L07 TODO 4: Add a physics to an item - update the position of the object from the physics.  
-	//app->render->DrawTexture(texture, position.x, position.y);
 
 	return true;
 }

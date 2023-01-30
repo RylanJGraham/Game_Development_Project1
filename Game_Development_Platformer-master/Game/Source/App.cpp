@@ -235,11 +235,7 @@ void App::FinishUpdate()
 	delayTimer.Start();
 	if (maxFrameDuration > 0 && delay > 0) {
 		SDL_Delay(delay);
-		//LOG("We waited for %f milliseconds and the real delay is % f", delay, delayTimer.ReadMs());
 		dt = maxFrameDuration;
-	}
-	else {
-		//LOG("No wait");
 	}
 
 	// Shows the time measurements in the window title
@@ -253,8 +249,6 @@ void App::FinishUpdate()
 			averageFps, framesPerSecond, dt, secondsSinceStartup, frameCount);
 	}
 
-	// L14: TODO 2: Use SDL_Delay to make sure you get your capped framerate
-	// L14: TODO 3: Measure accurately the amount of time SDL_Delay() actually waits compared to what was expected
 	app->win->SetTitle(title);
 }
 
@@ -398,8 +392,6 @@ uint App::GetFrameCount()
 	return frameCount;
 }
 
-// L02: DONE 1: Implement methods to request load / save and methods 
-// for the real execution of load / save (to be implemented in TODO 5 and 7)
 void App::LoadGameRequest()
 {
 	// NOTE: We should check if SAVE_STATE_FILENAME actually exist
@@ -413,9 +405,6 @@ void App::SaveGameRequest()
 	saveGameRequested = true;
 }
 
-
-// L02: DONE 5: Implement the method LoadFromFile() to actually load a xml file
-// then call all the modules to load themselves
 bool App::LoadFromFile()
 {
 	bool ret = true;
@@ -473,10 +462,9 @@ bool App::SaveToFile()
 pugi::xml_node App::LoadConfigFileToVar()
 {
 	pugi::xml_node ret;
-	// L01: DONE 3: Load config.xml file using load_file() method from the xml_document class
+
 	pugi::xml_parse_result parseResult = configFile.load_file("config.xml");
 
-	// L01: DONE 3: Check result for loading errors
 	if (parseResult) {
 		ret = configFile.child("config");
 	}
