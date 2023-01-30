@@ -107,8 +107,13 @@ bool Scene::Start()
 	app->render->camera.x = 0;
 	app->render->camera.y = -498;
 
+	//img = app->tex->Load("Assets/Textures/test.png");
+	//app->audio->PlayMusic("Assets/Audio/Music/music_spy.ogg");
+	
+	// L03: DONE: Load map
 	app->map->Load();
 
+	// L12 Create walkability map
 	if (app->map->Load()) {
 		int w, h;
 		uchar* data = NULL;
@@ -125,6 +130,7 @@ bool Scene::Start()
 
 	img_pause = app->tex->Load(imgPausePath);
 
+	// L15: TODO 2: Declare a GUI Button and create it using the GuiManager
 	uint w, h;
 	app->win->GetWindowSize(w, h);
 	resumeButton14 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 14, "resume", 7, { ((int)w / 2) - 490, (int(h) / 2) - 280, 227, 83 }, this);
@@ -161,6 +167,7 @@ bool Scene::Update(float dt)
 	int scale = app->win->GetScale();
 	int camSpeed = (0 / scale)*dt;
 
+	// L03: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
 #pragma region DEBUG_KEYS
 
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
@@ -202,12 +209,27 @@ bool Scene::Update(float dt)
 		if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) {
 		app->SaveGameRequest();
 		saveCounter = 2 * dt;
+		//player->savedPosition.x = player->position.x;
+		//player->savedPosition.y = player->position.y;
+
 		}
 
 		if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) {
 		app->LoadGameRequest();
 		loadCounter = 2 * dt;
+		//player->SetPos(player->savedPosition.x + 46, player->savedPosition.y + 60);
 		}
+
+		//if (app->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
+		//{
+		//	app->render->limitFPS = !app->render->limitFPS;
+		//	app->audio->PlayFx(selectSFX);
+		//}
+
+		//if (app->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
+		//{
+		//capTo30fps = !capTo30fps;
+		//}
 	}
 
 	
@@ -367,6 +389,8 @@ bool Scene::CleanUp()
 
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;
+	//if (player != nullptr) {
+	//	if (player->lives == 0) 
 
 		if (player) { app->entityManager->DestroyEntity(player); }		
 		if (airenemy) { app->entityManager->DestroyEntity(airenemy); }
