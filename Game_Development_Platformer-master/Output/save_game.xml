@@ -8,9 +8,9 @@
 	<scene />
 	<TitleScreen />
 	<scene>
-		<player x="-nan" y="-nan" lives="6" items="5" />
-		<airenemyPosition x="-nan" y="-nan" />
-		<groundenemyPosition x="-nan" y="-nan" />
+		<player x="40.5259857" y="18.9278221" lives="10" items="3" />
+		<airenemyPosition x="13.2112455" y="13.9681702" />
+		<groundenemyPosition x="28.9535179" y="20.6811104" />
 		<airenemyLives airenemyLives="2" />
 		<groundenemyLives groundenemyLives="0" />
 	</scene>
@@ -22,6 +22,6 @@
 	<:anonymous />
 	<guiManager />
 	<renderer>
-		<camera x="-2147483648" y="-498" />
+		<camera x="-1875" y="-498" />
 	</renderer>
 </save_state>

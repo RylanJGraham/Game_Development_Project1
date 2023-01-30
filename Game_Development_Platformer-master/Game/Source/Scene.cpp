@@ -182,7 +182,7 @@ bool Scene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 	{
 		gamePaused = !gamePaused;
-		
+
 		Mix_PauseMusic();
 	}
 

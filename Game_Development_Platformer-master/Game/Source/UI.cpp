@@ -83,18 +83,6 @@ void UI::BlitLives()
 	app->fonts->BlitText(20, 50, font1_id, playerLives);
 }
 
-void UI::BlitTitleScreen()
-{
-	char settings[20];
-	sprintf_s(settings, 20, "settings");
-	app->fonts->BlitText(20, 50, font1_id, settings);
-
-	char play[20];
-	sprintf_s(play, 20, "play");
-	app->fonts->BlitText(20, 35, font1_id, play);
-
-}
-
 void UI::BlitItems()
 {
 	char playerItems[20];
