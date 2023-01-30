@@ -45,6 +45,7 @@ bool Scene::Start()
 
 	batTilePath = app->configNode.child("scene").child("pathfinding").attribute("batPathTile").as_string();
 	origintexturePath = app->configNode.child("scene").child("originTexture").attribute("origintexturePath").as_string();
+	deathTime = app->configNode.child("scene").child("timer").attribute("value").as_int();
 	// Texture to highligh mouse position 
 	batTilePathTex = app->tex->Load(batTilePath);
 	// Texture to show path origin 
@@ -168,6 +169,10 @@ bool Scene::Update(float dt)
 	// L03: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
 #pragma region DEBUG_KEYS
 
+	if (deathTimer.ReadSec() == deathTime) {
+		player->lives = 0;
+	}
+
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
 		app->fade->FadeBlack((Module*)app->scene, (Module*)app->scene, 60 * (16.0f / dt));
 	}
@@ -259,6 +264,8 @@ bool Scene::Update(float dt)
 	app->ui->BlitItems();
 	app->ui->BlitLives();
 	app->ui->BlitFPS();
+	app->ui->BlitTimer();
+	app->ui->BlitPlayerTimer();
 
 	if (app->physics->debug) {
 		app->ui->BlitPlayerXPos();
@@ -301,6 +308,7 @@ bool Scene::Update(float dt)
 			{
 				resumeButton14->state = GuiControlState::PRESSED;
 				LOG("Leaving pause Menu Pressed");
+
 				gamePaused = !gamePaused;
 				app->audio->PlayFx(selectSFX);
 			}
@@ -328,6 +336,8 @@ bool Scene::Update(float dt)
 			{
 				exitButton16->state = GuiControlState::PRESSED;
 				LOG("Leaving Game Pressed");
+				app->render->camera.x = previousCameraPos.x;
+				app->render->camera.y = previousCameraPos.y;
 				gamePaused = !gamePaused;
 				app->audio->PlayFx(selectSFX);
 			}
@@ -434,6 +444,7 @@ void Scene::ResetScene() {
 	app->audio->PlayMusic("Assets/Audio/Music/medieval.ogg", 1.0f);
 	player->ResetPlayerPos();
 	player->lives = player->baseLives;
+	deathTimer.Start();
 }
 
 

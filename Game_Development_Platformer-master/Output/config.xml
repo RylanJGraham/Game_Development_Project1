@@ -38,6 +38,7 @@
 	<originTexture origintexturePath = "Assets/Textures/xmark.png" />
 	<pathfinding  batPathTile="Assets/Textures/path.png" />
 	<imgPause imgPausePath="Assets/Textures/pausemenu.png"/>
+	<timer value="20"/>
     <player x="200" y="511" texturepath="Assets/Textures/NewKnight.png" attcooldown="300" hp="10"/>
     <item x="285" y="542" texturepath="Assets/Textures/ChestProp.png"/>
 	<item x="706" y="512" texturepath="Assets/Textures/ChestProp.png"/>

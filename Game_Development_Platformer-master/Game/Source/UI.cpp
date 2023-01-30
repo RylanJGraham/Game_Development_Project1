@@ -169,4 +169,16 @@ void UI::BlitFrameCount()
 	app->fonts->BlitText(825, 70, font1_id, frameCount);
 }
 
+void UI::BlitTimer()
+{
+	char timer[25];
+	sprintf_s(timer, 25, "time spent; %2d", app->scene->deathTimer.ReadSec());
+	app->fonts->BlitText(220, 35, font1_id, timer);
+}
 
+void UI::BlitPlayerTimer()
+{
+	char playerTimer[25];
+	sprintf_s(playerTimer, 25, "time left; %2d", app->scene->deathTime - app->scene->deathTimer.ReadSec());
+	app->fonts->BlitText(220, 50, font1_id, playerTimer);
+}

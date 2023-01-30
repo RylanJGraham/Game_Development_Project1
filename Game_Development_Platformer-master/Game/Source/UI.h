@@ -49,6 +49,8 @@ public:
 	void BlitDT();
 	void BlitTimeSinceStart();
 	void BlitFrameCount();
+	void BlitTimer();
+	void BlitPlayerTimer();
 
 	uint font1_id = -1;
 

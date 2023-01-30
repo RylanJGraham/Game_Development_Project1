@@ -8,11 +8,11 @@
 	<scene />
 	<TitleScreen />
 	<scene>
-		<player x="40.5259857" y="18.9278221" lives="10" items="3" />
-		<airenemyPosition x="13.2112455" y="13.9681702" />
-		<groundenemyPosition x="28.9535179" y="20.6811104" />
+		<player x="5.66449499" y="17.4325047" lives="8" items="0" />
+		<airenemyPosition x="5.93307924" y="16.7879848" />
+		<groundenemyPosition x="14.0625" y="17.6825027" />
 		<airenemyLives airenemyLives="2" />
-		<groundenemyLives groundenemyLives="0" />
+		<groundenemyLives groundenemyLives="3" />
 	</scene>
 	<Fonts_Module />
 	<UI_Module />
@@ -22,6 +22,6 @@
 	<:anonymous />
 	<guiManager />
 	<renderer>
-		<camera x="-1875" y="-498" />
+		<camera x="-202" y="-498" />
 	</renderer>
 </save_state>

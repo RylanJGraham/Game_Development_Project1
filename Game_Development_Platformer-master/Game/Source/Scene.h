@@ -76,6 +76,8 @@ public:
 	int saveCounter;
 
 	int mouseX, mouseY;
+	Timer deathTimer;
+	int deathTime;
 
 	b2Vec2 previousCameraPos;
 
