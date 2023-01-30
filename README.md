@@ -22,6 +22,7 @@
  - F3: Start from the beginning of the current level
  - F5: Save the current game state
  - F6: Load the previous state (even across levels)
+ - F7: Toggle vsync capped at 30 fps
  - F9: View colliders / logic
  - F10: God Mode (fly around, cannot be killed, etc)
  - F11: Establish maximum framerate of 30 fps
