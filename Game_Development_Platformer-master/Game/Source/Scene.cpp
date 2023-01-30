@@ -107,8 +107,6 @@ bool Scene::Start()
 	app->render->camera.x = 0;
 	app->render->camera.y = -498;
 
-	//img = app->tex->Load("Assets/Textures/test.png");
-	//app->audio->PlayMusic("Assets/Audio/Music/music_spy.ogg");
 	
 	// L03: DONE: Load map
 	app->map->Load();
@@ -181,6 +179,15 @@ bool Scene::Update(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 	{
+		if (!gamePaused) {
+			previousCameraPos.x = app->render->camera.x;
+			previousCameraPos.y = app->render->camera.y;
+		}
+		else {
+			app->render->camera.x = previousCameraPos.x;
+			app->render->camera.y = previousCameraPos.y;
+		}
+
 		gamePaused = !gamePaused;
 
 		Mix_PauseMusic();
@@ -201,27 +208,12 @@ bool Scene::Update(float dt)
 		if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) {
 		app->SaveGameRequest();
 		saveCounter = 2 * dt;
-		//player->savedPosition.x = player->position.x;
-		//player->savedPosition.y = player->position.y;
-
 		}
 
 		if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) {
 		app->LoadGameRequest();
 		loadCounter = 2 * dt;
-		//player->SetPos(player->savedPosition.x + 46, player->savedPosition.y + 60);
 		}
-
-		//if (app->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
-		//{
-		//	app->render->limitFPS = !app->render->limitFPS;
-		//	app->audio->PlayFx(selectSFX);
-		//}
-
-		//if (app->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
-		//{
-		//capTo30fps = !capTo30fps;
-		//}
 	}
 
 	
@@ -381,8 +373,6 @@ bool Scene::CleanUp()
 
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;
-	//if (player != nullptr) {
-	//	if (player->lives == 0) 
 
 		if (player) { app->entityManager->DestroyEntity(player); }		
 		if (airenemy) { app->entityManager->DestroyEntity(airenemy); }
@@ -444,8 +434,6 @@ void Scene::ResetScene() {
 	app->audio->PlayMusic("Assets/Audio/Music/medieval.ogg", 1.0f);
 	player->ResetPlayerPos();
 	player->lives = player->baseLives;
-
-	//coin->ResetCoin();
 }
 
 
