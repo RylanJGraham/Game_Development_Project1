@@ -4,15 +4,11 @@
 #include "Module.h"
 #include "Player.h"
 #include "Item.h"
-#include "Physics.h"
 #include "Medkit.h"
 #include "Checkpoint.h"
 #include "GroundEnemy.h"
 #include "AirEnemy.h"
 #include "GuiButton.h"
-
-#include "Defs.h"
-#include "Log.h"
 
 struct SDL_Texture;
 
@@ -81,15 +77,11 @@ public:
 
 	int mouseX, mouseY;
 
-<<<<<<< HEAD
 	int camerastorex;
 
 	bool camlock;
 
 	int camerastorey;
-=======
-	b2Vec2 previousCameraPos;
->>>>>>> daf6853b1c3bca8dc146628a2b8cd6bd44ddfd16
 
 private:
 	SDL_Texture* img;

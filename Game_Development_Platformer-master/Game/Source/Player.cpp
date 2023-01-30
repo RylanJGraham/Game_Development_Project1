@@ -129,7 +129,7 @@ bool Player::Update(float dt)
 	{
 		velocity = { 0, -GRAVITY_Y };
 		pbody->body->SetGravityScale(1);
-		velocity = pbody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.0166f * (dt/16) * (dt/16) * sqrt(dt/16));
+		velocity = pbody->body->GetLinearVelocity() + b2Vec2(0, -GRAVITY_Y * 0.0166f * (dt/16) * (dt/16));
 	}
 
 	if (lives == 0) {
@@ -200,7 +200,7 @@ bool Player::Update(float dt)
 	//Apply Jump Force
 	if (remainingJumpSteps > 0)
 	{
-		float force = pbody->body->GetMass() * 100 * (dt / 16);
+		float force = pbody->body->GetMass() * 80 * (dt / 16);
 		pbody->body->ApplyForce(b2Vec2(0, -force), pbody->body->GetWorldCenter(), true);
 		remainingJumpSteps--;
 	}
