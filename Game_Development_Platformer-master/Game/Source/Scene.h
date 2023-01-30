@@ -77,6 +77,8 @@ public:
 
 	int mouseX, mouseY;
 
+	b2Vec2 previousCameraPos;
+
 private:
 	SDL_Texture* img;
 	SDL_Rect rectCamera;
