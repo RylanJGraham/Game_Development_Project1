@@ -40,6 +40,7 @@ public:
 	void BlitPlayerYPos();
 	void BlitGameSaved();
 	void BlitGameLoaded();
+	void BlitTitleScreen();
 	void BlitItems();
 	void BlitLives();
 	void BlitBatLives();

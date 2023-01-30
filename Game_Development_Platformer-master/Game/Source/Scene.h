@@ -77,6 +77,12 @@ public:
 
 	int mouseX, mouseY;
 
+	int camerastorex;
+
+	bool camlock;
+
+	int camerastorey;
+
 private:
 	SDL_Texture* img;
 	SDL_Rect rectCamera;

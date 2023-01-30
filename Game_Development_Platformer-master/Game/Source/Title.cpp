@@ -45,6 +45,8 @@ bool Title::Start()
 	/*Initialize*/
 	font1Path = app->configNode.child("ui").child("font1").attribute("texturepath").as_string();
 
+	app->ui->Enable();
+
 	//Loading font 1
 	char lookupTableFont1[] = { "! @,_./0123456789$;<&?abcdefghijklmnopqrstuvwxyz" };
 	font1_id = app->fonts->Load(font1Path, lookupTableFont1, 2);
@@ -145,12 +147,21 @@ bool Title::Update(float dt)
 
 	app->input->GetMousePosition(mouseX, mouseY);
 
+
 	/*Title Screen*/
 	if (settingMenu == false && creditsMenu == false) {
+
+		char play[20];
+		sprintf_s(play, 20, "play");
+		app->fonts->BlitText(20, 35, font1_id, play);
+
+
 		if ((mouseX > playButton1->bounds.x) && (mouseX < (playButton1->bounds.x + playButton1->bounds.w)) &&
 			(mouseY > playButton1->bounds.y) && (mouseY < (playButton1->bounds.y + playButton1->bounds.h)))
 		{
 			playButton1->state = GuiControlState::FOCUSED;
+
+
 			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
 			{
 				playButton1->state = GuiControlState::PRESSED;
@@ -206,6 +217,8 @@ bool Title::Update(float dt)
 
 		isSaved = true;
 	}*/
+
+	app->ui->BlitTitleScreen();
 
 
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
