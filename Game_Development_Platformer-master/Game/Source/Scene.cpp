@@ -181,8 +181,15 @@ bool Scene::Update(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 	{
+		if (!gamePaused) {
+			previousCameraPos.x = app->render->camera.x;
+			previousCameraPos.y = app->render->camera.y;
+		}
+		else {
+			app->render->camera.x = previousCameraPos.x;
+			app->render->camera.y = previousCameraPos.y;
+		}
 		gamePaused = !gamePaused;
-
 		Mix_PauseMusic();
 	}
 

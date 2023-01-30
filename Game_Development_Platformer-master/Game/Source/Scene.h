@@ -4,11 +4,15 @@
 #include "Module.h"
 #include "Player.h"
 #include "Item.h"
+#include "Physics.h"
 #include "Medkit.h"
 #include "Checkpoint.h"
 #include "GroundEnemy.h"
 #include "AirEnemy.h"
 #include "GuiButton.h"
+
+#include "Defs.h"
+#include "Log.h"
 
 struct SDL_Texture;
 
@@ -76,6 +80,8 @@ public:
 	int saveCounter;
 
 	int mouseX, mouseY;
+
+	b2Vec2 previousCameraPos;
 
 private:
 	SDL_Texture* img;
