@@ -22,7 +22,7 @@
 
 Scene::Scene() : Module()
 {
-	name.Create("scene");
+	name.Create("scenee");
 }
 
 // Destructor
